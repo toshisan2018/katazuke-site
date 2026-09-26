@@ -98,6 +98,17 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .btn-mail:hover{background:#fff;color:var(--dark);}
 .amt-katazuke .btn-tel:hover{filter:brightness(1.1);}
 
+/* トップのヒーローバナー画像＋CTA帯 */
+.amt-katazuke .hero-banner{line-height:0;}
+.amt-katazuke .hero-banner img{width:100%;height:auto;display:block;}
+.amt-katazuke .hero-cta-strip{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:28px 16px;}
+.amt-katazuke .hero-cta-strip .hcs-lead{font-weight:700;margin-bottom:16px;font-size:clamp(.95rem,2.2vw,1.1rem);}
+.amt-katazuke .hero-cta-strip .hero-cta{justify-content:center;}
+
+/* サービスページ上部の写真 */
+.amt-katazuke .svc-hero{max-width:1080px;margin:0 auto;padding:0 16px;}
+.amt-katazuke .svc-hero img{width:100%;height:auto;display:block;border-radius:10px;margin:22px auto 0;box-shadow:0 2px 14px rgba(0,0,0,.12);}
+
 /* 下層ページ用のコンパクトなヒーロー */
 .amt-katazuke .page-hero{padding:46px 16px 54px;}
 .amt-katazuke .page-hero h1{font-size:clamp(1.5rem,3.6vw,2.3rem);margin-bottom:0;}

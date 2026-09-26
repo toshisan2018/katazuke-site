@@ -49,6 +49,17 @@ _kb_no = (" 第" + KOBUTSU_NO + "号") if KOBUTSU_NO else ""
 KOBUTSU_TD = "古物商許可（" + KOBUTSU_CATEGORY + "）　" + KOBUTSU_AUTH + _kb_no
 KOBUTSU_LABEL = "古物商許可（" + KOBUTSU_AUTH + "）" + _kb_no  # 本文用
 
+# サイト画像（WordPressメディアにアップ済みのURL）
+UPLOADS = "https://katazuke.amt-eco.com/wp-content/uploads/2026/09/"
+IMG = {
+    "hero": UPLOADS + "hero-main.jpg",
+    "katazuke": UPLOADS + "service-katazuke.jpg",
+    "fuyouhin": UPLOADS + "service-fuyouhin.jpg",
+    "zanchibutsu": UPLOADS + "service-zanchibutsu.jpg",
+    "souko": UPLOADS + "service-souko.jpg",
+    "ogp": UPLOADS + "ogp-katazuke.jpg",
+}
+
 NAV_ITEMS = [
     ("/", "ホーム"),
     ("/katazuke/", "家の片付け"),
@@ -189,6 +200,17 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .btn-mail{display:inline-block;background:transparent;color:#fff;border:2px solid #fff;font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;}
 .amt-katazuke .btn-mail:hover{background:#fff;color:var(--dark);}
 .amt-katazuke .btn-tel:hover{filter:brightness(1.1);}
+
+/* トップのヒーローバナー画像＋CTA帯 */
+.amt-katazuke .hero-banner{line-height:0;}
+.amt-katazuke .hero-banner img{width:100%;height:auto;display:block;}
+.amt-katazuke .hero-cta-strip{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:28px 16px;}
+.amt-katazuke .hero-cta-strip .hcs-lead{font-weight:700;margin-bottom:16px;font-size:clamp(.95rem,2.2vw,1.1rem);}
+.amt-katazuke .hero-cta-strip .hero-cta{justify-content:center;}
+
+/* サービスページ上部の写真 */
+.amt-katazuke .svc-hero{max-width:1080px;margin:0 auto;padding:0 16px;}
+.amt-katazuke .svc-hero img{width:100%;height:auto;display:block;border-radius:10px;margin:22px auto 0;box-shadow:0 2px 14px rgba(0,0,0,.12);}
 
 /* 下層ページ用のコンパクトなヒーロー */
 .amt-katazuke .page-hero{padding:46px 16px 54px;}
@@ -466,13 +488,15 @@ def service_jsonld(name, desc, url):
 
 
 def assemble(slug, breadcrumb_label, hero_h1, hero_lead, body_html,
-             faq_items, rel_cards, jsonlds):
+             faq_items, rel_cards, jsonlds, hero_img=None):
     """下層ページ本体を wp:html ブロックとして組み立てる。"""
     url = "/" + slug + "/"
     parts = ['<div class="amt-katazuke">']
     parts.append(header(url))
     parts.append(breadcrumb(breadcrumb_label))
     parts.append(page_hero(hero_h1, hero_lead))
+    if hero_img:
+        parts.append(f'<div class="svc-hero"><img src="{hero_img}" alt="{breadcrumb_label}" width="1200" height="800" loading="lazy"></div>')
     parts.append(body_html)
     parts.append(faq_block(faq_items))
     parts.append(rel_block(rel_cards))
@@ -494,11 +518,12 @@ def assemble(slug, breadcrumb_label, hero_h1, hero_lead, body_html,
 PAGES = []
 
 
-def add_service_page(slug, nav_label, h1, lead, body, faq, rel, jsonld_name, jsonld_desc, title):
+def add_service_page(slug, nav_label, h1, lead, body, faq, rel, jsonld_name, jsonld_desc, title, hero_img=None):
     c, _ = assemble(
         slug, nav_label, h1, lead, body, faq, rel,
         [service_jsonld(jsonld_name, jsonld_desc, "/" + slug + "/"),
          breadcrumb_jsonld(nav_label, "/" + slug + "/"), faq_jsonld(faq)],
+        hero_img=hero_img,
     )
     PAGES.append((slug, title, c))
 
@@ -541,6 +566,7 @@ add_service_page(
      ("/flow/", "ご利用の流れ", "お問い合わせから完了まで")],
     "家のお片付け", "引越し・空き家・実家の片付け。仕分けから搬出まで対応。静岡県内中心。",
     "家のお片付け｜静岡県島田市の株式会社AMT",
+    hero_img=IMG["katazuke"],
 )
 
 # ------------------------------------------------------------
@@ -588,6 +614,7 @@ add_service_page(
      ("/ryoukin/", "料金・費用について", "費用の決まり方")],
     "不用品の回収", "家具・家電・雑貨などの不用品回収。個人・法人対応。静岡県内中心。",
     "不用品の回収｜家具・家電をまとめて｜株式会社AMT",
+    hero_img=IMG["fuyouhin"],
 )
 
 # ------------------------------------------------------------
@@ -626,6 +653,7 @@ add_service_page(
      ("/ryoukin/", "料金・費用について", "費用の決まり方")],
     "解体前の残置物撤去", "解体予定の建物の家財・設備・不用品を撤去。解体工事と一貫対応。",
     "解体前の残置物撤去｜家財・設備の撤去｜株式会社AMT",
+    hero_img=IMG["zanchibutsu"],
 )
 
 # ------------------------------------------------------------
@@ -663,6 +691,7 @@ add_service_page(
      ("/ryoukin/", "料金・費用について", "費用の決まり方")],
     "倉庫の片付け", "倉庫・工場・店舗の資材・在庫・什器の片付け。法人対応。金属買取も。",
     "倉庫の片付け｜工場・店舗の整理｜株式会社AMT",
+    hero_img=IMG["souko"],
 )
 
 # ------------------------------------------------------------
@@ -1015,16 +1044,16 @@ def build_index():
     )
 
     hero = (
-        '<div class="hero"><div class="hero-inner">'
-        '<span class="badge">静岡県内中心に対応｜お見積り無料</span>'
-        '<h1>家の片付け・不用品回収・残置物撤去、<br>まずは<em>無料見積り</em>から。</h1>'
-        '<p>ご自宅の片付けや不用品の回収から、解体前の残置物撤去、倉庫・工場の片付け、'
-        '農機具の買取りまで。個人のお客様も法人のお客様も、静岡県内を中心に対応します。'
+        f'<div class="hero-banner"><img src="{IMG["hero"]}" '
+        'alt="株式会社AMT おうちのお片付け隊｜家の片付け・不用品回収・残置物撤去・倉庫・農機具買取" '
+        'width="1600" height="841"></div>'
+        '<section class="hero-cta-strip"><div class="inner">'
+        '<p class="hcs-lead">静岡県内を中心に対応・お見積り無料｜個人のお客様も法人のお客様も、'
         '解体工事とあわせたご相談も可能です。</p>'
         '<div class="hero-cta">'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}<small>受付時間内にお気軽にお電話ください</small></a>'
         f'<a class="btn-mail" href="mailto:{MAIL}">メールで相談する</a>'
-        '</div></div></div>'
+        '</div></div></section>'
     )
     works = (
         '<section class="k-section works"><div class="inner">'
@@ -1101,6 +1130,7 @@ def build_index():
         '<meta property="og:description" content="家の片付け・不用品回収・解体前の残置物撤去・倉庫片付け・農機具買取。個人・法人どちらも対応。静岡県内中心、お見積り無料。">\n'
         '<meta property="og:type" content="website">\n'
         f'<meta property="og:url" content="{DOMAIN}/">\n'
+        f'<meta property="og:image" content="{IMG["ogp"]}">\n'
         '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
         '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">\n'
