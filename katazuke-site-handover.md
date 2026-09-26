@@ -138,3 +138,15 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - 他事業（解体・金属買取など）や他社名義の許認可番号を、このサイトに流用しない。
 - ファイルの編集・作成の前には、変更内容をリストで社長に確認してから作業する。
 - 呼びかけは「社長」。
+
+
+## 8. 2026-09-27 の更新（社長対応分）
+
+- 配色：緑に一度変更後、ご希望で**黄色に戻した**（現状＝黄色）。
+- **ロゴ・マスコット採用**：ヘッダーロゴ＝社長提供の家＋箱ロゴ、ファビコンも同ロゴ。トップのヒーロー右に作業員マスコット、各ページ下部CTAにヒーロー風マスコット（`assets/images/` に格納、WPメディア済み）。緑ユニフォームの作業写真4点は各サービスページに配置。
+- **会社概要から代表者名を削除**（ご希望）。
+- **お問い合わせフォーム**：Contact Form 7 を導入し /contact/ に埋め込み（日本語項目・送信先 katazuke@amt-eco.com）。※送信テスト未実施。
+- **Google Search Console**：`https://katazuke.amt-eco.com/` を**所有権確認済み（HTMLタグ方式）**。検証メタタグは **WPCode Lite（Insert Headers and Footers）** の「ヘッダー」に設定して <head> へ出力（`<meta name="google-site-verification" content="p_Aps9WvGC9dpWF66Sm5frMbrjQ3jtCJe8LgwAYXQTc">`）。**このWPCode設定とメタタグは削除しない**（削除すると確認が外れる）。
+- **サイトマップ**：`wp-sitemap.xml` をGSCに送信済み（送信直後は「取得できませんでした」表示だが、サイトマップ自体はHTTP 200で正常。Googleが取得すると成功に変わる見込み）。
+- 導入プラグイン（katazuke）：Contact Form 7、WPCode Lite（ともに有効）。
+- ※テーマ(functions.php)への直接コード追加は本番安全機構によりブロックされるため、head出力はWPCodeで管理している。
