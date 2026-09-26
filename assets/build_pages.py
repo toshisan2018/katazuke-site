@@ -292,6 +292,8 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .foot-corp a{color:#cfcfcf;text-decoration:none;}
 .amt-katazuke .foot-corp a:hover{color:var(--primary-bright);}
 .amt-katazuke .foot-bottom{border-top:1px solid #333;text-align:center;padding:16px;font-size:.8rem;color:#888;}
+.amt-katazuke .foot-bottom a{color:#bbb;text-decoration:none;}
+.amt-katazuke .foot-bottom a:hover{color:var(--primary-bright);}
 @media(max-width:760px){.amt-katazuke .foot-inner{grid-template-columns:1fr 1fr;gap:24px;}}
 @media(max-width:480px){.amt-katazuke .foot-inner{grid-template-columns:1fr;}}
 """
@@ -372,7 +374,8 @@ def footer():
         '<p class="foot-addr">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</p>'
         '<p class="foot-corp"><a href="https://amt-eco.com/" target="_blank" rel="noopener">'
         'コーポレートサイト ↗</a></p></div></div>'
-        '<div class="foot-bottom"><p>&copy; 株式会社AMT All Rights Reserved.</p></div></footer>'
+        '<div class="foot-bottom"><p><a href="/privacy-policy/">プライバシーポリシー</a>'
+        '　｜　&copy; 株式会社AMT All Rights Reserved.</p></div></footer>'
     )
 
 
@@ -892,6 +895,54 @@ c, _ = assemble(
     [breadcrumb_jsonld("お問い合わせ", "/contact/")],
 )
 PAGES.append(("contact", "お問い合わせ｜おうちのお片付け隊（株式会社AMT）", c))
+
+# ------------------------------------------------------------
+# 12. プライバシーポリシー
+# ------------------------------------------------------------
+privacy_body = (
+    '<section class="k-section"><div class="prose">'
+    '<p class="lead">株式会社AMT（以下「当社」）は、「おうちのお片付け隊」'
+    '（katazuke.amt-eco.com）の運営にあたり、お客様の個人情報を適切に取り扱い、'
+    'その保護に努めます。</p>'
+    '<h2>1. 取得する個人情報</h2>'
+    '<p>お問い合わせ・お見積り・作業のご依頼にあたり、お名前、ご住所、電話番号、'
+    'メールアドレス、お問い合わせ内容などをお預かりすることがあります。</p>'
+    '<h2>2. 利用目的</h2>'
+    '<ul><li>お見積り・ご相談への回答、ご連絡のため</li>'
+    '<li>片付け・回収・撤去・買取などのサービスの提供・実施のため</li>'
+    '<li>アフターフォロー、ご案内のため</li>'
+    '<li>法令に基づく対応のため</li></ul>'
+    '<h2>3. 第三者提供</h2>'
+    '<p>当社は、法令に基づく場合を除き、あらかじめご本人の同意を得ることなく、'
+    '個人情報を第三者に提供しません。</p>'
+    '<h2>4. 業務委託</h2>'
+    '<p>サービスの提供に必要な範囲で、不用品の適正処理を提携する許可業者に委託するなど、'
+    '業務の一部を外部に委託する場合があります。委託先に対しては、個人情報を適切に'
+    '取り扱うよう必要な監督を行います。</p>'
+    '<h2>5. 個人情報の管理</h2>'
+    '<p>お預かりした個人情報について、漏えい・滅失・毀損の防止に努め、適切に管理します。</p>'
+    '<h2>6. 開示・訂正・削除のご請求</h2>'
+    '<p>ご本人から個人情報の開示・訂正・削除などのお求めがあった場合は、'
+    'ご本人であることを確認のうえ、適切に対応します。</p>'
+    '<h2>7. お問い合わせ窓口</h2>'
+    '<p>株式会社AMT（おうちのお片付け隊）<br>'
+    '〒428-0013　静岡県島田市金谷東2丁目3483-290<br>'
+    f'TEL：<a href="tel:{TEL}">{TEL}</a>　メール：<a href="mailto:{MAIL}">{MAIL}</a></p>'
+    '<h2>8. 本ポリシーの改定</h2>'
+    '<p>本プライバシーポリシーは、必要に応じて改定することがあります。'
+    '改定後の内容は、本ページに掲載した時点から適用されます。</p>'
+    '</div></section>'
+)
+c, _ = assemble(
+    "privacy-policy", "プライバシーポリシー",
+    "プライバシーポリシー｜おうちのお片付け隊（株式会社AMT）",
+    "株式会社AMT「おうちのお片付け隊」の個人情報の取り扱いについてご案内します。",
+    privacy_body, [],
+    [("/contact/", "お問い合わせ", "電話・メールで相談"),
+     ("/company/", "会社概要", "株式会社AMTについて")],
+    [breadcrumb_jsonld("プライバシーポリシー", "/privacy-policy/")],
+)
+PAGES.append(("privacy-policy", "プライバシーポリシー｜おうちのお片付け隊（株式会社AMT）", c))
 
 
 # ============================================================
