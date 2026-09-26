@@ -58,6 +58,10 @@ IMG = {
     "zanchibutsu": UPLOADS + "service-zanchibutsu.jpg",
     "souko": UPLOADS + "service-souko.jpg",
     "ogp": UPLOADS + "ogp-katazuke.jpg",
+    "logo": UPLOADS + "logo.png",
+    "logoicon": UPLOADS + "logo-icon.png",
+    "mascot_worker": UPLOADS + "mascot-worker.png",
+    "mascot_hero": UPLOADS + "mascot-hero.png",
 }
 
 NAV_ITEMS = [
@@ -133,6 +137,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .header-inner{max-width:1080px;margin:0 auto;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
 .amt-katazuke .k-header .logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
 .amt-katazuke .logo-mark{width:46px;height:46px;flex-shrink:0;line-height:0;}
+.amt-katazuke .logo-mark img{width:100%;height:100%;object-fit:contain;display:block;}
 .amt-katazuke .logo-tx{display:flex;flex-direction:column;line-height:1.25;}
 .amt-katazuke .logo-name{font-weight:900;font-size:1.12rem;color:var(--ink);letter-spacing:.3px;}
 .amt-katazuke .logo-name b{color:var(--dark);}
@@ -194,6 +199,11 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .hero h1{font-size:clamp(1.7rem,4.5vw,3rem);font-weight:900;line-height:1.4;margin-bottom:18px;color:var(--ink);}
 .amt-katazuke .hero h1 em{font-style:normal;color:var(--dark);background:rgba(255,255,255,.55);padding:0 .2em;border-radius:4px;}
 .amt-katazuke .hero p{font-size:clamp(.95rem,2vw,1.15rem);max-width:660px;margin-bottom:32px;color:#3a352d;}
+.amt-katazuke .hero-inner--mascot{display:flex;align-items:center;gap:28px;}
+.amt-katazuke .hero-text{flex:1 1 auto;min-width:0;}
+.amt-katazuke .hero-mascot{flex:0 0 auto;}
+.amt-katazuke .hero-mascot img{width:clamp(190px,26vw,330px);height:auto;display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,.22));}
+@media(max-width:760px){.amt-katazuke .hero-inner--mascot{flex-direction:column;gap:8px;}.amt-katazuke .hero-mascot img{width:200px;margin:6px auto 0;}}
 .amt-katazuke .hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
 .amt-katazuke .btn-tel{display:inline-block;background:var(--dark);color:#fff;font-weight:900;font-size:clamp(1.2rem,3vw,1.6rem);padding:14px 32px;border-radius:8px;text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.28);}
 .amt-katazuke .btn-tel small{display:block;font-size:.75rem;font-weight:700;}
@@ -305,6 +315,11 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .cta-band .btn-line{display:block;margin-top:16px;}
 .amt-katazuke .cta-band .btn-mail{display:inline-block;background:transparent;color:#fff;border:2px solid #fff;font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;margin-top:8px;}
 .amt-katazuke .cta-band .btn-mail:hover{background:#fff;color:var(--dark);}
+.amt-katazuke .cta-band .cta-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:32px;}
+.amt-katazuke .cta-band .cta-mascot{flex:0 0 auto;}
+.amt-katazuke .cta-band .cta-mascot img{width:clamp(140px,17vw,210px);height:auto;display:block;filter:drop-shadow(0 8px 16px rgba(0,0,0,.3));}
+.amt-katazuke .cta-band .cta-content{flex:0 1 auto;}
+@media(max-width:700px){.amt-katazuke .cta-band .cta-mascot{display:none;}}
 
 /* 関連ページ */
 .amt-katazuke .rel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;max-width:1080px;margin:0 auto;}
@@ -364,7 +379,7 @@ def header(current=""):
     return (
         '<header class="k-header"><div class="hdr-topbar"></div>'
         '<div class="header-inner">'
-        f'<a class="logo" href="/"><span class="logo-mark">{LOGO_SVG}</span>'
+        f'<a class="logo" href="/"><span class="logo-mark"><img src="{IMG["logo"]}" alt="おうちのお片付け隊 ロゴ" width="46" height="46"></span>'
         f'<span class="logo-tx"><span class="logo-name"><b>{COMPANY_NAME}</b> {SITE_NAME}</span>'
         f'<small>{CATCH}</small></span></a>'
         f'<div class="header-tel"><a class="tel-btn" href="tel:{TEL}">{TEL_ICON}TEL {TEL}</a>'
@@ -387,12 +402,14 @@ def page_hero(h1, lead):
 
 def cta():
     return (
-        '<section class="cta-band"><h2>お片付けのご相談・お見積りは無料です</h2>'
+        '<section class="cta-band"><div class="cta-inner">'
+        f'<div class="cta-mascot"><img src="{IMG["mascot_hero"]}" alt="おうちのお片付け隊 マスコット" width="210" height="213" loading="lazy"></div>'
+        '<div class="cta-content"><h2>お片付けのご相談・お見積りは無料です</h2>'
         '<p>「いくらかかる？」「これは回収できる？」だけでもお気軽にどうぞ。'
         '個人のお客様も法人のお客様も、静岡県内を中心に対応します。</p>'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}</a>'
         f'<div class="btn-line"><a class="btn-mail" href="mailto:{MAIL}">'
-        'メールで相談する</a></div></section>'
+        'メールで相談する</a></div></div></div></section>'
     )
 
 
@@ -1044,7 +1061,8 @@ def build_index():
     )
 
     hero = (
-        '<div class="hero"><div class="hero-inner">'
+        '<div class="hero"><div class="hero-inner hero-inner--mascot">'
+        '<div class="hero-text">'
         '<span class="badge">静岡県内中心に対応｜お見積り無料</span>'
         '<h1>家の片付け・不用品回収・残置物撤去、<br>まずは<em>無料見積り</em>から。</h1>'
         '<p>ご自宅の片付けや不用品の回収から、解体前の残置物撤去、倉庫・工場の片付け、'
@@ -1053,7 +1071,9 @@ def build_index():
         '<div class="hero-cta">'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}<small>受付時間内にお気軽にお電話ください</small></a>'
         f'<a class="btn-mail" href="mailto:{MAIL}">メールで相談する</a>'
-        '</div></div></div>'
+        '</div></div>'
+        f'<div class="hero-mascot"><img src="{IMG["mascot_worker"]}" alt="おうちのお片付け隊 スタッフ" width="330" height="371"></div>'
+        '</div></div>'
     )
     works = (
         '<section class="k-section works"><div class="inner">'
