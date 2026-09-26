@@ -57,6 +57,8 @@ IMG = {
     "fuyouhin": UPLOADS + "service-fuyouhin.jpg",
     "zanchibutsu": UPLOADS + "service-zanchibutsu.jpg",
     "souko": UPLOADS + "service-souko.jpg",
+    "nouki": UPLOADS + "service-nouki.jpg",
+    "hero_bg": UPLOADS + "hero-bg.jpg",
     "ogp": UPLOADS + "ogp-katazuke.jpg",
     "logo": UPLOADS + "logo.png",
     "logoicon": UPLOADS + "logo-icon.png",
@@ -136,12 +138,13 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .hdr-topbar{height:5px;background:linear-gradient(90deg,var(--dark),var(--primary-dark) 40%,var(--primary) 70%,var(--primary-bright));}
 .amt-katazuke .header-inner{max-width:1080px;margin:0 auto;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
 .amt-katazuke .k-header .logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
-.amt-katazuke .logo-mark{width:46px;height:46px;flex-shrink:0;line-height:0;}
+.amt-katazuke .logo-mark{width:62px;height:62px;flex-shrink:0;line-height:0;}
 .amt-katazuke .logo-mark img{width:100%;height:100%;object-fit:contain;display:block;}
-.amt-katazuke .logo-tx{display:flex;flex-direction:column;line-height:1.25;}
-.amt-katazuke .logo-name{font-weight:900;font-size:1.12rem;color:var(--ink);letter-spacing:.3px;}
+.amt-katazuke .logo-tx{display:flex;flex-direction:column;line-height:1.22;}
+.amt-katazuke .logo-name{font-weight:900;font-size:1.5rem;color:var(--ink);letter-spacing:.5px;}
 .amt-katazuke .logo-name b{color:var(--dark);}
-.amt-katazuke .logo-tx small{font-size:.72rem;color:#666;font-weight:600;margin-top:3px;}
+.amt-katazuke .logo-tx small{font-size:.82rem;color:#555;font-weight:700;margin-top:4px;}
+@media(max-width:640px){.amt-katazuke .logo-mark{width:52px;height:52px;}.amt-katazuke .logo-name{font-size:1.2rem;}.amt-katazuke .logo-tx small{font-size:.72rem;}}
 .amt-katazuke .k-header .header-tel{text-align:center;flex-shrink:0;}
 .amt-katazuke .tel-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:var(--ink) !important;font-weight:900;font-size:1.28rem;padding:10px 24px;border-radius:30px;text-decoration:none;box-shadow:0 4px 12px rgba(224,160,0,.4);white-space:nowrap;}
 .amt-katazuke .tel-btn:hover{filter:brightness(1.05);}
@@ -199,6 +202,10 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .hero h1{font-size:clamp(1.7rem,4.5vw,3rem);font-weight:900;line-height:1.4;margin-bottom:18px;color:var(--ink);}
 .amt-katazuke .hero h1 em{font-style:normal;color:var(--dark);background:rgba(255,255,255,.55);padding:0 .2em;border-radius:4px;}
 .amt-katazuke .hero p{font-size:clamp(.95rem,2vw,1.15rem);max-width:660px;margin-bottom:32px;color:#3a352d;}
+/* トップの写真ヒーロー（左に文字スクリム） */
+.amt-katazuke .hero--home{background:linear-gradient(100deg, rgba(255,251,240,.96) 0%, rgba(255,251,240,.84) 30%, rgba(255,251,240,.38) 58%, rgba(255,251,240,0) 82%), url("__HERO_BG__"); background-size:cover; background-position:center right; padding:66px 16px 80px;}
+.amt-katazuke .hero--home .hero-text{max-width:620px;}
+@media(max-width:760px){.amt-katazuke .hero--home{background:linear-gradient(rgba(255,251,240,.9),rgba(255,251,240,.8)), url("__HERO_BG__"); background-size:cover; background-position:center;}}
 .amt-katazuke .hero-inner--mascot{display:flex;align-items:center;gap:28px;}
 .amt-katazuke .hero-text{flex:1 1 auto;min-width:0;}
 .amt-katazuke .hero-mascot{flex:0 0 auto;}
@@ -353,6 +360,9 @@ html,body{overflow-x:hidden;}
 @media(max-width:760px){.amt-katazuke .foot-inner{grid-template-columns:1fr 1fr;gap:24px;}}
 @media(max-width:480px){.amt-katazuke .foot-inner{grid-template-columns:1fr;}}
 """
+
+# ヒーロー背景画像のURLを差し込む
+DESIGN_CSS = DESIGN_CSS.replace('__HERO_BG__', IMG['hero_bg'])
 
 # ロゴマーク（片付け＝きれいに整った家＋きらめき）。文字は入れない。
 LOGO_SVG = (
@@ -749,6 +759,7 @@ add_service_page(
      ("/company/", "会社概要", "株式会社AMTについて")],
     "農機具の買取り", "トラクター・耕運機・田植機などの農機具買取。片付けと同時対応。",
     "農機具の買取り｜トラクター・耕運機ほか｜株式会社AMT",
+    hero_img=IMG["nouki"],
 )
 
 # ------------------------------------------------------------
@@ -1061,7 +1072,7 @@ def build_index():
     )
 
     hero = (
-        '<div class="hero"><div class="hero-inner hero-inner--mascot">'
+        '<div class="hero hero--home"><div class="hero-inner">'
         '<div class="hero-text">'
         '<span class="badge">静岡県内中心に対応｜お見積り無料</span>'
         '<h1>家の片付け・不用品回収・残置物撤去、<br>まずは<em>無料見積り</em>から。</h1>'
@@ -1071,9 +1082,7 @@ def build_index():
         '<div class="hero-cta">'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}<small>受付時間内にお気軽にお電話ください</small></a>'
         f'<a class="btn-mail" href="mailto:{MAIL}">メールで相談する</a>'
-        '</div></div>'
-        f'<div class="hero-mascot"><img src="{IMG["mascot_worker"]}" alt="おうちのお片付け隊 スタッフ" width="330" height="371"></div>'
-        '</div></div>'
+        '</div></div></div></div>'
     )
     works = (
         '<section class="k-section works"><div class="inner">'
@@ -1085,6 +1094,9 @@ def build_index():
         '<section class="k-section reasons"><div class="inner">'
         '<h2 class="sec-title">選ばれる理由</h2>'
         '<p class="sec-lead">片付けだけでなく、その先の「処分」「買取」「解体」まで見据えて対応します。</p>'
+        f'<div style="text-align:center;margin:0 0 10px;"><img src="{IMG["mascot_worker"]}" '
+        'alt="おうちのお片付け隊 スタッフ" width="200" height="225" loading="lazy" '
+        'style="height:180px;width:auto;display:inline-block;"></div>'
         f'<div class="card-grid">{reason_cards}</div></div></section>'
     )
     flow_sec = (
