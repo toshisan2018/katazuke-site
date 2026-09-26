@@ -34,6 +34,9 @@ footer.wp-block-template-part{display:none!important;}
 .wp-block-post-title,.wp-block-post-date,.wp-block-post-terms,.wp-block-post-author,
 .wp-block-post-author-name,.wp-block-post-author-biography,.wp-block-avatar,
 .wp-block-comments,.wp-block-post-navigation-link,.wp-block-query-pagination{display:none!important;}
+/* 投稿ヘッダーの著者・カテゴリ・日付メタ（テーマの wp-block-group）を丸ごと隠す */
+.wp-site-blocks main > .wp-block-group.has-small-font-size{display:none!important;}
+.wp-site-blocks main .entry-content ~ *{display:none!important;}
 .wp-site-blocks{padding:0!important;margin:0!important;}
 .wp-site-blocks>main{margin-block:0!important;padding:0!important;}
 .entry-content{margin-block-start:0!important;max-width:none!important;}
@@ -119,7 +122,7 @@ def add_article(slug, title, desc, lead, sections, faq, rel):
     parts = ['<div class="amt-katazuke">']
     parts.append(bp.header(""))
     parts.append('<div class="breadcrumb"><a href="/">ホーム</a>'
-                 '<span>›</span>コラム<span>›</span>' + title + '</div>')
+                 '<span>›</span><a href="/column/">コラム</a><span>›</span>' + title + '</div>')
     parts.append('<div class="page-hero hero"><div class="hero-inner">'
                  f'<div class="art-meta"><span class="art-cat">コラム</span>'
                  f'<time datetime="{TODAY_ISO}">{TODAY_JP}</time></div>'
@@ -541,6 +544,37 @@ add_article(
 
 
 # ============================================================
+# コラム一覧ページ（固定ページ /column/ ・サイトと同じデザインの自己完結HTML）
+# ============================================================
+def build_column_page():
+    cards = "".join(
+        f'<a class="rel-card" href="/{a["slug"]}/"><b>{a["title"]}</b>'
+        f'<span>{a["desc"]}</span></a>' for a in ARTICLES
+    )
+    parts = ['<div class="amt-katazuke">']
+    parts.append(bp.header("/column/"))
+    parts.append('<div class="breadcrumb"><a href="/">ホーム</a><span>›</span>コラム</div>')
+    parts.append(bp.page_hero("コラム", "お片付け・不用品・買取・残置物撤去に役立つ情報をお届けします。"))
+    parts.append('<section class="k-section"><div class="inner">'
+                 '<div class="rel-grid">' + cards + '</div></div></section>')
+    parts.append(bp.cta())
+    parts.append(bp.footer())
+    parts.append('</div>')
+    inner = "".join(parts)
+    content = ('<!-- wp:html -->\n<style id="amt-katazuke-css">' + CSS + '</style>\n'
+               + inner + '\n<!-- /wp:html -->')
+    bc = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+          "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "ホーム", "item": bp.DOMAIN + "/"},
+              {"@type": "ListItem", "position": 2, "name": "コラム", "item": bp.DOMAIN + "/column/"}]}
+    content += ('\n\n<!-- wp:html -->\n<script type="application/ld+json">'
+                + json.dumps(bc, ensure_ascii=False) + '</script>\n<!-- /wp:html -->')
+    return {"slug": "column", "title": "コラム｜おうちのお片付け隊",
+            "desc": "お片付け・不用品・買取・残置物撤去に役立つ情報。静岡県島田市の株式会社AMT おうちのお片付け隊のコラム。",
+            "content": content}
+
+
+# ============================================================
 # 保存
 # ============================================================
 manifest = []
@@ -554,6 +588,16 @@ for a in ARTICLES:
 with io.open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
     json.dump(manifest, f, ensure_ascii=False)
 
+# コラム一覧ページ（固定ページ）
+col = build_column_page()
+with io.open(os.path.join(OUT, "column.html"), "w", encoding="utf-8") as f:
+    f.write(col["content"])
+with io.open(os.path.join(OUT, "page_manifest.json"), "w", encoding="utf-8") as f:
+    json.dump([{"slug": col["slug"], "title": col["title"], "desc": col["desc"],
+                "b64": base64.b64encode(col["content"].encode("utf-8")).decode("ascii")}],
+              f, ensure_ascii=False)
+
 print("articles:", len(ARTICLES))
 for a in ARTICLES:
     print(f"  {a['slug']}: {len(a['content'])} bytes / title: {a['title']}")
+print("column page:", len(col["content"]), "bytes")
