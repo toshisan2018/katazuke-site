@@ -7,8 +7,11 @@ footer.wp-block-template-part{display:none!important;}
 .wp-block-post-author-name,.wp-block-post-author-biography,.wp-block-avatar,
 .wp-block-comments,.wp-block-post-navigation-link,.wp-block-query-pagination{display:none!important;}
 /* 投稿ヘッダーの著者・カテゴリ・日付メタ（テーマの wp-block-group）を丸ごと隠す */
-.wp-site-blocks main > .wp-block-group.has-small-font-size{display:none!important;}
+.wp-block-group.has-small-font-size{display:none!important;}
+/* 本文(entry-content)より後ろに続くテーマ要素（投稿ナビ・関連投稿など）を隠す */
 .wp-site-blocks main .entry-content ~ *{display:none!important;}
+.wp-site-blocks main > .wp-block-group.alignwide{display:none!important;}
+.wp-block-query{display:none!important;}
 .wp-site-blocks{padding:0!important;margin:0!important;}
 .wp-site-blocks>main{margin-block:0!important;padding:0!important;}
 .entry-content{margin-block-start:0!important;max-width:none!important;}
