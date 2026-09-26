@@ -177,4 +177,5 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **記事の作り方（単一ソース）**：`assets/build_articles.py` が `build_pages.py` のヘッダー/フッター/CTA/デザインCSSを再利用して自己完結HTML（`<style>`同梱・Article/BreadcrumbList/FAQ の JSON-LD付き）を生成。出力＝`assets/articles/*.html`＋`manifest.json`（投稿本文）、`column.html`＋`page_manifest.json`（一覧ページ）。記事を増やす手順：build_articles.py に `add_article(...)` を追記 → `python assets/build_articles.py` → git push → 管理画面（post-new.php 等 wpApiSettings がある画面）でRESTにより slug 一致で投稿へ upsert。
 - **テーマ(TT5)の投稿装飾を非表示**：投稿ページに出る「執筆者/カテゴリ/日付」メタ（`.wp-block-group.has-small-font-size`）と、本文下の関連投稿(`.wp-block-query` ほか）を、記事の`<style>`内HIDE_CSSでクラス指定により非表示化済み。
 - **運用ルール厳守**：料金の具体額・実績件数・お客様の声は記載しない／不用品は「古物商での買取＋片付け搬出、処分は提携許可業者へ適正処理を委託」と表現（一般廃棄物収集運搬業許可は無いため無許可回収を名乗らない）／古物商許可（機械工具類・静岡県公安委員会 第49118K000008号）は農機具・機械の買取で言及可。
-- **未対応（社長対応 or 翌日以降）**：新記事6本＋/column/のGSC手動インデックス登録（前日に割当上限のため。サイトマップ経由で順次クロールされる）。フォーム送信テスト。投稿の「執筆者」表示名が管理者メール（katazuke@amt-eco.com）になっている（CSSで非表示だがHTMLソースには残る）。
+- **お問い合わせフォーム：送信テスト済み（2026-09-27）**。/contact/ から送信し、katazuke@amt-eco.com に受信できることを確認済み（フォーム正常動作）。※CF7の完了/エラーメッセージは初期設定の英語のまま（日本語化は任意。社長のご希望があれば変更）。
+- **未対応（社長対応 or 翌日以降）**：新記事6本＋/column/のGSC手動インデックス登録（前日に割当上限のため。サイトマップ経由で順次クロールされる）。投稿の「執筆者」表示名が管理者メール（katazuke@amt-eco.com）になっている（CSSで非表示だがHTMLソースには残る）。
