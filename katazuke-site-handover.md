@@ -57,10 +57,12 @@
 - [x] 独自SSL（無料）適用済み
 - [x] WordPress（Lightning）実装済み
 - [x] 古物商許可番号を記載（静岡県公安委員会 第49118K000008号／機械工具類）
-- [ ] 「追加CSS」に `assets/extra.css` を登録
-- [ ] 各ページ（トップ＋下層11ページ）の作成・公開
+- [x] **各ページ（トップ＋下層11ページ）をWordPressに公開**（2026-09-26／REST経由／固定ページID 6〜17）
+- [x] **トップページを固定フロントページに設定**（ホーム＝ページID 6）
+- [x] PCブラウザでの表示確認（トップ・下層・フッターまで正常、テーマ枠は非表示）
+- [ ] スマホでの最終表示確認
 - [ ] `robots.txt` / `sitemap.xml` の確認（sitemapのURLは `https://katazuke.amt-eco.com/`）
-- [ ] ブラウザでの表示確認（PC・スマホ）
+- [ ] 旧サンプル（「Sample Page」「Hello world!」）の要否確認（不要なら削除）
 
 ## 5. ページ構成
 
@@ -106,6 +108,13 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 7. お問い合わせフォーム（Contact Form 7 等）を `/contact/` ページに差し込む（本文の該当位置に注記あり）。
 8. OGP画像の追加（任意。画像は社長の確認をとってから）。
 9. 本体サイト amt-eco.com、および解体サイト kaitai.amt-eco.com（残置物撤去の導線）からの相互リンクを検討（本体側を触る前に社長に確認）。
+
+## 7b. 公開の方法・更新のしかた（重要）
+
+- テーマは **Twenty Twenty-Five（ブロックテーマ）**。各固定ページは `.amt-katazuke` の自己完結HTML（`<style>`同梱）で、テーマのヘッダー/フッター/タイトルは各ページ先頭の`<style>`（`header.wp-block-template-part{display:none}` 等）で非表示にしている。そのため**カスタムのヘッダー1つだけ**が表示される。
+- 公開は、GitHub公開リポジトリの raw（`assets/pages/manifest.json`・`assets/extra.css`）をブラウザから取得し、WordPress REST（`/wp-json/wp/v2/pages`）へ各ページを作成した（管理者ログイン状態のnonce使用）。
+- **内容を直したいとき**：`assets/build_pages.py` を編集 → `python assets/build_pages.py` → GitHubへpush → 公開スクリプトを再実行（slugが一致する既存ページは上書き更新されるので重複しない）。または各固定ページを管理画面のコードエディターで直接編集してもよい。
+- CSSは各ページに同梱済みのため「追加CSS」への登録は不要。グローバルに一元管理したい場合のみ `assets/extra.css` を「追加CSS」に貼り、各ページ先頭の`<style>`は無くてもよい。
 
 ## 7. 注意事項
 
