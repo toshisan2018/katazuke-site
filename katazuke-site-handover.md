@@ -150,3 +150,14 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **サイトマップ**：`wp-sitemap.xml` をGSCに送信済み（送信直後は「取得できませんでした」表示だが、サイトマップ自体はHTTP 200で正常。Googleが取得すると成功に変わる見込み）。
 - 導入プラグイン（katazuke）：Contact Form 7、WPCode Lite（ともに有効）。
 - ※テーマ(functions.php)への直接コード追加は本番安全機構によりブロックされるため、head出力はWPCodeで管理している。
+
+
+## 9. 2026-09-27 追加対応（Google連携・デザイン強化）
+
+- **Site Kit by Google 導入・連携済み**：Search Console と Google アナリティクス(GA4)を接続。GA4はアカウント「おうち片付け隊」／プロパティ katazuke.amt-eco.com を新規作成し、gtagはSite Kitが自動出力（手動設置不要）。
+- **Google Search Console**：所有権確認済み（HTMLタグ＝WPCode）。サイトマップ wp-sitemap.xml 送信済み・検出済み。主要4ページ（トップ・家の片付け・不用品回収・残置物撤去）は手動インデックス登録をリクエスト済み。倉庫・農機具ほかは1日の割当上限のため翌日以降に追加可（サイトマップ経由でも順次クロールされる）。
+- **ヘッダー強化**：ロゴマーク62px・社名1.5remに拡大（左上のインパクト向上）。
+- **トップのヒーローを写真背景化**：作業風景の写真（hero-bg.jpg）＋左に文字スクリム。スマホは全面スクリムで可読性確保。
+- **農機具ページに農機具写真**（service-nouki.jpg）を追加。作業員マスコットは「選ばれる理由」に配置。
+- **ファビコン**：ロゴ（家＋箱＋きらめき）を設定済み。
+- 導入プラグイン（追加）：Site Kit by Google。※WordPress管理画面のCF7/WPCode/Site Kitは削除しないこと（フォーム・GSC検証・解析が外れる）。
