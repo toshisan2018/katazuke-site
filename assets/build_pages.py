@@ -64,6 +64,14 @@ IMG = {
     "logoicon": UPLOADS + "logo-icon.png",
     "mascot_worker": UPLOADS + "mascot-worker.png",
     "mascot_hero": UPLOADS + "mascot-hero.png",
+    # 対応業務セクション用イラスト（透過PNG）
+    "illust_katazuke": UPLOADS + "illust-katazuke.png",
+    "illust_fuyouhin": UPLOADS + "illust-fuyouhin.png",
+    "illust_zanchibutsu": UPLOADS + "illust-zanchibutsu.png",
+    "illust_souko": UPLOADS + "illust-souko.png",
+    "illust_nouki": UPLOADS + "illust-nouki.png",
+    # 対応エリアの地図イラスト
+    "area_map": UPLOADS + "area-map.jpg",
 }
 
 NAV_ITEMS = [
@@ -250,6 +258,15 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .card h3{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
 .amt-katazuke .card h3 .mk{color:var(--primary-dark);margin-right:6px;}
 .amt-katazuke .card p{font-size:.92rem;color:#444;}
+/* サービスカードのイラスト */
+.amt-katazuke .card--svc{padding-top:16px;transition:box-shadow .2s,transform .2s;}
+.amt-katazuke .card--svc:hover{box-shadow:0 8px 22px rgba(0,0,0,.12);transform:translateY(-3px);}
+.amt-katazuke .card-illust{text-align:center;margin:0 0 10px;}
+.amt-katazuke .card-illust img{height:132px;width:auto;display:inline-block;}
+
+/* 対応エリアの地図 */
+.amt-katazuke .area-map{margin:0 0 26px;}
+.amt-katazuke .area-map img{width:100%;max-width:860px;height:auto;display:block;margin:0 auto;border-radius:12px;box-shadow:0 3px 16px rgba(0,0,0,.10);}
 
 /* 選ばれる理由 */
 .amt-katazuke .reasons .card{border-top-color:var(--dark);}
@@ -879,6 +896,7 @@ area_body = (
     '<section class="k-section"><div class="prose">'
     '<p class="lead">静岡県内を中心に、片付け・不用品回収・残置物撤去・倉庫の片付け・'
     '農機具の買取りを承っています。下記エリアはもちろん、近隣地域もまずはご相談ください。</p>'
+    f'<div class="area-map"><img src="{IMG["area_map"]}" alt="対応エリアマップ：静岡県島田市を中心に藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市など" width="1200" height="761" loading="lazy"></div>'
     '<h2>主な対応エリア</h2>'
     '<ul>'
     '<li>島田市（金谷を含む）</li><li>藤枝市</li><li>焼津市</li><li>静岡市</li>'
@@ -1042,16 +1060,17 @@ PAGES.append(("privacy-policy", "プライバシーポリシー｜おうちの�
 # ============================================================
 def build_index():
     services = [
-        ("家のお片付け", "お引越し前後・空き家・実家の片付けなど。仕分けから搬出まで、ご希望に合わせて対応します。", "/katazuke/"),
-        ("不用品の回収", "家具・家電・雑貨など、ご家庭や事業所で不要になった品物をまとめて回収します。量が多い場合もご相談ください。", "/fuyouhin/"),
-        ("解体前の残置物撤去", "解体予定の建物に残った家財・設備・不用品を撤去します。当社の解体工事とあわせてのご依頼も可能です。", "/zanchibutsu/"),
-        ("倉庫の片付け", "倉庫・工場・店舗などに溜まった資材・在庫・什器の片付け。法人・事業者さまの整理もお任せください。", "/souko/"),
-        ("農機具の買取り", "使わなくなったトラクター・耕運機・田植機などの農機具を買取ります。片付けと同時のご相談も歓迎です。", "/nouki-kaitori/"),
+        ("家のお片付け", "お引越し前後・空き家・実家の片付けなど。仕分けから搬出まで、ご希望に合わせて対応します。", "/katazuke/", "illust_katazuke"),
+        ("不用品の回収", "家具・家電・雑貨など、ご家庭や事業所で不要になった品物をまとめて回収します。量が多い場合もご相談ください。", "/fuyouhin/", "illust_fuyouhin"),
+        ("解体前の残置物撤去", "解体予定の建物に残った家財・設備・不用品を撤去します。当社の解体工事とあわせてのご依頼も可能です。", "/zanchibutsu/", "illust_zanchibutsu"),
+        ("倉庫の片付け", "倉庫・工場・店舗などに溜まった資材・在庫・什器の片付け。法人・事業者さまの整理もお任せください。", "/souko/", "illust_souko"),
+        ("農機具の買取り", "使わなくなったトラクター・耕運機・田植機などの農機具を買取ります。片付けと同時のご相談も歓迎です。", "/nouki-kaitori/", "illust_nouki"),
     ]
     cards = "".join(
-        f'<a class="card" href="{u}" style="text-decoration:none;color:inherit;display:block;">'
+        f'<a class="card card--svc" href="{u}" style="text-decoration:none;color:inherit;display:block;">'
+        f'<div class="card-illust"><img src="{IMG[ik]}" alt="{t}のイラスト" width="280" height="280" loading="lazy"></div>'
         f'<h3><span class="mk">■</span>{t}</h3><p>{d}</p></a>'
-        for t, d, u in services
+        for t, d, u, ik in services
     )
     reasons = [
         ("BtoB・BtoC どちらも対応", "個人のお客様から法人・事業者さままで、片付け・回収・撤去に幅広く対応します。"),
@@ -1110,6 +1129,7 @@ def build_index():
     area_sec = (
         '<section class="k-section area"><div class="inner">'
         '<h2 class="sec-title">対応エリア</h2>'
+        f'<div class="area-map"><img src="{IMG["area_map"]}" alt="対応エリアマップ：静岡県島田市を中心に藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市など" width="1200" height="761" loading="lazy"></div>'
         '<p><strong>静岡県内を中心</strong>に対応しています。'
         '島田市・金谷・藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市・浜松市ほか、'
         '近隣エリアもまずはご相談ください。</p></div></section>'
