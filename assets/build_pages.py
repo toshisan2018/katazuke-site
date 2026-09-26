@@ -41,11 +41,13 @@ CATCH = "静岡県島田市｜片付け・不用品回収・残置物撤去・�
 # 許認可（この事業で実際に保有しているもののみ）
 #   一般廃棄物収集運搬業許可：なし（→ 収集運搬業としての「回収」を名乗らない書き方にする）
 #   古物商許可：あり
-KOBUTSU_AUTH = "静岡県公安委員会"   # 古物商許可の公安委員会
-KOBUTSU_NO = ""                    # 古物商許可番号。分かり次第ここに記入して再生成する（例: "471234567890"）
-_kb_suffix = (" 第" + KOBUTSU_NO + "号") if KOBUTSU_NO else ""
-KOBUTSU_TD = KOBUTSU_AUTH + _kb_suffix              # 会社概要テーブル用
-KOBUTSU_LABEL = "古物商許可（" + KOBUTSU_AUTH + "）" + _kb_suffix  # 本文用
+KOBUTSU_AUTH = "静岡県公安委員会"     # 古物商許可の公安委員会
+KOBUTSU_NO = "49118K000008"          # 古物商許可番号
+KOBUTSU_CATEGORY = "機械工具類"       # 取扱品目
+_kb_no = (" 第" + KOBUTSU_NO + "号") if KOBUTSU_NO else ""
+# 会社概要テーブル用（例: 古物商許可（機械工具類）　静岡県公安委員会 第49118K000008号）
+KOBUTSU_TD = "古物商許可（" + KOBUTSU_CATEGORY + "）　" + KOBUTSU_AUTH + _kb_no
+KOBUTSU_LABEL = "古物商許可（" + KOBUTSU_AUTH + "）" + _kb_no  # 本文用
 
 NAV_ITEMS = [
     ("/", "ホーム"),
@@ -756,7 +758,7 @@ company_body = (
     '<tr><th>所在地</th><td>〒428-0013　静岡県島田市金谷東2丁目3483-290</td></tr>'
     f'<tr><th>電話番号</th><td><a href="tel:{TEL}">{TEL}</a></td></tr>'
     f'<tr><th>メール</th><td><a href="mailto:{MAIL}">{MAIL}</a></td></tr>'
-    f'<tr><th>許認可</th><td>{KOBUTSU_TD}（古物商許可）</td></tr>'
+    f'<tr><th>許認可</th><td>{KOBUTSU_TD}</td></tr>'
     '<tr><th>事業内容</th><td>お片付け・不用品回収・残置物撤去・農機具買取（おうちのお片付け隊）、'
     '解体工事、非鉄金属・工業雑品スクラップ買取、中古太陽光パネル買取・輸出、通販・卸売</td></tr>'
     '<tr><th>対応エリア</th><td>静岡県内を中心（島田市・金谷・藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市・浜松市ほか）</td></tr>'
@@ -960,7 +962,7 @@ def build_index():
         '<tr><th>所在地</th><td>〒428-0013　静岡県島田市金谷東2丁目3483-290</td></tr>'
         f'<tr><th>電話番号</th><td><a href="tel:{TEL}">{TEL}</a></td></tr>'
         f'<tr><th>メール</th><td><a href="mailto:{MAIL}">{MAIL}</a></td></tr>'
-        f'<tr><th>許認可</th><td>{KOBUTSU_TD}（古物商許可）</td></tr>'
+        f'<tr><th>許認可</th><td>{KOBUTSU_TD}</td></tr>'
         '<tr><th>事業内容</th><td>お片付け・不用品回収・残置物撤去・農機具買取（おうちのお片付け隊）、'
         '解体工事、非鉄金属・工業雑品スクラップ買取、中古太陽光パネル買取・輸出、通販・卸売</td></tr>'
         '<tr><th>コーポレートサイト</th><td><a href="https://amt-eco.com/" target="_blank" rel="noopener">https://amt-eco.com/</a></td></tr>'
