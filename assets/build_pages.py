@@ -420,7 +420,7 @@ def cta():
         '<p>「いくらかかる？」「これは回収できる？」だけでもお気軽にどうぞ。'
         '個人のお客様も法人のお客様も、静岡県内を中心に対応します。</p>'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}</a>'
-        f'<div class="btn-line"><a class="btn-mail" href="mailto:{MAIL}">'
+        '<div class="btn-line"><a class="btn-mail" href="/contact/">'
         'メールで相談する</a></div></div></div></section>'
     )
 
@@ -440,7 +440,7 @@ def footer():
         '<div class="foot-col foot-contact"><h4>お問い合わせ</h4>'
         f'<a class="foot-tel" href="tel:{TEL}">{TEL}</a>'
         '<p class="foot-note">お見積り・ご相談は無料</p>'
-        f'<a class="foot-mail" href="mailto:{MAIL}">メールで相談する</a>'
+        '<a class="foot-mail" href="/contact/">メールで相談する</a>'
         '<p class="foot-addr">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</p>'
         '<p class="foot-corp"><a href="https://amt-eco.com/" target="_blank" rel="noopener">'
         'コーポレートサイト ↗</a></p></div></div>'
@@ -1083,7 +1083,7 @@ def build_index():
         '解体工事とあわせたご相談も可能です。</p>'
         '<div class="hero-cta">'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}<small>受付時間内にお気軽にお電話ください</small></a>'
-        f'<a class="btn-mail" href="mailto:{MAIL}">メールで相談する</a>'
+        '<a class="btn-mail" href="/contact/">メールで相談する</a>'
         '</div></div></div></div>'
     )
     works = (
