@@ -166,13 +166,19 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 
 - **All in One SEO (AIOSEO) 導入・設定済み**：セットアップウィザードでビジネス種別＝「小規模オフラインビジネス」（LocalBusinessスキーマ）、組織情報（電話 0547-39-3750／ロゴ／SNSシェア画像＝OGP）を設定。サイトマップ有効・全投稿タイプを含む。※ウィザードの「機能」画面にある外部プラグイン（MonsterInsights/OptinMonster/リンク切れチェッカー/Multilingual）は導入しない方針のため、ウィザードは途中で本体設定へ移動して完了させている（余計なプラグインは未導入）。
 - **パーマリンクを「投稿名」(/%postname%/) に変更**：投稿URLが `https://katazuke.amt-eco.com/<スラッグ>/` に統一（旧 `/年/月/日/スラッグ/` は404）。※固定ページのURLには影響なし。
-- **コラム記事6本を公開**（WordPress投稿・カテゴリー「コラム」slug=column, ID 11／各投稿はコメント無効）：
+- **コラム記事11本を公開**（WordPress投稿・カテゴリー「コラム」slug=column, ID 11／各投稿はコメント無効）：
   - `/seizen-seiri/` 生前整理は何から始める？（ID155）
   - `/ihin-seiri/` 遺品整理の進め方と業者選び（ID156）
   - `/akiya-katazuke/` 空き家・実家の片付け5ステップ（ID157）
   - `/fuyouhin-tebanashi/` 不用品を賢く手放す方法（ID158）
   - `/nouki-kaitori-kotsu/` 農機具を高く売るコツ（ID159）
   - `/souko-seiri-houjin/` 倉庫・工場の片付け（法人向け）（ID160）
+  - `/gomiyashiki/` ゴミ屋敷の片付けはどう進める？
+  - `/fuyouhin-hiyou/` 不用品回収の費用はどう決まる？
+  - `/hikkoshi-fuyouhin/` 引っ越しで出る不用品をまとめて処分
+  - `/kaden-shobun/` 冷蔵庫・洗濯機・テレビの処分方法（家電リサイクル法）
+  - `/tenpo-heiten/` 店舗・オフィスの閉店・移転の片付け（法人向け）
+  - ※後半5本は **SEO＋AIO（AI検索・強調スニペット）対策**として、本文冒頭に「結論」先出しブロック(`.answer`)＋質問型の見出しを採用。
 - **コラム一覧ページ `/column/`**（固定ページ・サイトと同じデザイン）を新設。ヘッダーナビとフッター「ご案内」に「コラム」リンクを追加（全ページ再公開済み）。
 - **記事の作り方（単一ソース）**：`assets/build_articles.py` が `build_pages.py` のヘッダー/フッター/CTA/デザインCSSを再利用して自己完結HTML（`<style>`同梱・Article/BreadcrumbList/FAQ の JSON-LD付き）を生成。出力＝`assets/articles/*.html`＋`manifest.json`（投稿本文）、`column.html`＋`page_manifest.json`（一覧ページ）。記事を増やす手順：build_articles.py に `add_article(...)` を追記 → `python assets/build_articles.py` → git push → 管理画面（post-new.php 等 wpApiSettings がある画面）でRESTにより slug 一致で投稿へ upsert。
 - **テーマ(TT5)の投稿装飾を非表示**：投稿ページに出る「執筆者/カテゴリ/日付」メタ（`.wp-block-group.has-small-font-size`）と、本文下の関連投稿(`.wp-block-query` ほか）を、記事の`<style>`内HIDE_CSSでクラス指定により非表示化済み。
