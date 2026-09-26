@@ -161,3 +161,20 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **農機具ページに農機具写真**（service-nouki.jpg）を追加。作業員マスコットは「選ばれる理由」に配置。
 - **ファビコン**：ロゴ（家＋箱＋きらめき）を設定済み。
 - 導入プラグイン（追加）：Site Kit by Google。※WordPress管理画面のCF7/WPCode/Site Kitは削除しないこと（フォーム・GSC検証・解析が外れる）。
+
+## 10. 2026-09-27 追加対応（AIOSEO・コラム記事）
+
+- **All in One SEO (AIOSEO) 導入・設定済み**：セットアップウィザードでビジネス種別＝「小規模オフラインビジネス」（LocalBusinessスキーマ）、組織情報（電話 0547-39-3750／ロゴ／SNSシェア画像＝OGP）を設定。サイトマップ有効・全投稿タイプを含む。※ウィザードの「機能」画面にある外部プラグイン（MonsterInsights/OptinMonster/リンク切れチェッカー/Multilingual）は導入しない方針のため、ウィザードは途中で本体設定へ移動して完了させている（余計なプラグインは未導入）。
+- **パーマリンクを「投稿名」(/%postname%/) に変更**：投稿URLが `https://katazuke.amt-eco.com/<スラッグ>/` に統一（旧 `/年/月/日/スラッグ/` は404）。※固定ページのURLには影響なし。
+- **コラム記事6本を公開**（WordPress投稿・カテゴリー「コラム」slug=column, ID 11／各投稿はコメント無効）：
+  - `/seizen-seiri/` 生前整理は何から始める？（ID155）
+  - `/ihin-seiri/` 遺品整理の進め方と業者選び（ID156）
+  - `/akiya-katazuke/` 空き家・実家の片付け5ステップ（ID157）
+  - `/fuyouhin-tebanashi/` 不用品を賢く手放す方法（ID158）
+  - `/nouki-kaitori-kotsu/` 農機具を高く売るコツ（ID159）
+  - `/souko-seiri-houjin/` 倉庫・工場の片付け（法人向け）（ID160）
+- **コラム一覧ページ `/column/`**（固定ページ・サイトと同じデザイン）を新設。ヘッダーナビとフッター「ご案内」に「コラム」リンクを追加（全ページ再公開済み）。
+- **記事の作り方（単一ソース）**：`assets/build_articles.py` が `build_pages.py` のヘッダー/フッター/CTA/デザインCSSを再利用して自己完結HTML（`<style>`同梱・Article/BreadcrumbList/FAQ の JSON-LD付き）を生成。出力＝`assets/articles/*.html`＋`manifest.json`（投稿本文）、`column.html`＋`page_manifest.json`（一覧ページ）。記事を増やす手順：build_articles.py に `add_article(...)` を追記 → `python assets/build_articles.py` → git push → 管理画面（post-new.php 等 wpApiSettings がある画面）でRESTにより slug 一致で投稿へ upsert。
+- **テーマ(TT5)の投稿装飾を非表示**：投稿ページに出る「執筆者/カテゴリ/日付」メタ（`.wp-block-group.has-small-font-size`）と、本文下の関連投稿(`.wp-block-query` ほか）を、記事の`<style>`内HIDE_CSSでクラス指定により非表示化済み。
+- **運用ルール厳守**：料金の具体額・実績件数・お客様の声は記載しない／不用品は「古物商での買取＋片付け搬出、処分は提携許可業者へ適正処理を委託」と表現（一般廃棄物収集運搬業許可は無いため無許可回収を名乗らない）／古物商許可（機械工具類・静岡県公安委員会 第49118K000008号）は農機具・機械の買取で言及可。
+- **未対応（社長対応 or 翌日以降）**：新記事6本＋/column/のGSC手動インデックス登録（前日に割当上限のため。サイトマップ経由で順次クロールされる）。フォーム送信テスト。投稿の「執筆者」表示名が管理者メール（katazuke@amt-eco.com）になっている（CSSで非表示だがHTMLソースには残る）。
