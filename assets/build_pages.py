@@ -130,6 +130,15 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .tel-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:var(--ink) !important;font-weight:900;font-size:1.28rem;padding:10px 24px;border-radius:30px;text-decoration:none;box-shadow:0 4px 12px rgba(224,160,0,.4);white-space:nowrap;}
 .amt-katazuke .tel-btn:hover{filter:brightness(1.05);}
 .amt-katazuke .k-header .header-tel small{display:block;font-size:.72rem;color:var(--ink);font-weight:700;margin-top:6px;}
+@media(max-width:640px){
+  .amt-katazuke .header-inner{flex-wrap:wrap;justify-content:center;text-align:center;gap:10px;padding:12px 14px;}
+  .amt-katazuke .k-header .logo{justify-content:center;flex-wrap:wrap;}
+  .amt-katazuke .logo-name{font-size:1.02rem;}
+  .amt-katazuke .logo-tx{align-items:center;}
+  .amt-katazuke .logo-tx small{font-size:.68rem;line-height:1.5;}
+  .amt-katazuke .k-header .header-tel{width:100%;}
+  .amt-katazuke .tel-btn{font-size:1.15rem;padding:10px 20px;}
+}
 
 /* ===== グローバルナビ ===== */
 .amt-katazuke .k-nav{background:var(--dark);position:relative;}
