@@ -164,6 +164,17 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .faq-a{display:flex;gap:12px;align-items:flex-start;padding:18px 20px;color:#444;font-size:.95rem;}
 .amt-katazuke .faq-a::before{content:"A";flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--primary);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;}
 
+/* お問い合わせフォーム */
+.amt-katazuke .amt-form{max-width:640px;margin:8px auto 0;}
+.amt-katazuke .amt-form label{display:block;font-weight:700;margin:16px 0 6px;color:var(--dark);font-size:.95rem;}
+.amt-katazuke .amt-form label .req{color:#c0392b;font-size:.8rem;margin-left:6px;}
+.amt-katazuke .amt-form input,.amt-katazuke .amt-form textarea{width:100%;padding:12px 14px;border:1px solid #ccc;border-radius:8px;font-size:1rem;font-family:inherit;background:#fff;color:var(--ink);}
+.amt-katazuke .amt-form input:focus,.amt-katazuke .amt-form textarea:focus{outline:2px solid var(--primary);border-color:var(--primary);}
+.amt-katazuke .amt-form .form-submit{margin-top:22px;text-align:center;}
+.amt-katazuke .amt-form button{background:var(--dark);color:#fff;font-weight:900;font-size:1.1rem;padding:14px 44px;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25);}
+.amt-katazuke .amt-form button:hover{filter:brightness(1.15);}
+.amt-katazuke .amt-form .form-note{font-size:.82rem;color:#666;margin-top:12px;text-align:center;}
+
 /* 下部CTA帯（濃色地・白文字＋黄ボタン） */
 .amt-katazuke .cta-band{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:48px 16px;}
 .amt-katazuke .cta-band h2{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:900;margin-bottom:10px;color:#fff;}

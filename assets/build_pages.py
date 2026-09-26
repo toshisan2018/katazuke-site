@@ -256,6 +256,17 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .faq-a{display:flex;gap:12px;align-items:flex-start;padding:18px 20px;color:#444;font-size:.95rem;}
 .amt-katazuke .faq-a::before{content:"A";flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--primary);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;}
 
+/* お問い合わせフォーム */
+.amt-katazuke .amt-form{max-width:640px;margin:8px auto 0;}
+.amt-katazuke .amt-form label{display:block;font-weight:700;margin:16px 0 6px;color:var(--dark);font-size:.95rem;}
+.amt-katazuke .amt-form label .req{color:#c0392b;font-size:.8rem;margin-left:6px;}
+.amt-katazuke .amt-form input,.amt-katazuke .amt-form textarea{width:100%;padding:12px 14px;border:1px solid #ccc;border-radius:8px;font-size:1rem;font-family:inherit;background:#fff;color:var(--ink);}
+.amt-katazuke .amt-form input:focus,.amt-katazuke .amt-form textarea:focus{outline:2px solid var(--primary);border-color:var(--primary);}
+.amt-katazuke .amt-form .form-submit{margin-top:22px;text-align:center;}
+.amt-katazuke .amt-form button{background:var(--dark);color:#fff;font-weight:900;font-size:1.1rem;padding:14px 44px;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25);}
+.amt-katazuke .amt-form button:hover{filter:brightness(1.15);}
+.amt-katazuke .amt-form .form-note{font-size:.82rem;color:#666;margin-top:12px;text-align:center;}
+
 /* 下部CTA帯（濃色地・白文字＋黄ボタン） */
 .amt-katazuke .cta-band{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:48px 16px;}
 .amt-katazuke .cta-band h2{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:900;margin-bottom:10px;color:#fff;}
@@ -874,14 +885,31 @@ contact_body = (
     '<h2>お電話でのお問い合わせ</h2>'
     f'<p style="font-size:1.6rem;font-weight:900;"><a href="tel:{TEL}">{TEL}</a></p>'
     '<p>受付時間内にお気軽にお電話ください。「費用だけ知りたい」というご相談だけでも大丈夫です。</p>'
-    '<h2>メールでのお問い合わせ</h2>'
-    f'<p><a href="mailto:{MAIL}">{MAIL}</a></p>'
-    '<p>次の内容をお知らせいただくと、ご案内がスムーズです。</p>'
-    '<ul><li>片付けたい場所（住所・エリア）</li>'
-    '<li>おおよその内容（例：一軒分／一部屋／不用品◯点／倉庫／農機具など）</li>'
-    '<li>ご希望の時期</li><li>お名前・ご連絡先</li></ul>'
-    '<p class="note">※お問い合わせフォームを設置する場合は、この位置にWordPressの'
-    'お問い合わせフォーム（Contact Form 7 等）を差し込めます。</p>'
+    f'<p>メールでも承ります：<a href="mailto:{MAIL}">{MAIL}</a></p>'
+    '</div></section>'
+    '<section class="k-section"><div class="inner">'
+    '<h2 class="sec-title">メールでのお問い合わせ</h2>'
+    '<p class="sec-lead">下記フォームにご入力のうえ「メールで送信する」を押すと、'
+    'メールソフトが起動し、入力内容が本文に反映されます。そのまま送信してください。</p>'
+    '<form class="amt-form" onsubmit="return false;">'
+    '<label>お名前<span class="req">必須</span><input type="text" id="cf-name" autocomplete="name"></label>'
+    '<label>電話番号<input type="tel" id="cf-tel" autocomplete="tel"></label>'
+    '<label>メールアドレス<span class="req">必須</span><input type="email" id="cf-mail" autocomplete="email"></label>'
+    '<label>片付けたい場所・エリア（市町名など）<input type="text" id="cf-area"></label>'
+    '<label>おおよその内容（例：一軒分／一部屋／不用品／倉庫／農機具など）<input type="text" id="cf-kind"></label>'
+    '<label>ご希望の時期<input type="text" id="cf-when"></label>'
+    '<label>ご相談内容<textarea id="cf-msg" rows="5"></textarea></label>'
+    '<div class="form-submit"><button type="button" onclick="amtSend()">メールで送信する</button>'
+    '<p class="form-note">送信ボタンでメールソフトが開きます。うまく開かない場合は、'
+    f'お手数ですが <a href="mailto:{MAIL}">{MAIL}</a> 宛にメール、または '
+    f'<a href="tel:{TEL}">{TEL}</a> までお電話ください。</p></div>'
+    '</form>'
+    '<script>function amtSend(){var g=function(id){var e=document.getElementById(id);return e?e.value:"";};'
+    'var to="' + MAIL + '";var sub=encodeURIComponent("お片付けのお問い合わせ");'
+    'var body="お名前: "+g("cf-name")+"\\n電話番号: "+g("cf-tel")+"\\nメールアドレス: "+g("cf-mail")'
+    '+"\\n片付けたい場所・エリア: "+g("cf-area")+"\\n内容: "+g("cf-kind")+"\\nご希望の時期: "+g("cf-when")'
+    '+"\\n\\nご相談内容:\\n"+g("cf-msg");'
+    'window.location.href="mailto:"+to+"?subject="+sub+"&body="+encodeURIComponent(body);}</script>'
     '</div></section>'
 )
 c, _ = assemble(
