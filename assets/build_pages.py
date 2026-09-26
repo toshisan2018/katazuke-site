@@ -320,11 +320,11 @@ html,body{overflow-x:hidden;}
 # ロゴマーク（片付け＝きれいに整った家＋きらめき）。文字は入れない。
 LOGO_SVG = (
     '<svg viewBox="0 0 48 48" width="46" height="46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
-    '<rect width="48" height="48" rx="11" fill="#f7b500"/>'
-    '<path d="M11 24l13-10 13 10" fill="none" stroke="#2f3a41" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'
-    '<path d="M14 22.5V35h20V22.5" fill="none" stroke="#2f3a41" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'
-    '<path d="M20.5 35v-6h7v6" fill="none" stroke="#2f3a41" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'
-    '<path d="M37 13l1.1 2.4L40.5 16.5l-2.4 1.1L37 20l-1.1-2.4L33.5 16.5l2.4-1.1z" fill="#ffffff"/>'
+    '<rect width="48" height="48" rx="11" fill="#2f7d4f"/>'
+    '<path d="M11 24l13-10 13 10" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'
+    '<path d="M14 22.5V35h20V22.5" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'
+    '<path d="M20.5 35v-6h7v6" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'
+    '<path d="M37 13l1.1 2.4L40.5 16.5l-2.4 1.1L37 20l-1.1-2.4L33.5 16.5l2.4-1.1z" fill="#cdeccd"/>'
     '</svg>'
 )
 
