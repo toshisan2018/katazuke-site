@@ -95,16 +95,16 @@ DESIGN_CSS = """/* ===== 株式会社AMT おうちのお片付け隊 デザイ�
    使い方: この内容を WordPress「追加CSS」に貼る。各ページ本文は .amt-katazuke で囲む。 */
 
 .amt-katazuke{
-  --primary:#f7b500;        /* ブランド黄（アクセント・ボタン・見出し飾り・現在地ナビ） */
-  --primary-dark:#e0a000;   /* 濃い黄（グラデ・ホバー） */
-  --primary-bright:#ffd23f; /* 明るい黄 */
-  --primary-light:#fff5d6;  /* 淡い黄（背景面） */
-  --ink:#2a2724;            /* 本文の黒 */
-  --dark:#2f3a41;           /* 構造色スレート（白文字を載せる：ナビ・CTA・見出しマーク等） */
-  --dark-2:#212a30;         /* さらに濃い */
-  --gray:#f6f5f2;
+  --primary:#2f7d4f;        /* ブランド緑（アクセント・ボタン・見出し飾り・現在地ナビ） */
+  --primary-dark:#245f3c;   /* 濃い緑（グラデ・ホバー） */
+  --primary-bright:#57a877; /* 明るい緑 */
+  --primary-light:#e9f2ec;  /* 淡い緑（背景面） */
+  --ink:#233027;            /* 本文の黒（緑がかった濃色） */
+  --dark:#254a34;           /* 構造色 深緑（白文字を載せる：ナビ・CTA・見出しマーク等） */
+  --dark-2:#1b3826;         /* さらに濃い深緑 */
+  --gray:#f5f5f1;
   --white:#ffffff;
-  --link:#9a6a00;           /* 白背景で読めるリンク色（黄系） */
+  --link:#246b41;           /* 白背景で読めるリンク色（緑系） */
   font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif;
   color:var(--ink);
   background:var(--white);
@@ -127,7 +127,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .logo-name b{color:var(--dark);}
 .amt-katazuke .logo-tx small{font-size:.72rem;color:#666;font-weight:600;margin-top:3px;}
 .amt-katazuke .k-header .header-tel{text-align:center;flex-shrink:0;}
-.amt-katazuke .tel-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:var(--ink) !important;font-weight:900;font-size:1.28rem;padding:10px 24px;border-radius:30px;text-decoration:none;box-shadow:0 4px 12px rgba(224,160,0,.4);white-space:nowrap;}
+.amt-katazuke .tel-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff !important;font-weight:900;font-size:1.28rem;padding:10px 24px;border-radius:30px;text-decoration:none;box-shadow:0 4px 12px rgba(36,95,60,.35);white-space:nowrap;}
 .amt-katazuke .tel-btn:hover{filter:brightness(1.05);}
 .amt-katazuke .k-header .header-tel small{display:block;font-size:.72rem;color:var(--ink);font-weight:700;margin-top:6px;}
 @media(max-width:640px){
@@ -176,18 +176,18 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .breadcrumb span{color:#999;margin:0 6px;}
 
 /* ===== トップの大ヒーロー（黄色地・黒文字） ===== */
-.amt-katazuke .hero{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 55%,var(--primary-bright) 100%);color:var(--ink);padding:72px 16px 88px;position:relative;overflow:hidden;}
-.amt-katazuke .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:repeating-linear-gradient(45deg,var(--dark) 0 24px,var(--primary-dark) 24px 48px);}
+.amt-katazuke .hero{background:linear-gradient(135deg,var(--dark-2) 0%,var(--dark) 55%,var(--primary) 100%);color:#fff;padding:72px 16px 88px;position:relative;overflow:hidden;}
+.amt-katazuke .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:repeating-linear-gradient(45deg,var(--primary-bright) 0 24px,var(--primary) 24px 48px);}
 .amt-katazuke .hero-inner{max-width:1080px;margin:0 auto;position:relative;z-index:1;}
-.amt-katazuke .hero .badge{display:inline-block;background:var(--dark);color:#fff;font-weight:700;font-size:.85rem;padding:5px 16px;border-radius:999px;margin-bottom:20px;}
-.amt-katazuke .hero h1{font-size:clamp(1.7rem,4.5vw,3rem);font-weight:900;line-height:1.4;margin-bottom:18px;color:var(--ink);}
-.amt-katazuke .hero h1 em{font-style:normal;color:var(--dark);background:rgba(255,255,255,.55);padding:0 .2em;border-radius:4px;}
-.amt-katazuke .hero p{font-size:clamp(.95rem,2vw,1.15rem);max-width:660px;margin-bottom:32px;color:#3a352d;}
+.amt-katazuke .hero .badge{display:inline-block;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.45);font-weight:700;font-size:.85rem;padding:5px 16px;border-radius:999px;margin-bottom:20px;}
+.amt-katazuke .hero h1{font-size:clamp(1.7rem,4.5vw,3rem);font-weight:900;line-height:1.4;margin-bottom:18px;color:#fff;}
+.amt-katazuke .hero h1 em{font-style:normal;color:var(--primary-bright);}
+.amt-katazuke .hero p{font-size:clamp(.95rem,2vw,1.15rem);max-width:660px;margin-bottom:32px;color:#e8efe9;}
 .amt-katazuke .hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
-.amt-katazuke .btn-tel{display:inline-block;background:var(--dark);color:#fff;font-weight:900;font-size:clamp(1.2rem,3vw,1.6rem);padding:14px 32px;border-radius:8px;text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.28);}
+.amt-katazuke .btn-tel{display:inline-block;background:#fff;color:var(--dark);font-weight:900;font-size:clamp(1.2rem,3vw,1.6rem);padding:14px 32px;border-radius:8px;text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.28);}
 .amt-katazuke .btn-tel small{display:block;font-size:.75rem;font-weight:700;}
-.amt-katazuke .btn-mail{display:inline-block;background:transparent;color:var(--ink);border:2px solid var(--dark);font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;}
-.amt-katazuke .btn-mail:hover{background:var(--dark);color:#fff;}
+.amt-katazuke .btn-mail{display:inline-block;background:transparent;color:#fff;border:2px solid #fff;font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;}
+.amt-katazuke .btn-mail:hover{background:#fff;color:var(--dark);}
 .amt-katazuke .btn-tel:hover{filter:brightness(1.1);}
 
 /* 下層ページ用のコンパクトなヒーロー */
@@ -279,7 +279,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .cta-band{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:48px 16px;}
 .amt-katazuke .cta-band h2{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:900;margin-bottom:10px;color:#fff;}
 .amt-katazuke .cta-band p{margin-bottom:24px;color:#e7e7e7;}
-.amt-katazuke .cta-band .btn-tel{display:inline-block;background:var(--primary);color:var(--ink);font-weight:900;font-size:clamp(1.3rem,3.5vw,1.8rem);padding:16px 40px;border-radius:8px;text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.3);}
+.amt-katazuke .cta-band .btn-tel{display:inline-block;background:#fff;color:var(--dark);font-weight:900;font-size:clamp(1.3rem,3.5vw,1.8rem);padding:16px 40px;border-radius:8px;text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.3);}
 .amt-katazuke .cta-band .btn-line{display:block;margin-top:16px;}
 .amt-katazuke .cta-band .btn-mail{display:inline-block;background:transparent;color:#fff;border:2px solid #fff;font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;margin-top:8px;}
 .amt-katazuke .cta-band .btn-mail:hover{background:#fff;color:var(--dark);}
@@ -329,7 +329,7 @@ LOGO_SVG = (
 )
 
 TEL_ICON = (
-    '<svg viewBox="0 0 24 24" width="19" height="19" fill="#2a2724" style="flex-shrink:0">'
+    '<svg viewBox="0 0 24 24" width="19" height="19" fill="#ffffff" style="flex-shrink:0">'
     '<path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5 3 3.9 3.4 3.5 4 3.5H7.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 1.7z"/></svg>'
 )
 
