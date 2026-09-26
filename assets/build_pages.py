@@ -1017,17 +1017,29 @@ def build_index():
     )
     with io.open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8") as f:
         f.write(doc)
-    return len(doc)
+
+    # WordPress公開用のトップページ本文（wp:htmlブロック）も返す
+    home_block = (
+        "<!-- wp:html -->\n" + body + "\n<!-- /wp:html -->\n\n"
+        '<!-- wp:html -->\n<script type="application/ld+json">'
+        + json.dumps(jsonld, ensure_ascii=False) + "</script>\n<!-- /wp:html -->"
+    )
+    home_title = "おうちのお片付け隊｜片付け・不用品回収・残置物撤去｜静岡県島田市の株式会社AMT"
+    return len(doc), home_title, home_block
 
 
 # ============================================================
 # 保存
 # ============================================================
-# extra.css（＝Customizer 追加CSS）
+# トップページ（index.html を書き出し、WP公開用のブロックも受け取る）
+idx_len, home_title, home_block = build_index()
+PAGES.insert(0, ("home", home_title, home_block))
+
+# extra.css（グローバルに使う場合の「追加CSS」用。※公開時は各ページに<style>同梱でも可）
 with io.open(os.path.join(HERE, "extra.css"), "w", encoding="utf-8") as f:
     f.write(DESIGN_CSS)
 
-# 下層ページ
+# 各ページ（home＋下層11）
 manifest = []
 for slug, title, content in PAGES:
     fn = os.path.join(OUT, slug + ".html")
@@ -1037,9 +1049,6 @@ for slug, title, content in PAGES:
                      "b64": base64.b64encode(content.encode("utf-8")).decode("ascii")})
 with io.open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
     json.dump(manifest, f, ensure_ascii=False)
-
-# トップページ
-idx_len = build_index()
 
 print("index.html:", idx_len, "bytes")
 print("extra.css :", len(DESIGN_CSS), "bytes")
