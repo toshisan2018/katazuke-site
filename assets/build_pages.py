@@ -1186,27 +1186,32 @@ def build_index():
 # ============================================================
 # 保存
 # ============================================================
-# トップページ（index.html を書き出し、WP公開用のブロックも受け取る）
-idx_len, home_title, home_block = build_index()
-PAGES.insert(0, ("home", home_title, home_block))
+def build_all():
+    # トップページ（index.html を書き出し、WP公開用のブロックも受け取る）
+    idx_len, home_title, home_block = build_index()
+    PAGES.insert(0, ("home", home_title, home_block))
 
-# extra.css（グローバルに使う場合の「追加CSS」用。※公開時は各ページに<style>同梱でも可）
-with io.open(os.path.join(HERE, "extra.css"), "w", encoding="utf-8") as f:
-    f.write(DESIGN_CSS)
+    # extra.css（グローバルに使う場合の「追加CSS」用。※公開時は各ページに<style>同梱でも可）
+    with io.open(os.path.join(HERE, "extra.css"), "w", encoding="utf-8") as f:
+        f.write(DESIGN_CSS)
 
-# 各ページ（home＋下層11）
-manifest = []
-for slug, title, content in PAGES:
-    fn = os.path.join(OUT, slug + ".html")
-    with io.open(fn, "w", encoding="utf-8") as f:
-        f.write(content)
-    manifest.append({"slug": slug, "title": title,
-                     "b64": base64.b64encode(content.encode("utf-8")).decode("ascii")})
-with io.open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
-    json.dump(manifest, f, ensure_ascii=False)
+    # 各ページ（home＋下層11）
+    manifest = []
+    for slug, title, content in PAGES:
+        fn = os.path.join(OUT, slug + ".html")
+        with io.open(fn, "w", encoding="utf-8") as f:
+            f.write(content)
+        manifest.append({"slug": slug, "title": title,
+                         "b64": base64.b64encode(content.encode("utf-8")).decode("ascii")})
+    with io.open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False)
 
-print("index.html:", idx_len, "bytes")
-print("extra.css :", len(DESIGN_CSS), "bytes")
-print("pages:", len(PAGES))
-for slug, title, content in PAGES:
-    print(f"  {slug}: {len(content)} bytes")
+    print("index.html:", idx_len, "bytes")
+    print("extra.css :", len(DESIGN_CSS), "bytes")
+    print("pages:", len(PAGES))
+    for slug, title, content in PAGES:
+        print(f"  {slug}: {len(content)} bytes")
+
+
+if __name__ == "__main__":
+    build_all()
