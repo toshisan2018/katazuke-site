@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【事業名】なら株式会社AMT｜【対応エリア】</title>
+<meta name="description" content="【事業内容の要約】。【対応エリア】中心に対応。お見積り無料、TEL 【電話番号】。">
+<meta property="og:title" content="【事業名】なら株式会社AMT｜【対応エリア】">
+<meta property="og:description" content="【事業内容の要約（120字以内目安）】">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://【サブドメイン】.amt-eco.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ▼▼▼ ここから配色。事業ごとに決めて書き換える（例の色はダミー） ▼▼▼ */
+:root{
+  --primary:#1a5fb4;
+  --primary-dark:#123c73;
+  --primary-bright:#2f7de1;
+  --accent:#f9a825;
+  --accent-light:#fff3d6;
+  --ink:#212121;
+  --gray:#f5f5f5;
+  --white:#ffffff;
+}
+/* ▲▲▲ ここまで配色 ▲▲▲ */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif;
+  color:var(--ink);
+  background:var(--white);
+  line-height:1.8;
+}
+img{max-width:100%;}
+a{color:var(--primary);}
+
+/* ヘッダー */
+header{
+  position:sticky;top:0;z-index:100;
+  background:var(--white);
+  border-bottom:4px solid var(--primary);
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.header-inner{
+  max-width:1080px;margin:0 auto;padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.logo{font-weight:900;font-size:1.25rem;letter-spacing:.02em;}
+.logo span{color:var(--primary);}
+.logo small{display:block;font-size:.7rem;font-weight:500;color:#666;letter-spacing:.1em;}
+.header-tel{text-align:right;}
+.header-tel a{
+  font-weight:900;font-size:1.3rem;color:var(--primary);text-decoration:none;white-space:nowrap;
+}
+.header-tel small{display:block;font-size:.7rem;color:#666;}
+
+/* ヒーロー */
+.hero{
+  background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 55%,var(--primary-bright) 100%);
+  color:var(--white);
+  padding:72px 16px 88px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:"";
+  position:absolute;left:0;right:0;bottom:0;height:14px;
+  background:repeating-linear-gradient(45deg,var(--accent) 0 24px,var(--ink) 24px 48px);
+}
+.hero-inner{max-width:1080px;margin:0 auto;}
+.hero .badge{
+  display:inline-block;background:var(--accent);color:var(--ink);
+  font-weight:700;font-size:.85rem;padding:4px 14px;border-radius:999px;margin-bottom:20px;
+}
+.hero h1{
+  font-size:clamp(1.7rem,4.5vw,3rem);
+  font-weight:900;line-height:1.4;margin-bottom:18px;
+}
+.hero h1 em{font-style:normal;color:var(--accent);}
+.hero p{font-size:clamp(.95rem,2vw,1.15rem);max-width:640px;margin-bottom:32px;}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.btn-tel{
+  display:inline-block;background:var(--accent);color:var(--ink);
+  font-weight:900;font-size:clamp(1.2rem,3vw,1.6rem);
+  padding:14px 32px;border-radius:8px;text-decoration:none;
+  box-shadow:0 4px 0 rgba(0,0,0,.25);
+}
+.btn-tel small{display:block;font-size:.75rem;font-weight:700;}
+.btn-mail{
+  display:inline-block;background:transparent;color:var(--white);
+  border:2px solid var(--white);font-weight:700;
+  padding:12px 28px;border-radius:8px;text-decoration:none;
+}
+.btn-mail:hover,.btn-tel:hover{opacity:.9;}
+
+/* 共通セクション */
+section{padding:64px 16px;}
+.inner{max-width:1080px;margin:0 auto;}
+.sec-title{
+  font-size:clamp(1.4rem,3vw,2rem);font-weight:900;text-align:center;margin-bottom:8px;
+}
+.sec-title::after{
+  content:"";display:block;width:64px;height:5px;margin:14px auto 0;
+  background:linear-gradient(90deg,var(--primary) 50%,var(--accent) 50%);
+}
+.sec-lead{text-align:center;color:#555;margin-bottom:40px;}
+
+/* サービス（対応業務） */
+.works{background:var(--gray);}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.card{
+  background:var(--white);border-radius:10px;padding:26px 22px;
+  border-top:6px solid var(--primary);
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+}
+.card h3{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
+.card h3::before{content:"■ ";color:var(--accent);}
+.card p{font-size:.92rem;color:#444;}
+
+/* 資格・登録（該当する場合のみ使用。不要なら<section>ごと削除） */
+.qual-list{max-width:720px;margin:0 auto;}
+.qual-item{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--accent-light);border-left:6px solid var(--accent);
+  padding:18px 20px;border-radius:6px;margin-bottom:14px;
+}
+.qual-item strong{display:block;font-size:1.02rem;}
+.qual-item span{font-size:.9rem;color:#555;}
+.qual-mark{
+  flex-shrink:0;width:42px;height:42px;border-radius:50%;
+  background:var(--primary);color:var(--white);
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem;
+}
+
+/* 流れ */
+.flow{background:var(--gray);}
+.flow-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;counter-reset:step;}
+.flow-step{
+  background:var(--white);border-radius:10px;padding:22px 16px;text-align:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);position:relative;
+}
+.flow-step::before{
+  counter-increment:step;content:"0" counter(step);
+  display:block;font-weight:900;font-size:1.6rem;color:var(--primary);
+  border-bottom:3px solid var(--accent);width:56px;margin:0 auto 12px;padding-bottom:4px;
+}
+.flow-step h3{font-size:1rem;font-weight:700;margin-bottom:8px;}
+.flow-step p{font-size:.85rem;color:#555;}
+
+/* エリア（店舗・拠点を持たない事業は「対応範囲」に読み替えてよい） */
+.area p{max-width:720px;margin:0 auto;text-align:center;}
+.area strong{color:var(--primary);}
+
+/* 会社概要 */
+.company{background:var(--gray);}
+.company table{
+  width:100%;max-width:760px;margin:0 auto;border-collapse:collapse;background:var(--white);
+  box-shadow:0 2px 10px rgba(0,0,0,.06);border-radius:10px;overflow:hidden;
+}
+.company th,.company td{
+  padding:16px 20px;text-align:left;border-bottom:1px solid #eee;font-size:.95rem;vertical-align:top;
+}
+.company th{
+  width:32%;background:var(--primary);color:var(--white);font-weight:700;white-space:nowrap;
+}
+@media(max-width:560px){
+  .company th{width:38%;}
+}
+
+/* CTA */
+.contact{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:var(--white);text-align:center;
+}
+.contact .sec-title{color:var(--white);}
+.contact .sec-title::after{background:var(--accent);}
+.contact p{margin-bottom:28px;}
+.contact .btn-tel{font-size:clamp(1.4rem,4vw,2rem);padding:18px 44px;}
+.contact .mail-line{margin-top:22px;font-size:.95rem;}
+.contact .mail-line a{color:var(--accent);font-weight:700;}
+
+/* フッター */
+footer{
+  background:var(--ink);color:#ccc;text-align:center;
+  padding:26px 16px;font-size:.82rem;
+  border-top:8px solid var(--accent);
+}
+footer a{color:var(--accent);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span>株式会社AMT</span> 【事業名】
+      <small>【対応エリア】｜【事業のひとことアピール】</small>
+    </div>
+    <div class="header-tel">
+      <a href="tel:【電話番号（ハイフンあり）】">TEL 【電話番号（表示用）】</a>
+      <small>お見積り・ご相談無料</small>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="badge">【対応エリア】中心に対応｜お見積り無料</span>
+    <h1>【キャッチコピー1行目】、<br>まずは<em>【CTAワード】</em>から。</h1>
+    <p>【事業内容の説明。何を、誰に、どこまで対応するかを2〜3文で】</p>
+    <div class="hero-cta">
+      <a class="btn-tel" href="tel:【電話番号（ハイフンあり）】">【電話番号（表示用）】<small>受付時間内にお気軽にお電話ください</small></a>
+      <a class="btn-mail" href="mailto:【メールアドレス】">メールで相談する</a>
+    </div>
+  </div>
+</div>
+
+<section class="works">
+  <div class="inner">
+    <h2 class="sec-title">対応業務</h2>
+    <p class="sec-lead">【対応業務の一言まとめ】</p>
+    <div class="card-grid">
+      <div class="card"><h3>【サービス1】</h3><p>【サービス1の説明】</p></div>
+      <div class="card"><h3>【サービス2】</h3><p>【サービス2の説明】</p></div>
+      <div class="card"><h3>【サービス3】</h3><p>【サービス3の説明】</p></div>
+      <div class="card"><h3>【サービス4】</h3><p>【サービス4の説明】</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 資格・許認可がある事業のみ使用。無ければこの<section>ごと削除する -->
+<section>
+  <div class="inner">
+    <h2 class="sec-title">資格・登録</h2>
+    <p class="sec-lead">【資格・登録の一言まとめ】</p>
+    <div class="qual-list">
+      <div class="qual-item">
+        <div class="qual-mark">登</div>
+        <div><strong>【許認可・登録の名称】</strong><span>【許認可番号・発行元。この事業で実際に保有しているものだけを記載】</span></div>
+      </div>
+      <div class="qual-item">
+        <div class="qual-mark">資</div>
+        <div><strong>【資格名】</strong><span>【資格の説明】</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="inner">
+    <h2 class="sec-title">ご依頼の流れ</h2>
+    <p class="sec-lead">お問い合わせから完了まで、わかりやすくご案内します。</p>
+    <div class="flow-steps">
+      <div class="flow-step"><h3>お問い合わせ</h3><p>お電話またはメールでご相談ください。</p></div>
+      <div class="flow-step"><h3>【ヒアリング／現地調査など】</h3><p>【内容確認のステップ説明】</p></div>
+      <div class="flow-step"><h3>お見積り</h3><p>内容をもとに明確なお見積りをご提示します。</p></div>
+      <div class="flow-step"><h3>【対応・施工・納品など】</h3><p>【実施ステップの説明】</p></div>
+      <div class="flow-step"><h3>完了</h3><p>【完了時の対応内容】</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="area">
+  <div class="inner">
+    <h2 class="sec-title">対応エリア</h2>
+    <p><strong>【対応エリア】</strong>を中心に対応しています。【補足（近隣地域や遠方対応の可否など）】</p>
+  </div>
+</section>
+
+<section class="company">
+  <div class="inner">
+    <h2 class="sec-title">会社概要</h2>
+    <table>
+      <tr><th>会社名</th><td>株式会社AMT</td></tr>
+      <tr><th>代表者</th><td>代表取締役　鈴木 敏也</td></tr>
+      <tr><th>所在地</th><td>〒428-0013　静岡県島田市金谷東2丁目3483-290</td></tr>
+      <tr><th>電話番号</th><td><a href="tel:【電話番号（ハイフンあり）】">【電話番号（表示用）】</a></td></tr>
+      <tr><th>メール</th><td><a href="mailto:【メールアドレス】">【メールアドレス】</a></td></tr>
+      <tr><th>事業内容</th><td>【この事業の内容。他事業を併記する場合は事実のみ】</td></tr>
+      <tr><th>コーポレートサイト</th><td><a href="https://amt-eco.com/" target="_blank" rel="noopener">https://amt-eco.com/</a></td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="inner">
+    <h2 class="sec-title">お見積り・ご相談は無料です</h2>
+    <p>【問い合わせを後押しする一言】</p>
+    <a class="btn-tel" href="tel:【電話番号（ハイフンあり）】">【電話番号（表示用）】</a>
+    <p class="mail-line">メールでのご相談：<a href="mailto:【メールアドレス】">【メールアドレス】</a></p>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 株式会社AMT｜<a href="https://amt-eco.com/" target="_blank" rel="noopener">コーポレートサイト</a></p>
+</footer>
+
+</body>
+</html>
