@@ -256,16 +256,24 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .faq-a{display:flex;gap:12px;align-items:flex-start;padding:18px 20px;color:#444;font-size:.95rem;}
 .amt-katazuke .faq-a::before{content:"A";flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--primary);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;}
 
-/* お問い合わせフォーム */
+/* お問い合わせフォーム（自作フォーム＋Contact Form 7 共通） */
 .amt-katazuke .amt-form{max-width:640px;margin:8px auto 0;}
 .amt-katazuke .amt-form label{display:block;font-weight:700;margin:16px 0 6px;color:var(--dark);font-size:.95rem;}
 .amt-katazuke .amt-form label .req{color:#c0392b;font-size:.8rem;margin-left:6px;}
-.amt-katazuke .amt-form input,.amt-katazuke .amt-form textarea{width:100%;padding:12px 14px;border:1px solid #ccc;border-radius:8px;font-size:1rem;font-family:inherit;background:#fff;color:var(--ink);}
-.amt-katazuke .amt-form input:focus,.amt-katazuke .amt-form textarea:focus{outline:2px solid var(--primary);border-color:var(--primary);}
+.amt-katazuke .amt-form input,.amt-katazuke .amt-form textarea,.amt-katazuke .amt-form select{width:100%;padding:12px 14px;border:1px solid #ccc;border-radius:8px;font-size:1rem;font-family:inherit;background:#fff;color:var(--ink);}
+.amt-katazuke .amt-form input:focus,.amt-katazuke .amt-form textarea:focus,.amt-katazuke .amt-form select:focus{outline:2px solid var(--primary);border-color:var(--primary);}
 .amt-katazuke .amt-form .form-submit{margin-top:22px;text-align:center;}
-.amt-katazuke .amt-form button{background:var(--dark);color:#fff;font-weight:900;font-size:1.1rem;padding:14px 44px;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25);}
-.amt-katazuke .amt-form button:hover{filter:brightness(1.15);}
+.amt-katazuke .amt-form button,.amt-katazuke .amt-form input[type="submit"],.amt-katazuke .amt-form .wpcf7-submit{width:auto;background:var(--dark);color:#fff;font-weight:900;font-size:1.1rem;padding:14px 44px;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25);}
+.amt-katazuke .amt-form button:hover,.amt-katazuke .amt-form input[type="submit"]:hover,.amt-katazuke .amt-form .wpcf7-submit:hover{filter:brightness(1.15);}
 .amt-katazuke .amt-form .form-note{font-size:.82rem;color:#666;margin-top:12px;text-align:center;}
+/* Contact Form 7 個別調整 */
+.amt-katazuke .amt-cf7 p{margin:0 0 4px;}
+.amt-katazuke .amt-cf7 .wpcf7-form-control-wrap{display:block;margin-bottom:6px;}
+.amt-katazuke .amt-cf7 br{display:none;}
+.amt-katazuke .amt-cf7 .wpcf7-list-item{display:inline-block;margin:0 1em 0 0;}
+.amt-katazuke .amt-cf7 .wpcf7-submit{display:block;margin:22px auto 0;}
+.amt-katazuke .amt-cf7 .wpcf7-not-valid-tip{color:#c0392b;font-size:.85rem;}
+.amt-katazuke .amt-cf7 .wpcf7-response-output{margin:16px 0 0!important;border-radius:8px;font-size:.9rem;}
 
 /* 下部CTA帯（濃色地・白文字＋黄ボタン） */
 .amt-katazuke .cta-band{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:48px 16px;}
@@ -878,50 +886,47 @@ PAGES.append(("faq", "よくある質問｜おうちのお片付け隊（株式�
 # ------------------------------------------------------------
 # 11. お問い合わせ
 # ------------------------------------------------------------
-contact_body = (
+# Contact Form 7 のショートコード（既定フォーム「Contact form 1」／送信先＝サイト管理者メール）
+CF7_SHORTCODE = '[contact-form-7 id="2ca5633" title="Contact form 1"]'
+
+contact_h1 = "お問い合わせ｜おうちのお片付け隊（株式会社AMT）"
+contact_lead = ("片付け・不用品回収のご相談・お見積りは無料。"
+                "電話・フォーム・メールのいずれでもお気軽にお問い合わせください。")
+contact_intro = (
     '<section class="k-section"><div class="prose">'
     '<p class="lead">お片付け・不用品回収・残置物撤去・倉庫の片付け・農機具の買取りに関するご相談・'
-    'お見積りは無料です。お電話またはメールでお気軽にお問い合わせください。</p>'
+    'お見積りは無料です。お電話・フォーム・メールのいずれでもお気軽にどうぞ。</p>'
     '<h2>お電話でのお問い合わせ</h2>'
     f'<p style="font-size:1.6rem;font-weight:900;"><a href="tel:{TEL}">{TEL}</a></p>'
     '<p>受付時間内にお気軽にお電話ください。「費用だけ知りたい」というご相談だけでも大丈夫です。</p>'
     f'<p>メールでも承ります：<a href="mailto:{MAIL}">{MAIL}</a></p>'
     '</div></section>'
+)
+contact_form_open = (
     '<section class="k-section"><div class="inner">'
-    '<h2 class="sec-title">メールでのお問い合わせ</h2>'
-    '<p class="sec-lead">下記フォームにご入力のうえ「メールで送信する」を押すと、'
-    'メールソフトが起動し、入力内容が本文に反映されます。そのまま送信してください。</p>'
-    '<form class="amt-form" onsubmit="return false;">'
-    '<label>お名前<span class="req">必須</span><input type="text" id="cf-name" autocomplete="name"></label>'
-    '<label>電話番号<input type="tel" id="cf-tel" autocomplete="tel"></label>'
-    '<label>メールアドレス<span class="req">必須</span><input type="email" id="cf-mail" autocomplete="email"></label>'
-    '<label>片付けたい場所・エリア（市町名など）<input type="text" id="cf-area"></label>'
-    '<label>おおよその内容（例：一軒分／一部屋／不用品／倉庫／農機具など）<input type="text" id="cf-kind"></label>'
-    '<label>ご希望の時期<input type="text" id="cf-when"></label>'
-    '<label>ご相談内容<textarea id="cf-msg" rows="5"></textarea></label>'
-    '<div class="form-submit"><button type="button" onclick="amtSend()">メールで送信する</button>'
-    '<p class="form-note">送信ボタンでメールソフトが開きます。うまく開かない場合は、'
-    f'お手数ですが <a href="mailto:{MAIL}">{MAIL}</a> 宛にメール、または '
-    f'<a href="tel:{TEL}">{TEL}</a> までお電話ください。</p></div>'
-    '</form>'
-    '<script>function amtSend(){var g=function(id){var e=document.getElementById(id);return e?e.value:"";};'
-    'var to="' + MAIL + '";var sub=encodeURIComponent("お片付けのお問い合わせ");'
-    'var body="お名前: "+g("cf-name")+"\\n電話番号: "+g("cf-tel")+"\\nメールアドレス: "+g("cf-mail")'
-    '+"\\n片付けたい場所・エリア: "+g("cf-area")+"\\n内容: "+g("cf-kind")+"\\nご希望の時期: "+g("cf-when")'
-    '+"\\n\\nご相談内容:\\n"+g("cf-msg");'
-    'window.location.href="mailto:"+to+"?subject="+sub+"&body="+encodeURIComponent(body);}</script>'
-    '</div></section>'
+    '<h2 class="sec-title">フォームでのお問い合わせ</h2>'
+    '<p class="sec-lead">下記フォームにご記入のうえ送信してください。'
+    '折り返し担当者よりご連絡します。</p>'
+    '<div class="amt-form amt-cf7">'
 )
-c, _ = assemble(
-    "contact", "お問い合わせ",
-    "お問い合わせ｜おうちのお片付け隊（株式会社AMT）",
-    "片付け・不用品回収のご相談・お見積りは無料。電話 0547-39-3750、またはメールでお問い合わせください。",
-    contact_body, [],
-    [("/ryoukin/", "料金・費用について", "費用の決まり方"),
-     ("/flow/", "ご利用の流れ", "お問い合わせから完了まで"),
-     ("/faq/", "よくある質問", "対応品目・流れ")],
-    [breadcrumb_jsonld("お問い合わせ", "/contact/")],
-)
+contact_form_close = '</div></div></section>'
+contact_rel = rel_block([
+    ("/ryoukin/", "料金・費用について", "費用の決まり方"),
+    ("/flow/", "ご利用の流れ", "お問い合わせから完了まで"),
+    ("/faq/", "よくある質問", "対応品目・流れ"),
+])
+# 解体サイトと同じ「カスタムHTML＋ショートコードブロック」方式でCF7を本文内に埋め込む
+_c_b1 = ('<!-- wp:html -->\n<div class="amt-katazuke">'
+         + header("/contact/") + breadcrumb("お問い合わせ")
+         + page_hero(contact_h1, contact_lead) + contact_intro + contact_form_open
+         + '\n<!-- /wp:html -->')
+_c_b2 = '<!-- wp:shortcode -->' + CF7_SHORTCODE + '<!-- /wp:shortcode -->'
+_c_b3 = ('<!-- wp:html -->\n' + contact_form_close + contact_rel + cta() + footer()
+         + '</div>\n<!-- /wp:html -->')
+_c_ld = ('<!-- wp:html -->\n<script type="application/ld+json">'
+         + json.dumps(breadcrumb_jsonld("お問い合わせ", "/contact/"), ensure_ascii=False)
+         + '</script>\n<!-- /wp:html -->')
+c = "\n\n".join([_c_b1, _c_b2, _c_b3, _c_ld])
 PAGES.append(("contact", "お問い合わせ｜おうちのお片付け隊（株式会社AMT）", c))
 
 # ------------------------------------------------------------
