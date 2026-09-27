@@ -199,3 +199,12 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **SEO/AIO対策（全体）**：`build_pages.py` の `ANSWERS` 辞書で、全サービスページ冒頭に「要点」結論先出しブロックを自動挿入（AI検索・強調スニペット対策）。トップに「こんなお困りごとにも対応します」導線セクションを追加（内部リンク強化）。各ページは Service/BreadcrumbList/FAQ の JSON-LD 付き。記事（コラム）も結論先出し＋質問型見出しで最適化済み。
 - **公開状況**：固定ページ19枚＋コラム一覧＋コラム記事11本を全公開（GitHub push → 管理画面 post-new.php で REST により slug 一致 upsert）。
 - **GSC手動インデックス（2026-09-27 実施分）**：/column/・/gomiyashiki/・/fuyouhin-hiyou/・/hikkoshi-fuyouhin/・/akiya-katazuke/ を登録リクエスト済み。新設の下層ページ（/seiri/ /hinmoku/ /akiya/ ほか）はサイトマップ（/sitemap.xml・/wp-sitemap.xml 送信済み）経由で順次クロール。必要に応じGSCで個別に「インデックス登録をリクエスト」可。
+
+## 12. 2026-09-27 追加対応（お困りごとイラスト・スマホヒーロー）
+
+- **お困りごと6テーマのイラスト**：社長提供の合成画像（2行×3列）を6分割し、外側の白のみ透過化（内部の白い物体は保持）して `illust-seiri/akiya/gomiyashiki/hikkoshi/tenpo/hinmoku.png` に。WPメディア（2026/09）へアップ済み。
+  - トップ「こんなお困りごとにも対応します」の6カードに配置（`card-illust`）。
+  - 該当6下層ページ（/seiri/ /akiya/ /gomiyashiki-katazuke/ /hikkoshi/ /tenpo/ /hinmoku/）の見出し画像を、流用写真からイラストへ変更（`HERO_ILLUSTS` 辞書 → `svc-hero--illust`：伸ばさず中央表示・最大300px・影なし）。
+- **スマホのトップヒーロー**：以前は全面クリーム80〜90%で背景写真がほぼ見えず「さっぱりしすぎ」との指摘。縦グラデーション（上部95%→下部15%）に変更し、下部で写真が見えるように。見出し・本文の可読性は維持。
+- 全31ページ再公開・PC/スマホで表示確認済み。
+- 画像作成の依頼ブリーフ：`作成イメージ/お困りごとイラスト_画像生成ブリーフ.md`（次回以降の画像追加時のテイスト指定に流用可）。
