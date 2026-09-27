@@ -96,7 +96,7 @@ html,body{overflow-x:hidden;}
 /* トップの写真ヒーロー（左に文字スクリム） */
 .amt-katazuke .hero--home{background:linear-gradient(100deg, rgba(255,251,240,.96) 0%, rgba(255,251,240,.84) 30%, rgba(255,251,240,.38) 58%, rgba(255,251,240,0) 82%), url("https://katazuke.amt-eco.com/wp-content/uploads/2026/09/hero-bg.jpg"); background-size:cover; background-position:center right; padding:66px 16px 80px;}
 .amt-katazuke .hero--home .hero-text{max-width:620px;}
-@media(max-width:760px){.amt-katazuke .hero--home{background:linear-gradient(rgba(255,251,240,.9),rgba(255,251,240,.8)), url("https://katazuke.amt-eco.com/wp-content/uploads/2026/09/hero-bg.jpg"); background-size:cover; background-position:center;}}
+@media(max-width:760px){.amt-katazuke .hero--home{background:linear-gradient(180deg,rgba(255,251,240,.95) 0%,rgba(255,251,240,.9) 40%,rgba(255,251,240,.5) 72%,rgba(255,251,240,.15) 100%), url("https://katazuke.amt-eco.com/wp-content/uploads/2026/09/hero-bg.jpg"); background-size:cover; background-position:center;}}
 .amt-katazuke .hero-inner--mascot{display:flex;align-items:center;gap:28px;}
 .amt-katazuke .hero-text{flex:1 1 auto;min-width:0;}
 .amt-katazuke .hero-mascot{flex:0 0 auto;}
@@ -119,6 +119,9 @@ html,body{overflow-x:hidden;}
 /* サービスページ上部の写真 */
 .amt-katazuke .svc-hero{max-width:1080px;margin:0 auto;padding:0 16px;}
 .amt-katazuke .svc-hero img{width:100%;height:auto;display:block;border-radius:10px;margin:22px auto 0;box-shadow:0 2px 14px rgba(0,0,0,.12);}
+/* 透過イラストの見出し画像：伸ばさず中央に、影・角丸なし */
+.amt-katazuke .svc-hero--illust{text-align:center;}
+.amt-katazuke .svc-hero--illust img{width:auto;max-width:100%;height:auto;max-height:300px;display:inline-block;border-radius:0;box-shadow:none;margin:18px auto 0;}
 
 /* 下層ページ用のコンパクトなヒーロー */
 .amt-katazuke .page-hero{padding:46px 16px 54px;}

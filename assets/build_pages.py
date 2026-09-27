@@ -72,6 +72,13 @@ IMG = {
     "illust_nouki": UPLOADS + "illust-nouki.png",
     # 対応エリアの地図イラスト
     "area_map": UPLOADS + "area-map.jpg",
+    # お困りごと6テーマのイラスト（透過PNG）
+    "illust_seiri": UPLOADS + "illust-seiri.png",
+    "illust_akiya": UPLOADS + "illust-akiya.png",
+    "illust_gomiyashiki": UPLOADS + "illust-gomiyashiki.png",
+    "illust_hikkoshi": UPLOADS + "illust-hikkoshi.png",
+    "illust_tenpo": UPLOADS + "illust-tenpo.png",
+    "illust_hinmoku": UPLOADS + "illust-hinmoku.png",
 }
 
 NAV_ITEMS = [
@@ -222,7 +229,7 @@ html,body{overflow-x:hidden;}
 /* トップの写真ヒーロー（左に文字スクリム） */
 .amt-katazuke .hero--home{background:linear-gradient(100deg, rgba(255,251,240,.96) 0%, rgba(255,251,240,.84) 30%, rgba(255,251,240,.38) 58%, rgba(255,251,240,0) 82%), url("__HERO_BG__"); background-size:cover; background-position:center right; padding:66px 16px 80px;}
 .amt-katazuke .hero--home .hero-text{max-width:620px;}
-@media(max-width:760px){.amt-katazuke .hero--home{background:linear-gradient(rgba(255,251,240,.9),rgba(255,251,240,.8)), url("__HERO_BG__"); background-size:cover; background-position:center;}}
+@media(max-width:760px){.amt-katazuke .hero--home{background:linear-gradient(180deg,rgba(255,251,240,.95) 0%,rgba(255,251,240,.9) 40%,rgba(255,251,240,.5) 72%,rgba(255,251,240,.15) 100%), url("__HERO_BG__"); background-size:cover; background-position:center;}}
 .amt-katazuke .hero-inner--mascot{display:flex;align-items:center;gap:28px;}
 .amt-katazuke .hero-text{flex:1 1 auto;min-width:0;}
 .amt-katazuke .hero-mascot{flex:0 0 auto;}
@@ -245,6 +252,9 @@ html,body{overflow-x:hidden;}
 /* サービスページ上部の写真 */
 .amt-katazuke .svc-hero{max-width:1080px;margin:0 auto;padding:0 16px;}
 .amt-katazuke .svc-hero img{width:100%;height:auto;display:block;border-radius:10px;margin:22px auto 0;box-shadow:0 2px 14px rgba(0,0,0,.12);}
+/* 透過イラストの見出し画像：伸ばさず中央に、影・角丸なし */
+.amt-katazuke .svc-hero--illust{text-align:center;}
+.amt-katazuke .svc-hero--illust img{width:auto;max-width:100%;height:auto;max-height:300px;display:inline-block;border-radius:0;box-shadow:none;margin:18px auto 0;}
 
 /* 下層ページ用のコンパクトなヒーロー */
 .amt-katazuke .page-hero{padding:46px 16px 54px;}
@@ -546,14 +556,17 @@ def service_jsonld(name, desc, url):
 
 
 def assemble(slug, breadcrumb_label, hero_h1, hero_lead, body_html,
-             faq_items, rel_cards, jsonlds, hero_img=None):
+             faq_items, rel_cards, jsonlds, hero_img=None, hero_illust=None):
     """下層ページ本体を wp:html ブロックとして組み立てる。"""
     url = "/" + slug + "/"
     parts = ['<div class="amt-katazuke">']
     parts.append(header(url))
     parts.append(breadcrumb(breadcrumb_label))
     parts.append(page_hero(hero_h1, hero_lead))
-    if hero_img:
+    if hero_illust:
+        # 透過イラストを見出し画像として中央に（写真ヒーローの代わり）
+        parts.append(f'<div class="svc-hero svc-hero--illust"><img src="{hero_illust}" alt="{breadcrumb_label}のイラスト" width="560" height="520" loading="lazy"></div>')
+    elif hero_img:
         parts.append(f'<div class="svc-hero"><img src="{hero_img}" alt="{breadcrumb_label}" width="1200" height="800" loading="lazy"></div>')
     parts.append(body_html)
     parts.append(faq_block(faq_items))
@@ -592,17 +605,30 @@ ANSWERS = {
 }
 
 
+# 下層ページの見出し画像に透過イラストを使うページ（slug → IMG キー）。写真ヒーローの代わりに中央表示。
+HERO_ILLUSTS = {
+    "seiri": "illust_seiri",
+    "akiya": "illust_akiya",
+    "gomiyashiki-katazuke": "illust_gomiyashiki",
+    "hikkoshi": "illust_hikkoshi",
+    "tenpo": "illust_tenpo",
+    "hinmoku": "illust_hinmoku",
+}
+
+
 def add_service_page(slug, nav_label, h1, lead, body, faq, rel, jsonld_name, jsonld_desc, title, hero_img=None):
     ans = ANSWERS.get(slug)
     if ans:
         body = ('<section class="k-section" style="padding-bottom:0;">'
                 '<div class="prose"><div class="answer"><span class="answer-h">要点</span>'
                 '<p>' + ans + '</p></div></div></section>') + body
+    hi = HERO_ILLUSTS.get(slug)
+    hero_illust = IMG[hi] if hi else None
     c, _ = assemble(
         slug, nav_label, h1, lead, body, faq, rel,
         [service_jsonld(jsonld_name, jsonld_desc, "/" + slug + "/"),
          breadcrumb_jsonld(nav_label, "/" + slug + "/"), faq_jsonld(faq)],
-        hero_img=hero_img,
+        hero_img=(None if hero_illust else hero_img), hero_illust=hero_illust,
     )
     PAGES.append((slug, title, c))
 
@@ -1426,17 +1452,18 @@ def build_index():
         f'<div class="card-grid">{cards}</div></div></section>'
     )
     scenes = [
-        ("生前整理・遺品整理", "元気なうちの整理から、遺品整理まで。", "/seiri/"),
-        ("空き家・実家の片付け", "遠方でも、解体前でもまとめて対応。", "/akiya/"),
-        ("ゴミ屋敷の片付け", "足の踏み場がなくても、まずご相談を。", "/gomiyashiki-katazuke/"),
-        ("引っ越しの片付け", "期日までにまとめて搬出・処分・買取。", "/hikkoshi/"),
-        ("店舗・オフィスの片付け", "閉店・移転・原状回復まで一貫対応。", "/tenpo/"),
-        ("回収・買取できるもの", "対応品目と、買取の対象を一覧で。", "/hinmoku/"),
+        ("生前整理・遺品整理", "元気なうちの整理から、遺品整理まで。", "/seiri/", "illust_seiri"),
+        ("空き家・実家の片付け", "遠方でも、解体前でもまとめて対応。", "/akiya/", "illust_akiya"),
+        ("ゴミ屋敷の片付け", "足の踏み場がなくても、まずご相談を。", "/gomiyashiki-katazuke/", "illust_gomiyashiki"),
+        ("引っ越しの片付け", "期日までにまとめて搬出・処分・買取。", "/hikkoshi/", "illust_hikkoshi"),
+        ("店舗・オフィスの片付け", "閉店・移転・原状回復まで一貫対応。", "/tenpo/", "illust_tenpo"),
+        ("回収・買取できるもの", "対応品目と、買取の対象を一覧で。", "/hinmoku/", "illust_hinmoku"),
     ]
     scene_cards = "".join(
-        f'<a class="card" href="{u}" style="text-decoration:none;color:inherit;display:block;">'
+        f'<a class="card card--svc" href="{u}" style="text-decoration:none;color:inherit;display:block;">'
+        f'<div class="card-illust"><img src="{IMG[ik]}" alt="{t}のイラスト" width="280" height="260" loading="lazy"></div>'
         f'<h3><span class="mk">●</span>{t}</h3><p>{d}</p></a>'
-        for t, d, u in scenes
+        for t, d, u, ik in scenes
     )
     scenes_sec = (
         '<section class="k-section scenes"><div class="inner">'
