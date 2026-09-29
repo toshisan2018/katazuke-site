@@ -1,0 +1,8 @@
+# robots.txt for https://katazuke.amt-eco.com/
+# 株式会社AMT / おうちのお片付け隊
+
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+
+Sitemap: https://katazuke.amt-eco.com/wp-sitemap.xml
