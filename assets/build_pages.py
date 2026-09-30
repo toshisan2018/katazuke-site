@@ -73,12 +73,12 @@ IMG = {
     # 対応エリアの地図イラスト
     "area_map": UPLOADS + "area-map.jpg",
     # お困りごと6テーマのイラスト（透過PNG）
-    "illust_seiri": UPLOADS + "illust-seiri.png",
-    "illust_akiya": UPLOADS + "illust-akiya.png",
-    "illust_gomiyashiki": UPLOADS + "illust-gomiyashiki.png",
-    "illust_hikkoshi": UPLOADS + "illust-hikkoshi.png",
-    "illust_tenpo": UPLOADS + "illust-tenpo.png",
-    "illust_hinmoku": UPLOADS + "illust-hinmoku.png",
+    "illust_seiri": UPLOADS + "illust-seiri-v2.png",
+    "illust_akiya": UPLOADS + "illust-akiya-v2.png",
+    "illust_gomiyashiki": UPLOADS + "illust-gomiyashiki-v2.png",
+    "illust_hikkoshi": UPLOADS + "illust-hikkoshi-v2.png",
+    "illust_tenpo": UPLOADS + "illust-tenpo-v2.png",
+    "illust_hinmoku": UPLOADS + "illust-hinmoku-v2.png",
 }
 
 NAV_ITEMS = [
@@ -185,7 +185,7 @@ html,body{overflow-x:hidden;}
 
 /* ===== グローバルナビ ===== */
 .amt-katazuke .k-nav{background:var(--dark);position:relative;}
-.amt-katazuke .k-nav ul{max-width:1080px;margin:0 auto;padding:0 16px;list-style:none;display:flex;flex-wrap:wrap;gap:2px 0;}
+.amt-katazuke .k-nav ul{max-width:1080px;margin:0 auto;padding:0 16px;list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:2px 0;}
 .amt-katazuke .k-nav a{display:block;color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;padding:12px 14px;white-space:nowrap;position:relative;}
 .amt-katazuke .k-nav a::after{content:"";position:absolute;left:14px;right:14px;bottom:5px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:center;transition:transform .2s;}
 .amt-katazuke .k-nav a:hover::after{transform:scaleX(1);}

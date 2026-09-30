@@ -120,6 +120,21 @@ def article_breadcrumb_jsonld(slug, title):
 
 ARTICLES = []
 
+# 記事ごとの見出しイラスト（コラム一覧カードと記事冒頭に使用）。slug → build_pages.IMG のキー
+ART_ILLUST = {
+    "seizen-seiri": "illust_seiri",
+    "ihin-seiri": "illust_katazuke",
+    "akiya-katazuke": "illust_akiya",
+    "fuyouhin-tebanashi": "illust_fuyouhin",
+    "nouki-kaitori-kotsu": "illust_nouki",
+    "souko-seiri-houjin": "illust_souko",
+    "gomiyashiki": "illust_gomiyashiki",
+    "fuyouhin-hiyou": "illust_zanchibutsu",
+    "hikkoshi-fuyouhin": "illust_hikkoshi",
+    "kaden-shobun": "illust_hinmoku",
+    "tenpo-heiten": "illust_tenpo",
+}
+
 
 def add_article(slug, title, desc, lead, sections, faq, rel, answer=None):
     ans = (f'<div class="answer"><span class="answer-h">結論</span><p>{answer}</p></div>'
@@ -138,6 +153,10 @@ def add_article(slug, title, desc, lead, sections, faq, rel, answer=None):
                  f'<div class="art-meta"><span class="art-cat">コラム</span>'
                  f'<time datetime="{TODAY_ISO}">{TODAY_JP}</time></div>'
                  f'<h1>{title}</h1></div></div>')
+    ik = ART_ILLUST.get(slug)
+    if ik:
+        parts.append(f'<div class="svc-hero svc-hero--illust"><img src="{bp.IMG[ik]}" '
+                     f'alt="{title}のイメージイラスト" width="560" height="520" loading="lazy"></div>')
     parts.append('<section class="k-section">' + art + '</section>')
     parts.append(bp.faq_block(faq))
     parts.append(bp.rel_block(rel))
@@ -153,7 +172,7 @@ def add_article(slug, title, desc, lead, sections, faq, rel, answer=None):
         if j:
             content += ('\n\n<!-- wp:html -->\n<script type="application/ld+json">'
                         + json.dumps(j, ensure_ascii=False) + '</script>\n<!-- /wp:html -->')
-    ARTICLES.append({"slug": slug, "title": title, "desc": desc, "content": content})
+    ARTICLES.append({"slug": slug, "title": title, "desc": desc, "content": content, "illust": ik})
 
 
 # ============================================================
@@ -795,16 +814,18 @@ add_article(
 # コラム一覧ページ（固定ページ /column/ ・サイトと同じデザインの自己完結HTML）
 # ============================================================
 def build_column_page():
-    cards = "".join(
-        f'<a class="rel-card" href="/{a["slug"]}/"><b>{a["title"]}</b>'
-        f'<span>{a["desc"]}</span></a>' for a in ARTICLES
-    )
+    def _card(a):
+        il = (f'<div class="card-illust"><img src="{bp.IMG[a["illust"]]}" alt="{a["title"]}のイメージイラスト" '
+              'width="280" height="260" loading="lazy"></div>') if a.get("illust") else ""
+        return (f'<a class="card card--svc" href="/{a["slug"]}/" style="text-decoration:none;color:inherit;display:block;">'
+                f'{il}<h3 style="line-height:1.55;">{a["title"]}</h3><p>{a["desc"]}</p></a>')
+    cards = "".join(_card(a) for a in ARTICLES)
     parts = ['<div class="amt-katazuke">']
     parts.append(bp.header("/column/"))
     parts.append('<div class="breadcrumb"><a href="/">ホーム</a><span>›</span>コラム</div>')
     parts.append(bp.page_hero("コラム", "お片付け・不用品・買取・残置物撤去に役立つ情報をお届けします。"))
     parts.append('<section class="k-section"><div class="inner">'
-                 '<div class="rel-grid">' + cards + '</div></div></section>')
+                 '<div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(290px,1fr));">' + cards + '</div></div></section>')
     parts.append(bp.cta())
     parts.append(bp.footer())
     parts.append('</div>')

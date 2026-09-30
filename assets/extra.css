@@ -52,7 +52,7 @@ html,body{overflow-x:hidden;}
 
 /* ===== グローバルナビ ===== */
 .amt-katazuke .k-nav{background:var(--dark);position:relative;}
-.amt-katazuke .k-nav ul{max-width:1080px;margin:0 auto;padding:0 16px;list-style:none;display:flex;flex-wrap:wrap;gap:2px 0;}
+.amt-katazuke .k-nav ul{max-width:1080px;margin:0 auto;padding:0 16px;list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:2px 0;}
 .amt-katazuke .k-nav a{display:block;color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;padding:12px 14px;white-space:nowrap;position:relative;}
 .amt-katazuke .k-nav a::after{content:"";position:absolute;left:14px;right:14px;bottom:5px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:center;transition:transform .2s;}
 .amt-katazuke .k-nav a:hover::after{transform:scaleX(1);}
