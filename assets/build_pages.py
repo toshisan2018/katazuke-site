@@ -51,6 +51,7 @@ KOBUTSU_LABEL = "古物商許可（" + KOBUTSU_AUTH + "）" + _kb_no  # 本文�
 
 # サイト画像（WordPressメディアにアップ済みのURL）
 UPLOADS = "https://katazuke.amt-eco.com/wp-content/uploads/2026/09/"
+UPLOADS_OCT = "https://katazuke.amt-eco.com/wp-content/uploads/2026/10/"   # 2026-10 以降にアップした画像
 IMG = {
     "hero": UPLOADS + "hero-main.jpg",
     "katazuke": UPLOADS + "service-katazuke.jpg",
@@ -73,12 +74,12 @@ IMG = {
     # 対応エリアの地図イラスト
     "area_map": UPLOADS + "area-map.jpg",
     # お困りごと6テーマのイラスト（透過PNG）
-    "illust_seiri": UPLOADS + "illust-seiri-v2.png",
-    "illust_akiya": UPLOADS + "illust-akiya-v2.png",
-    "illust_gomiyashiki": UPLOADS + "illust-gomiyashiki-v2.png",
-    "illust_hikkoshi": UPLOADS + "illust-hikkoshi-v2.png",
-    "illust_tenpo": UPLOADS + "illust-tenpo-v2.png",
-    "illust_hinmoku": UPLOADS + "illust-hinmoku-v2.png",
+    "illust_seiri": UPLOADS_OCT + "illust-seiri-v2.png",
+    "illust_akiya": UPLOADS_OCT + "illust-akiya-v2.png",
+    "illust_gomiyashiki": UPLOADS_OCT + "illust-gomiyashiki-v2.png",
+    "illust_hikkoshi": UPLOADS_OCT + "illust-hikkoshi-v2.png",
+    "illust_tenpo": UPLOADS_OCT + "illust-tenpo-v2.png",
+    "illust_hinmoku": UPLOADS_OCT + "illust-hinmoku-v2.png",
 }
 
 NAV_ITEMS = [
