@@ -18,7 +18,7 @@ AMT共通デザインシステムを黄色系統に置き換えて使用する�
   - 掲載する電話番号は CONFIG の TEL 1件のみ。
   - 許認可・資格は保有していないため記載しない（会社概要にも資格欄を置かない）。
 """
-import json, os, base64, io
+import json, os, base64, io, re
 
 HERE = os.path.dirname(__file__)
 OUT = os.path.join(HERE, "pages")
@@ -275,6 +275,11 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .card h3{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
 .amt-katazuke .card h3 .mk{color:var(--primary-dark);margin-right:6px;}
 .amt-katazuke .card p{font-size:.92rem;color:#444;}
+/* カード中央寄せグリッド（3列・端数の行も中央に） */
+.amt-katazuke .card-grid--c{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+.amt-katazuke .card-grid--c>.card{flex:0 1 calc((100% - 40px)/3);box-sizing:border-box;}
+@media(max-width:900px){.amt-katazuke .card-grid--c>.card{flex-basis:calc((100% - 20px)/2);}}
+@media(max-width:560px){.amt-katazuke .card-grid--c>.card{flex-basis:100%;}}
 /* サービスカードのイラスト */
 .amt-katazuke .card--svc{padding-top:16px;transition:box-shadow .2s,transform .2s;}
 .amt-katazuke .card--svc:hover{box-shadow:0 8px 22px rgba(0,0,0,.12);transform:translateY(-3px);}
@@ -605,6 +610,23 @@ ANSWERS = {
 }
 
 
+# 片付け → 解体サイトへの相互リンクバナー（assets/cross-link-snippets のスニペットを単一ソースとして読み込む）
+KAITAI_BANNER_SLUGS = {"zanchibutsu", "akiya", "tenpo"}
+
+
+def kaitai_banner():
+    path = os.path.join(HERE, "cross-link-snippets", "for-katazuke-site-to-kaitai.html")
+    try:
+        with io.open(path, encoding="utf-8") as f:
+            snip = f.read()
+    except IOError:
+        return ""
+    snip = re.sub(r"<!--.*?-->", "", snip, flags=re.S).strip()
+    snip = "".join(line.strip() for line in snip.splitlines())
+    return ('<section class="k-section" style="padding-top:0;"><div class="inner">'
+            + snip + '</div></section>')
+
+
 # 下層ページの見出し画像に透過イラストを使うページ（slug → IMG キー）。写真ヒーローの代わりに中央表示。
 HERO_ILLUSTS = {
     "seiri": "illust_seiri",
@@ -622,6 +644,8 @@ def add_service_page(slug, nav_label, h1, lead, body, faq, rel, jsonld_name, jso
         body = ('<section class="k-section" style="padding-bottom:0;">'
                 '<div class="prose"><div class="answer"><span class="answer-h">要点</span>'
                 '<p>' + ans + '</p></div></div></section>') + body
+    if slug in KAITAI_BANNER_SLUGS:
+        body = body + kaitai_banner()
     hi = HERO_ILLUSTS.get(slug)
     hero_illust = IMG[hi] if hi else None
     c, _ = assemble(
@@ -1449,7 +1473,7 @@ def build_index():
         '<section class="k-section works"><div class="inner">'
         '<h2 class="sec-title">対応業務</h2>'
         '<p class="sec-lead">ご家庭の片付けから法人・事業者さまの倉庫整理まで、規模を問わず対応します。</p>'
-        f'<div class="card-grid">{cards}</div></div></section>'
+        f'<div class="card-grid card-grid--c">{cards}</div></div></section>'
     )
     scenes = [
         ("生前整理・遺品整理", "元気なうちの整理から、遺品整理まで。", "/seiri/", "illust_seiri"),
@@ -1469,7 +1493,7 @@ def build_index():
         '<section class="k-section scenes"><div class="inner">'
         '<h2 class="sec-title">こんなお困りごとにも対応します</h2>'
         '<p class="sec-lead">「どこに頼めばいい？」というお困りごとも、片付けから買取・処分・解体まで見据えてお手伝いします。</p>'
-        f'<div class="card-grid">{scene_cards}</div></div></section>'
+        f'<div class="card-grid card-grid--c">{scene_cards}</div></div></section>'
     )
     reasons_sec = (
         '<section class="k-section reasons"><div class="inner">'

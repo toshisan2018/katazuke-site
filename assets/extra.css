@@ -142,6 +142,11 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .card h3{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
 .amt-katazuke .card h3 .mk{color:var(--primary-dark);margin-right:6px;}
 .amt-katazuke .card p{font-size:.92rem;color:#444;}
+/* カード中央寄せグリッド（3列・端数の行も中央に） */
+.amt-katazuke .card-grid--c{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+.amt-katazuke .card-grid--c>.card{flex:0 1 calc((100% - 40px)/3);box-sizing:border-box;}
+@media(max-width:900px){.amt-katazuke .card-grid--c>.card{flex-basis:calc((100% - 20px)/2);}}
+@media(max-width:560px){.amt-katazuke .card-grid--c>.card{flex-basis:100%;}}
 /* サービスカードのイラスト */
 .amt-katazuke .card--svc{padding-top:16px;transition:box-shadow .2s,transform .2s;}
 .amt-katazuke .card--svc:hover{box-shadow:0 8px 22px rgba(0,0,0,.12);transform:translateY(-3px);}

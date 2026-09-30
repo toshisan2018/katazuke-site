@@ -158,6 +158,8 @@ def add_article(slug, title, desc, lead, sections, faq, rel, answer=None):
         parts.append(f'<div class="svc-hero svc-hero--illust"><img src="{bp.IMG[ik]}" '
                      f'alt="{title}のイメージイラスト" width="560" height="520" loading="lazy"></div>')
     parts.append('<section class="k-section">' + art + '</section>')
+    if slug in ("akiya-katazuke", "tenpo-heiten"):
+        parts.append(bp.kaitai_banner())   # 解体サイトへの相互リンクバナー
     parts.append(bp.faq_block(faq))
     parts.append(bp.rel_block(rel))
     parts.append(bp.cta())
@@ -825,7 +827,7 @@ def build_column_page():
     parts.append('<div class="breadcrumb"><a href="/">ホーム</a><span>›</span>コラム</div>')
     parts.append(bp.page_hero("コラム", "お片付け・不用品・買取・残置物撤去に役立つ情報をお届けします。"))
     parts.append('<section class="k-section"><div class="inner">'
-                 '<div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(290px,1fr));">' + cards + '</div></div></section>')
+                 '<div class="card-grid card-grid--c">' + cards + '</div></div></section>')
     parts.append(bp.cta())
     parts.append(bp.footer())
     parts.append('</div>')
