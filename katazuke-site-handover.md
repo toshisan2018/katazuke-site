@@ -221,3 +221,4 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **検証方法の追加（スクショが撮れないとき）**：内蔵ブラウザ／Chromeのタブが背面だと画面キャプチャが古いままになる。ヘッドレスEdge（`msedge --headless=new --screenshot`）で、(a) `assets/extra.css`＋ページ断片から作ったローカルプレビュー、(b) 本番URL、(c) 幅375pxのiframeを並べたラッパーHTML、を撮影して確認できる。
 - **GSC自動操作のコツ**：タブが背面だとスクショ座標が当てにならない。ページ内JSで要素の実座標を取り、表示倍率（innerWidth÷キャプチャ幅）で換算してクリックする。検索欄は「トリプルクリック→Delete→入力→Enter」で確実に切り替わる。
 - **注意（再掲）**：Claudeに接続されているWordPressコネクタ（AI Engine）の接続先は **in-tex.jp**。片付けサイトとは無関係なので使わない。公開は従来どおり、Chromeの管理画面セッション＋RESTで行う。
+- **執筆者の表示名（10/1）**：社長の指示で、管理者ユーザー（ID 1）の表示名とニックネームを「おうちのお片付け隊」に変更。投稿HTMLに管理者メールが出なくなった（変更前4か所→0）。ユーザースラッグ `katazukeamt-eco-com`（投稿者アーカイブURL）はそのまま。
