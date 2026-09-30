@@ -1,13 +1,14 @@
 # 相互リンク導線バナー（cross-link snippets）
 
-他サイトから片付けサイト `https://katazuke.amt-eco.com/` へ誘導するための、貼り付け用HTMLスニペットです。
+グループ各サイト間の相互リンク導線用の、貼り付け用HTMLスニペットです。
 
 ## ファイル
 | ファイル | 貼り付け先 | 導線 |
 |---|---|---|
 | `for-kaitai-site.html` | 解体サイト kaitai.amt-eco.com | 解体前の残置物撤去 → 片付け |
 | `for-corporate-site.html` | コーポレートサイト amt-eco.com | 事業紹介 → 片付け専門サイト |
-| `preview.html` | （確認用） | 上記2つの見た目プレビュー |
+| `for-katazuke-site-to-kaitai.html` | 片付けサイト katazuke.amt-eco.com | 片付け → 解体（逆方向） |
+| `preview.html` | （確認用） | 上記バナーの見た目プレビュー |
 
 ## 使い方
 1. 貼り付け先のWordPress編集画面で「カスタムHTML」ブロックを追加
