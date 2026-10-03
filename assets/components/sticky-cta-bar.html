@@ -1,0 +1,24 @@
+<!--
+  スマホ追従CTAバー（画面下に固定）：電話＋メール相談
+  貼り方：WordPressの「カスタムHTML」ブロックに貼る（フッター用ウィジェット、または全ページ共通の場所が理想）。
+  - スマホ(〜768px)でのみ表示。PCでは非表示。
+  - 自己完結（インラインCSS）。他のCSSに影響されにくいよう #amt-sticky-cta で限定。
+  - 下部に隠れないよう、ページ末尾の余白を自動確保（spacer）。
+-->
+<div id="amt-sticky-cta-spacer" style="height:0;"></div>
+<div id="amt-sticky-cta" style="position:fixed;left:0;right:0;bottom:0;z-index:9999;display:none;grid-template-columns:1fr 1fr;gap:8px;padding:8px 10px;background:rgba(47,58,65,.96);box-shadow:0 -4px 16px rgba(0,0,0,.2);font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif;">
+  <a href="tel:0547-39-3750" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(135deg,#e0a000,#f7b500);color:#2a2724;font-weight:900;text-decoration:none;padding:10px 6px;border-radius:12px;line-height:1.2;">
+    <span style="font-size:15px;">電話で相談</span>
+    <span style="font-size:12px;font-weight:700;">0547-39-3750</span>
+  </a>
+  <a href="/contact/" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#fff;color:#2a2724;font-weight:900;text-decoration:none;padding:10px 6px;border-radius:12px;line-height:1.2;border:2px solid #f7b500;">
+    <span style="font-size:15px;">無料見積り</span>
+    <span style="font-size:12px;font-weight:700;color:#9a6a00;">メールで相談</span>
+  </a>
+</div>
+<style>
+@media (max-width:768px){
+  #amt-sticky-cta{display:grid !important;}
+  #amt-sticky-cta-spacer{height:76px;}
+}
+</style>
