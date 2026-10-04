@@ -1318,7 +1318,28 @@ _c_b3 = ('<!-- wp:html -->\n' + contact_form_close + contact_rel + cta() + foote
 _c_ld = ('<!-- wp:html -->\n<script type="application/ld+json">'
          + json.dumps(breadcrumb_jsonld("お問い合わせ", "/contact/"), ensure_ascii=False)
          + '</script>\n<!-- /wp:html -->')
-c = "\n\n".join([_c_b1, _c_b2, _c_b3, _c_ld])
+# WebMCP（Declarative API）：CF7のformをAIエージェント用ツールとして宣言（2026-10-05）。
+# CF7はformに任意属性を付けられないため、フォームの後ろでスクリプトが属性を付与する。
+# toolautosubmit は付けない（送信はお客様自身がボタンを押す）。
+WEBMCP_PARAMS = {
+    "your-name": "お問い合わせする方のお名前（必須）",
+    "your-email": "返信先のメールアドレス（必須）",
+    "your-tel": "連絡のつく電話番号（任意）",
+    "your-subject": "件名。例：家の片付け、不用品回収、残置物撤去、倉庫の片付け、農機具の買取（任意）",
+    "your-message": "ご相談内容。片付けたい場所・品物の量・所在地（市町）・希望時期など（必須）",
+}
+_c_webmcp = (
+    '<!-- wp:html -->\n<script id="amt-webmcp-form">(function(){'
+    "var f=document.querySelector('form.wpcf7-form');if(!f)return;"
+    "f.setAttribute('toolname','request_katazuke_estimate');"
+    "f.setAttribute('tooldescription','株式会社AMT「おうちのお片付け隊」（静岡県島田市）に、家の片付け・不用品回収・"
+    "解体前の残置物撤去・倉庫の片付け・農機具の買取の無料見積り・相談を依頼するお問い合わせフォーム。"
+    "お名前・メールアドレス・お問い合わせ内容は必須。送信はユーザーが確認して行う。');"
+    "var d=" + json.dumps(WEBMCP_PARAMS, ensure_ascii=False) + ";"
+    "for(var k in d){var e=f.querySelector('[name=\"'+k+'\"]');if(e)e.setAttribute('toolparamdescription',d[k]);}"
+    "})();</script>\n<!-- /wp:html -->"
+)
+c = "\n\n".join([_c_b1, _c_b2, _c_b3, _c_webmcp, _c_ld])
 PAGES.append(("contact", "お問い合わせ｜おうちのお片付け隊（株式会社AMT）", c))
 
 # ------------------------------------------------------------
