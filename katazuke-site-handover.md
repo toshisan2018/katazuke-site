@@ -234,3 +234,10 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **SEO**：各固定ページの meta description を `PAGE_DESC`（build_pages.py。元は docs/live-apply-sheet.md）で一元管理し、公開時に AIOSEO（REST の `aioseo_meta_data.description`）へ設定。公開CSSからコメントを除去（AIOSEOがCSSコメントを説明文に拾っていたため）。
 - **公開手順（新）**：`python assets/build_pages.py && python assets/publish_bundle.py` → `assets/publish/bundle.json`（git管理外）を管理画面に注入した file input から読み、slug一致で `/wp/v2/pages|posts/<id>` に `{title, content, aioseo_meta_data:{description, og_image_type:'custom_image', og_image_custom_url, twitter_use_og:true}}` をPOST。
 - **点検**：`python assets/audit_live.py`（全31ページの 200・description・og:image・JSON-LD・旧ロゴ・Googleフォント・電話番号）。2026-10-05 時点で問題0。
+
+## 15. 2026-10-05 「島田市 片付け／不用品回収」対策
+
+- **地域ページ新設** `/katazuke-shimada/`（固定ページ・build_pages.py の add_service_page）。島田市の粗大ごみ（電話申込の戸別収集・1世帯1回2点・家電4品目等は対象外）、自己搬入（田代環境プラザ）、空き家の窓口、当社の回収のしくみ（古物商買取＋提携許可業者へ委託）を市の公式ページへのリンク付きで掲載。市の電話番号は載せない方針。
+- **トップの検索タイトル**：「島田市の片付け・不用品回収ならおうちのお片付け隊｜残置物撤去・農機具買取｜株式会社AMT」。※トップ（ID6）は AIOSEO 側にタイトルが固定入力されているため、変更時は REST `aioseo_meta_data.title` も更新すること。
+- フッター「ご案内」とトップの対応エリア章に `/katazuke-shimada/` へのリンクを追加。
+- **コーポレートサイト amt-eco.com**：`/services/cleanup/` を片付けサイトのトップへ 301 転送（プラグイン Redirection）。島田市の地域ページ（/area/shizuoka/shimada/）に片付けサイトへの案内枠（黄色）を追加。
