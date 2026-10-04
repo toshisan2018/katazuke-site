@@ -222,3 +222,15 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **GSC自動操作のコツ**：タブが背面だとスクショ座標が当てにならない。ページ内JSで要素の実座標を取り、表示倍率（innerWidth÷キャプチャ幅）で換算してクリックする。検索欄は「トリプルクリック→Delete→入力→Enter」で確実に切り替わる。
 - **注意（再掲）**：Claudeに接続されているWordPressコネクタ（AI Engine）の接続先は **in-tex.jp**。片付けサイトとは無関係なので使わない。公開は従来どおり、Chromeの管理画面セッション＋RESTで行う。
 - **執筆者の表示名（10/1）**：社長の指示で、管理者ユーザー（ID 1）の表示名とニックネームを「おうちのお片付け隊」に変更。投稿HTMLに管理者メールが出なくなった（変更前4か所→0）。ユーザースラッグ `katazukeamt-eco-com`（投稿者アーカイブURL）はそのまま。
+
+## 14. 2026-10-05 リニューアル v2（解体サイトと同じ作り込み・新ロゴ・速度/SEO）
+
+- **新ロゴ**：社長提供の「家＋開いた箱＋きらめき」ロゴ（原本 `assets/images/logo-v2-original.png`）。ヘッダー/フッター＝`logo-v2-mark.webp`、ファビコン（サイトアイコン, メディアID 398）＝`favicon-v2-512.png`。OGP画像も新ロゴ入り黄色版 `ogp-katazuke-v2.jpg` に変更（各ページの AIOSEO で og 画像をカスタム指定）。
+- **トップ全面刷新**（配色は黄色×スレートのまま）：写真ヒーロー（`<img>`でLCP短縮）→ 想い（濃色・OUR PROMISE）→ 対応業務（写真カード）→ お困りごと → 選ばれる理由4項目 → 許可・登録（古物商許可を証書風に）→ ご利用の流れ（タイムライン）→ 対応エリア（地図＋市町チップ）→ 会社概要（タイル・代表者名なし）→ CTA。
+  - 「想い」の文言は既存の確定事項（買取は古物商許可のもと／処分は提携許可業者へ委託／解体・金属買取も自社）のみで構成。社長確認のうえ必要なら修正。
+- **下層・コラム全31ページ**：`V2_CSS`（build_pages.py）で見出し帯を濃いスレート＋黄の光＋ロゴ透かしに、本文見出し・FAQ・関連カード・CTA帯を格上げ。フッター見出しは `p.foot-h`（見出し順序の是正）。
+- **速度**：Webフォント指定を端末標準フォントへ、画像をWebP化（2026/10 にアップ）、プラグイン **Flying Scripts**（googletagmanager.com を5秒遅延）を導入。不要プラグイン（OptinMonster / MonsterInsights / 多言語プラグイン）を**無効化**（削除はしていない）。テーマの本文グループ上余白(70px)を HIDE_CSS で解消。
+  - スマホPSI（トップ）：性能 80→98、ユーザー補助 91→94+、SEO 100。
+- **SEO**：各固定ページの meta description を `PAGE_DESC`（build_pages.py。元は docs/live-apply-sheet.md）で一元管理し、公開時に AIOSEO（REST の `aioseo_meta_data.description`）へ設定。公開CSSからコメントを除去（AIOSEOがCSSコメントを説明文に拾っていたため）。
+- **公開手順（新）**：`python assets/build_pages.py && python assets/publish_bundle.py` → `assets/publish/bundle.json`（git管理外）を管理画面に注入した file input から読み、slug一致で `/wp/v2/pages|posts/<id>` に `{title, content, aioseo_meta_data:{description, og_image_type:'custom_image', og_image_custom_url, twitter_use_og:true}}` をPOST。
+- **点検**：`python assets/audit_live.py`（全31ページの 200・description・og:image・JSON-LD・旧ロゴ・Googleフォント・電話番号）。2026-10-05 時点で問題0。

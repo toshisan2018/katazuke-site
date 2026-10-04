@@ -80,6 +80,19 @@ IMG = {
     "illust_hikkoshi": UPLOADS_OCT + "illust-hikkoshi-v2.png",
     "illust_tenpo": UPLOADS_OCT + "illust-tenpo-v2.png",
     "illust_hinmoku": UPLOADS_OCT + "illust-hinmoku-v2.png",
+    # 2026-10-05 リニューアル（新ロゴ・軽量WebP）
+    "logo_v2": UPLOADS_OCT + "logo-v2-mark.webp",
+    "hero_v2": UPLOADS_OCT + "hero-bg-1600.webp",
+    "hero_v2_sp": UPLOADS_OCT + "hero-bg-900.webp",
+    "svc_katazuke": UPLOADS_OCT + "service-katazuke-720.webp",
+    "svc_fuyouhin": UPLOADS_OCT + "service-fuyouhin-720.webp",
+    "svc_zanchibutsu": UPLOADS_OCT + "service-zanchibutsu-720.webp",
+    "svc_souko": UPLOADS_OCT + "service-souko-720.webp",
+    "svc_nouki": UPLOADS_OCT + "service-nouki-720.webp",
+    "mascot_hero_v2": UPLOADS_OCT + "mascot-hero-420.webp",
+    "mascot_worker_v2": UPLOADS_OCT + "mascot-worker-420.webp",
+    "ogp_v2": UPLOADS_OCT + "ogp-katazuke-v2.jpg",
+    "logo_v2_png": UPLOADS_OCT + "favicon-v2-512.png",
 }
 
 NAV_ITEMS = [
@@ -147,7 +160,7 @@ DESIGN_CSS = """/* ===== 株式会社AMT おうちのお片付け隊 デザイ�
   --gray:#f6f5f2;
   --white:#ffffff;
   --link:#9a6a00;           /* 白背景で読めるリンク色（黄系） */
-  font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif;
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium",YuGothic,"Yu Gothic",Meiryo,sans-serif;  /* 端末標準フォント（速度対策 2026-10-05） */
   color:var(--ink);
   background:var(--white);
   line-height:1.8;
@@ -411,6 +424,224 @@ html,body{overflow-x:hidden;}
 # ヒーロー背景画像のURLを差し込む
 DESIGN_CSS = DESIGN_CSS.replace('__HERO_BG__', IMG['hero_bg'])
 
+# ============================================================
+# リニューアル v2（2026-10-05）：解体サイトと同じ作り込み。黄色×スレートのまま、
+# 下層ページの見出し帯・本文・FAQ・カード・CTA を共通で格上げし、トップの新セクション(.kz-*)を定義。
+# ============================================================
+V2_CSS = """
+/* ===== v2 共通 ===== */
+body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium",YuGothic,"Yu Gothic",Meiryo,sans-serif;}
+.amt-katazuke{--deep:#1c2328;}
+.amt-katazuke .logo-mark{width:64px;height:64px;}
+@media(max-width:640px){.amt-katazuke .logo-mark{width:52px;height:52px;}}
+
+/* 下層ページの見出し帯（濃いスレート＋黄の光＋ロゴの透かし） */
+.amt-katazuke .page-hero{background:radial-gradient(ellipse 60% 75% at 100% 100%,rgba(247,181,0,.30),transparent 70%),radial-gradient(ellipse 45% 55% at 0% 0%,rgba(255,210,63,.10),transparent 70%),var(--deep);color:#fff;padding:60px 16px 70px;isolation:isolate;}
+.amt-katazuke .page-hero::before{content:"";position:absolute;right:-50px;top:50%;width:min(44vw,400px);aspect-ratio:1/1;transform:translateY(-50%);background:url("__LOGO_V2__") no-repeat center/contain;opacity:.12;z-index:-1;pointer-events:none;}
+.amt-katazuke .page-hero::after{height:8px;background:repeating-linear-gradient(45deg,var(--primary) 0 18px,var(--deep) 18px 36px);}
+.amt-katazuke .page-hero .hero-inner::before{content:"OUCHI NO OKATAZUKE-TAI";display:block;margin:0 0 12px;font-size:.72rem;font-weight:700;letter-spacing:.3em;color:var(--primary);}
+.amt-katazuke .page-hero h1{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.3);}
+.amt-katazuke .page-hero h1 em{background:none;color:var(--primary-bright);padding:0;}
+.amt-katazuke .page-hero p{color:#d6dbde;line-height:1.9;}
+@media(max-width:700px){.amt-katazuke .page-hero{padding:46px 16px 56px;}.amt-katazuke .page-hero::before{width:62vw;right:-18vw;opacity:.09;}}
+
+/* 本文 */
+.amt-katazuke .prose h2{border-left:none;padding:0 0 12px 18px;position:relative;border-bottom:1px solid #ece7da;}
+.amt-katazuke .prose h2::before{content:"";position:absolute;left:0;top:.2em;bottom:14px;width:6px;border-radius:3px;background:linear-gradient(180deg,var(--primary-bright),var(--primary-dark));}
+.amt-katazuke .prose h3{padding-left:1.1em;position:relative;}
+.amt-katazuke .prose h3::before{content:"";position:absolute;left:0;top:.5em;width:.55em;height:.55em;border-radius:2px;background:var(--primary);}
+.amt-katazuke .prose strong{background:linear-gradient(transparent 62%,rgba(247,181,0,.32) 62%);}
+.amt-katazuke .prose a{color:var(--link);text-underline-offset:3px;}
+.amt-katazuke .prose .lead{border-left:none;border-radius:14px;padding:20px 22px 20px 28px;position:relative;}
+.amt-katazuke .prose .lead::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:6px;border-radius:3px;background:var(--primary);}
+.amt-katazuke .prose table{border-radius:14px;box-shadow:0 8px 24px rgba(30,36,40,.08);}
+.amt-katazuke .note{border-left:4px solid var(--primary);border-radius:10px;}
+.amt-katazuke .answer{border-radius:16px;position:relative;overflow:hidden;}
+.amt-katazuke .answer::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--primary-dark),var(--primary-bright));}
+.amt-katazuke .svc-hero img{border-radius:16px;box-shadow:0 14px 34px rgba(30,36,40,.16);}
+
+/* 章タイトル */
+.amt-katazuke .sec-eye{display:block;text-align:center;font-size:.74rem;font-weight:700;letter-spacing:.32em;color:#8a6200;margin:0 0 8px;}
+.amt-katazuke .sec-title::after{width:72px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--primary) 0 60%,var(--dark) 60%);}
+
+/* FAQ */
+.amt-katazuke .faq-item{border:1px solid #ece7da;border-radius:14px;box-shadow:0 6px 18px rgba(30,36,40,.06);transition:box-shadow .25s,transform .25s;}
+.amt-katazuke .faq-item:hover{box-shadow:0 14px 30px rgba(30,36,40,.12);transform:translateY(-2px);}
+.amt-katazuke .faq-q::before{box-shadow:0 0 0 4px rgba(247,181,0,.28);}
+
+/* 関連ページ・カード */
+.amt-katazuke .rel-grid{gap:14px;}
+.amt-katazuke .rel-card{position:relative;border-top:none;border:1px solid #ece7da;border-left:5px solid var(--primary);border-radius:12px;padding:18px 44px 18px 20px;transition:transform .25s,box-shadow .25s;}
+.amt-katazuke .rel-card::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--dark);font-weight:900;transition:right .25s;}
+.amt-katazuke .rel-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(30,36,40,.12);}
+.amt-katazuke .rel-card:hover::after{right:12px;}
+
+/* 下部CTA帯 */
+.amt-katazuke .cta-band{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse 55% 70% at 100% 100%,rgba(247,181,0,.25),transparent 70%),linear-gradient(135deg,#161c20,var(--dark));padding:70px 16px 64px;}
+.amt-katazuke .cta-band::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(45deg,var(--primary) 0 18px,var(--deep) 18px 36px);}
+.amt-katazuke .cta-band .btn-tel{border-radius:18px;padding:16px 44px;box-shadow:0 12px 30px rgba(0,0,0,.3);transition:transform .2s;}
+.amt-katazuke .cta-band .btn-tel:hover{transform:translateY(-3px);}
+.amt-katazuke .cta-band .btn-mail{border-radius:999px;padding:12px 30px;}
+
+/* フッター（見出しは p.foot-h：見出し順序の是正） */
+.amt-katazuke .foot-h{color:#fff;font-size:.95rem;font-weight:700;margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid var(--primary);}
+.amt-katazuke .foot-logo{display:flex;align-items:center;gap:10px;}
+.amt-katazuke .foot-logo .fl-tx span{color:var(--primary);}
+.amt-katazuke .foot-logo img{width:44px;height:44px;background:#fff;border-radius:10px;padding:4px;}
+
+/* ===== トップ v2 ===== */
+/* ヒーロー（写真は<img>でLCPを早く） */
+.amt-katazuke .kz-hero{position:relative;overflow:hidden;isolation:isolate;background:#fffbf0;padding:70px 16px 84px;}
+.amt-katazuke .kz-hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;z-index:-2;}
+.amt-katazuke .kz-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(255,251,240,.97) 0%,rgba(255,251,240,.88) 32%,rgba(255,251,240,.35) 60%,rgba(255,251,240,0) 82%);}
+.amt-katazuke .kz-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:repeating-linear-gradient(45deg,var(--dark) 0 22px,var(--primary) 22px 44px);}
+.amt-katazuke .kz-hero-in{max-width:1080px;margin:0 auto;}
+.amt-katazuke .kz-hero-tx{max-width:640px;}
+.amt-katazuke .kz-badge{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;font-weight:700;font-size:.85rem;padding:6px 16px;border-radius:999px;margin:0 0 20px;}
+.amt-katazuke .kz-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 3px rgba(247,181,0,.35);}
+.amt-katazuke .kz-hero h1{font-size:clamp(1.75rem,4.6vw,3.1rem);font-weight:900;line-height:1.38;margin:0 0 18px;color:var(--ink);letter-spacing:.01em;}
+.amt-katazuke .kz-hero h1 em{font-style:normal;background:linear-gradient(transparent 58%,rgba(247,181,0,.75) 58%);padding:0 .1em;}
+.amt-katazuke .kz-hero-copy{font-size:clamp(.95rem,2vw,1.1rem);margin:0 0 28px;color:#3a352d;line-height:1.95;}
+.amt-katazuke .kz-hero .hero-cta{margin:0 0 26px;}
+.amt-katazuke .kz-hero .btn-tel{border-radius:14px;box-shadow:0 10px 24px rgba(30,36,40,.28);}
+.amt-katazuke .kz-hero .btn-mail{border-radius:999px;background:rgba(255,255,255,.85);}
+.amt-katazuke .kz-points{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;}
+.amt-katazuke .kz-points li{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #efe3bf;border-radius:999px;padding:7px 16px 7px 10px;font-weight:700;font-size:.88rem;box-shadow:0 4px 12px rgba(30,36,40,.08);}
+.amt-katazuke .kz-points li::before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--primary);color:var(--ink);font-size:.8rem;font-weight:900;}
+@media(max-width:760px){.amt-katazuke .kz-hero{padding:44px 16px 230px;}.amt-katazuke .kz-hero-bg{object-position:70% 100%;}.amt-katazuke .kz-hero::before{background:linear-gradient(180deg,rgba(255,251,240,.97) 0%,rgba(255,251,240,.93) 55%,rgba(255,251,240,.35) 78%,rgba(255,251,240,0) 100%);}}
+
+/* 想い（濃色） */
+.amt-katazuke .kz-pas{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse 70% 60% at 100% 100%,rgba(247,181,0,.22),transparent 70%),radial-gradient(ellipse 50% 45% at 0% 0%,rgba(255,210,63,.08),transparent 70%),var(--deep);color:#fff;padding:88px 16px 80px;}
+.amt-katazuke .kz-pas::after{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(45deg,var(--primary) 0 18px,var(--deep) 18px 36px);}
+.amt-katazuke .kz-pas-mark{position:absolute;right:-4%;bottom:-10%;width:min(56vw,620px);opacity:.10;z-index:-1;pointer-events:none;}
+.amt-katazuke .kz-pas-in{max-width:1080px;margin:0 auto;}
+.amt-katazuke .kz-eye{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-size:.76rem;font-weight:700;letter-spacing:.32em;color:var(--primary);}
+.amt-katazuke .kz-eye::before{content:"";width:40px;height:2px;background:var(--primary);}
+.amt-katazuke .kz-pas h2{margin:0 0 34px;font-size:clamp(1rem,1.6vw,1.15rem);font-weight:700;letter-spacing:.12em;color:#cfd5d8;}
+.amt-katazuke .kz-pas-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:end;margin:0 0 54px;}
+.amt-katazuke .kz-state{margin:0;font-size:clamp(1.9rem,4.2vw,3.25rem);font-weight:900;line-height:1.3;color:#fff;}
+.amt-katazuke .kz-state em{font-style:normal;color:var(--primary-bright);text-shadow:0 0 28px rgba(247,181,0,.35);}
+.amt-katazuke .kz-pas-body p{margin:0 0 16px;font-size:clamp(.98rem,1.6vw,1.05rem);line-height:2.05;color:#d9dee1;}
+.amt-katazuke .kz-pas-body strong{color:#fff;}
+.amt-katazuke .kz-pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.amt-katazuke .kz-pcard{position:relative;padding:30px 24px 26px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.10);transition:transform .25s,border-color .25s,box-shadow .25s;}
+.amt-katazuke .kz-pcard::before{content:"";position:absolute;left:24px;right:24px;top:-1px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--primary-bright),var(--primary-dark));box-shadow:0 0 18px rgba(247,181,0,.5);}
+.amt-katazuke .kz-pcard:hover{transform:translateY(-6px);border-color:rgba(247,181,0,.45);box-shadow:0 18px 40px rgba(0,0,0,.45);}
+.amt-katazuke .kz-num{display:block;margin:0 0 10px;font-size:3.3rem;font-weight:900;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--primary);}
+.amt-katazuke .kz-pcard h3{margin:0 0 12px;font-size:1.22rem;font-weight:900;color:#fff;}
+.amt-katazuke .kz-pcard p{margin:0;font-size:.95rem;line-height:1.9;color:#cdd3d6;}
+.amt-katazuke .kz-pcard a{color:var(--primary-bright);}
+.amt-katazuke .kz-sign{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin:42px 0 0;font-size:.95rem;font-weight:700;letter-spacing:.14em;color:#b9c1c5;}
+.amt-katazuke .kz-sign::before{content:"";width:64px;height:1px;background:var(--primary);}
+@media(max-width:860px){.amt-katazuke .kz-pas-grid{grid-template-columns:1fr;gap:24px;}.amt-katazuke .kz-pcards{grid-template-columns:1fr;}.amt-katazuke .kz-pas-mark{width:110vw;right:-30%;bottom:auto;top:6%;}}
+@media(max-width:600px){.amt-katazuke .kz-pas{padding:64px 16px 56px;}.amt-katazuke .kz-pas-body p br{display:none;}.amt-katazuke .kz-sign{font-size:.8rem;letter-spacing:.06em;}.amt-katazuke .kz-sign::before{width:32px;}}
+
+/* 対応業務（写真カード） */
+.amt-katazuke .kz-svc{background:var(--gray);}
+.amt-katazuke .kz-sgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;}
+.amt-katazuke .kz-scard{flex:0 1 calc((100% - 44px)/3);display:flex;flex-direction:column;background:#fff;border-radius:18px;overflow:hidden;text-decoration:none;color:var(--ink);box-shadow:0 10px 28px rgba(30,36,40,.09);transition:transform .25s,box-shadow .25s;}
+.amt-katazuke .kz-scard:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(30,36,40,.16);}
+.amt-katazuke .kz-sph{position:relative;aspect-ratio:3/2;overflow:hidden;background:#ddd;}
+.amt-katazuke .kz-sph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;}
+.amt-katazuke .kz-scard:hover .kz-sph img{transform:scale(1.06);}
+.amt-katazuke .kz-sno{position:absolute;left:14px;top:14px;background:var(--primary);color:var(--ink);font-weight:900;font-size:.82rem;letter-spacing:.08em;padding:4px 12px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
+.amt-katazuke .kz-sbody{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1;}
+.amt-katazuke .kz-sbody h3{font-size:1.2rem;font-weight:900;margin:0 0 8px;}
+.amt-katazuke .kz-sbody p{font-size:.93rem;color:#4a4740;margin:0 0 14px;flex:1;}
+.amt-katazuke .kz-more{font-weight:900;font-size:.9rem;color:var(--dark);}
+.amt-katazuke .kz-more::after{content:" →";color:var(--primary-dark);}
+@media(max-width:900px){.amt-katazuke .kz-scard{flex-basis:calc((100% - 22px)/2);}}
+@media(max-width:560px){.amt-katazuke .kz-scard{flex-basis:100%;}}
+
+/* お困りごと（イラストカード） */
+.amt-katazuke .kz-scn .card{border-top:none;border-radius:18px;border:1px solid #efe8d4;box-shadow:0 8px 22px rgba(30,36,40,.07);}
+.amt-katazuke .kz-scn .card h3 .mk{display:none;}
+.amt-katazuke .kz-scn .card h3{text-align:center;}
+.amt-katazuke .kz-scn .card p{text-align:center;}
+.amt-katazuke .kz-scn .card-illust{background:radial-gradient(circle at 50% 60%,var(--primary-light),transparent 70%);border-radius:14px;padding:6px 0;}
+
+/* 選ばれる理由 */
+.amt-katazuke .kz-rsn{background:#fff;}
+.amt-katazuke .kz-rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.amt-katazuke .kz-rcard{position:relative;background:#fff;border:1px solid #efe8d4;border-radius:18px;padding:30px 22px 24px;box-shadow:0 10px 26px rgba(30,36,40,.07);overflow:hidden;transition:transform .25s,box-shadow .25s;}
+.amt-katazuke .kz-rcard:hover{transform:translateY(-5px);box-shadow:0 18px 36px rgba(30,36,40,.13);}
+.amt-katazuke .kz-rcard::after{content:attr(data-n);position:absolute;right:12px;top:2px;font-size:4.2rem;font-weight:900;line-height:1;color:rgba(247,181,0,.16);}
+.amt-katazuke .kz-ric{display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:16px;background:var(--dark);margin:0 0 16px;box-shadow:0 8px 18px rgba(30,36,40,.25);}
+.amt-katazuke .kz-ric svg{width:30px;height:30px;}
+.amt-katazuke .kz-rcard h3{font-size:1.08rem;font-weight:900;margin:0 0 10px;line-height:1.5;}
+.amt-katazuke .kz-rcard p{font-size:.9rem;color:#4a4740;margin:0;line-height:1.85;}
+@media(max-width:960px){.amt-katazuke .kz-rgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.amt-katazuke .kz-rgrid{grid-template-columns:1fr;}}
+
+/* 許可（証書風） */
+.amt-katazuke .kz-lic{background:var(--gray);}
+.amt-katazuke .kz-cert{max-width:760px;margin:0 auto;position:relative;background:#fffdf6;border-radius:6px;padding:44px 40px 36px;box-shadow:0 16px 40px rgba(30,36,40,.12);border:1px solid #e8dcb6;}
+.amt-katazuke .kz-cert::before{content:"";position:absolute;inset:10px;border:2px solid var(--primary);border-radius:4px;pointer-events:none;}
+.amt-katazuke .kz-cert::after{content:"";position:absolute;inset:16px;border:1px solid rgba(224,160,0,.45);border-radius:2px;pointer-events:none;}
+.amt-katazuke .kz-cert-t{text-align:center;font-size:clamp(1.35rem,3vw,1.8rem);font-weight:900;letter-spacing:.3em;margin:0 0 6px;color:var(--ink);}
+.amt-katazuke .kz-cert-s{text-align:center;font-size:.8rem;letter-spacing:.2em;color:#8a6200;margin:0 0 24px;}
+.amt-katazuke .kz-cert dl{display:grid;grid-template-columns:9em 1fr;gap:0;margin:0 auto;max-width:520px;}
+.amt-katazuke .kz-cert dt,.amt-katazuke .kz-cert dd{padding:12px 6px;border-bottom:1px dashed #e2d3a6;margin:0;}
+.amt-katazuke .kz-cert dt{font-weight:700;color:#6b5a2a;}
+.amt-katazuke .kz-cert dd{font-weight:900;}
+.amt-katazuke .kz-seal{position:absolute;right:34px;bottom:26px;width:86px;height:86px;border-radius:50%;border:3px solid rgba(224,160,0,.75);display:flex;align-items:center;justify-content:center;text-align:center;font-size:.72rem;font-weight:900;line-height:1.3;color:rgba(160,110,0,.9);transform:rotate(-12deg);background:rgba(255,245,214,.6);}
+.amt-katazuke .kz-cert-note{max-width:760px;margin:22px auto 0;font-size:.88rem;color:#555;text-align:center;line-height:1.85;}
+@media(max-width:600px){.amt-katazuke .kz-cert{padding:36px 22px 110px;}.amt-katazuke .kz-cert dl{grid-template-columns:1fr;}.amt-katazuke .kz-cert dt{border-bottom:none;padding-bottom:0;}.amt-katazuke .kz-seal{right:50%;transform:translateX(50%) rotate(-12deg);bottom:16px;}}
+
+/* ご利用の流れ（タイムライン） */
+.amt-katazuke .kz-flow{background:#fff;}
+.amt-katazuke .kz-fwrap{display:grid;grid-template-columns:1fr 220px;gap:28px;align-items:center;}
+.amt-katazuke .kz-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative;}
+.amt-katazuke .kz-steps::before{content:"";position:absolute;left:8%;right:8%;top:30px;height:4px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--primary) 0 14px,transparent 14px 22px);}
+.amt-katazuke .kz-steps li{position:relative;text-align:center;}
+.amt-katazuke .kz-sn{position:relative;display:flex;align-items:center;justify-content:center;width:62px;height:62px;margin:0 auto 14px;border-radius:50%;background:var(--dark);color:var(--primary);font-weight:900;font-size:1.25rem;border:4px solid #fff;box-shadow:0 0 0 3px var(--primary),0 10px 20px rgba(30,36,40,.2);}
+.amt-katazuke .kz-steps h3{font-size:1rem;font-weight:900;margin:0 0 6px;}
+.amt-katazuke .kz-steps p{font-size:.85rem;color:#555;margin:0;line-height:1.75;}
+.amt-katazuke .kz-fmascot img{width:100%;max-width:220px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 12px 18px rgba(0,0,0,.18));}
+.amt-katazuke .kz-flow-more{text-align:center;margin:30px 0 0;}
+.amt-katazuke .kz-btn{display:inline-block;background:var(--dark);color:#fff!important;font-weight:900;text-decoration:none;padding:13px 34px;border-radius:999px;box-shadow:0 8px 20px rgba(30,36,40,.22);transition:transform .2s;}
+.amt-katazuke .kz-btn:hover{transform:translateY(-2px);}
+.amt-katazuke .kz-btn::after{content:" →";color:var(--primary);}
+@media(max-width:960px){.amt-katazuke .kz-fwrap{grid-template-columns:1fr;}.amt-katazuke .kz-fmascot{display:none;}}
+@media(max-width:760px){.amt-katazuke .kz-steps{grid-template-columns:1fr;gap:0;}.amt-katazuke .kz-steps::before{left:30px;right:auto;top:20px;bottom:20px;width:4px;height:auto;background:repeating-linear-gradient(180deg,var(--primary) 0 14px,transparent 14px 22px);}.amt-katazuke .kz-steps li{display:grid;grid-template-columns:62px 1fr;column-gap:16px;text-align:left;padding:0 0 18px;}.amt-katazuke .kz-sn{grid-row:span 2;margin:0;}.amt-katazuke .kz-steps h3{align-self:end;}}
+
+/* 対応エリア */
+.amt-katazuke .kz-area{background:var(--gray);}
+.amt-katazuke .kz-agrid{display:grid;grid-template-columns:1.3fr 1fr;gap:34px;align-items:center;}
+.amt-katazuke .kz-agrid .area-map{margin:0;}
+.amt-katazuke .kz-agrid .area-map img{border-radius:18px;box-shadow:0 14px 34px rgba(30,36,40,.14);}
+.amt-katazuke .kz-chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:0;}
+.amt-katazuke .kz-chips li{background:#fff;border:1px solid #e8dcb6;border-radius:999px;padding:6px 14px;font-weight:700;font-size:.9rem;}
+.amt-katazuke .kz-chips li.is-base{background:var(--dark);border-color:var(--dark);color:#fff;}
+.amt-katazuke .kz-chips li.is-base::before{content:"● ";color:var(--primary);}
+.amt-katazuke .kz-atx p{margin:0 0 12px;line-height:1.9;}
+@media(max-width:860px){.amt-katazuke .kz-agrid{grid-template-columns:1fr;}}
+
+/* 会社概要（タイル） */
+.amt-katazuke .kz-co{background:#fff;}
+.amt-katazuke .kz-cogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.amt-katazuke .kz-tile{background:var(--gray);border-radius:16px;padding:20px 22px;border:1px solid #efe8d4;}
+.amt-katazuke .kz-tile .t{display:block;font-size:.76rem;font-weight:700;letter-spacing:.14em;color:#8a6200;margin:0 0 6px;}
+.amt-katazuke .kz-tile .v{font-weight:900;font-size:1.02rem;line-height:1.65;word-break:break-word;}
+.amt-katazuke .kz-tile .v a{color:var(--ink);}
+.amt-katazuke .kz-tile--wide{grid-column:span 3;background:var(--deep);border-color:var(--deep);color:#fff;}
+.amt-katazuke .kz-tile--wide .t{color:var(--primary);}
+.amt-katazuke .kz-biz{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 0;padding:0;}
+.amt-katazuke .kz-biz li{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.88rem;}
+.amt-katazuke .kz-biz li.is-here{background:var(--primary);border-color:var(--primary);color:var(--ink);}
+@media(max-width:860px){.amt-katazuke .kz-cogrid{grid-template-columns:1fr 1fr;}.amt-katazuke .kz-tile--wide{grid-column:span 2;}}
+@media(max-width:520px){.amt-katazuke .kz-cogrid{grid-template-columns:1fr;}.amt-katazuke .kz-tile--wide{grid-column:auto;}}
+
+/* コントラスト・表示比率の是正（PSI 2026-10-05） */
+.amt-katazuke .kz-pas-mark{height:auto;}
+.amt-katazuke .kz-seal{color:#7a5200;border-color:#b07a00;}
+.amt-katazuke .kz-cert-note a,.amt-katazuke .kz-lic a{color:#7a5200;}
+.amt-katazuke .foot-col a.foot-mail{color:var(--ink);}
+.amt-katazuke .foot-bottom{color:#a9afb3;}
+"""
+V2_CSS = V2_CSS.replace('__LOGO_V2__', IMG['logo_v2'])
+DESIGN_CSS = DESIGN_CSS + V2_CSS
+
 # ロゴマーク（片付け＝きれいに整った家＋きらめき）。文字は入れない。
 LOGO_SVG = (
     '<svg viewBox="0 0 48 48" width="46" height="46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
@@ -436,7 +667,7 @@ def header(current=""):
     return (
         '<header class="k-header"><div class="hdr-topbar"></div>'
         '<div class="header-inner">'
-        f'<a class="logo" href="/"><span class="logo-mark"><img src="{IMG["logo"]}" alt="おうちのお片付け隊 ロゴ" width="46" height="46"></span>'
+        f'<a class="logo" href="/"><span class="logo-mark"><img src="{IMG["logo_v2"]}" alt="おうちのお片付け隊 ロゴ" width="64" height="64"></span>'
         f'<span class="logo-tx"><span class="logo-name"><b>{COMPANY_NAME}</b> {SITE_NAME}</span>'
         f'<small>{CATCH}</small></span></a>'
         f'<div class="header-tel"><a class="tel-btn" href="tel:{TEL}">{TEL_ICON}TEL {TEL}</a>'
@@ -460,7 +691,7 @@ def page_hero(h1, lead):
 def cta():
     return (
         '<section class="cta-band"><div class="cta-inner">'
-        f'<div class="cta-mascot"><img src="{IMG["mascot_hero"]}" alt="おうちのお片付け隊 マスコット" width="210" height="213" loading="lazy"></div>'
+        f'<div class="cta-mascot"><img src="{IMG["mascot_hero_v2"]}" alt="おうちのお片付け隊 マスコット" width="210" height="213" loading="lazy" decoding="async"></div>'
         '<div class="cta-content"><h2>お片付けのご相談・お見積りは無料です</h2>'
         '<p>「いくらかかる？」「これは回収できる？」だけでもお気軽にどうぞ。'
         '個人のお客様も法人のお客様も、静岡県内を中心に対応します。</p>'
@@ -476,13 +707,13 @@ def footer():
     return (
         '<footer class="k-footer"><div class="foot-inner">'
         '<div class="foot-col foot-about">'
-        f'<div class="foot-logo"><span>{COMPANY_NAME}</span> {SITE_NAME}</div>'
+        f'<div class="foot-logo"><img src="{IMG["logo_v2"]}" alt="" width="44" height="44" loading="lazy" decoding="async"><span class="fl-tx"><span>{COMPANY_NAME}</span> {SITE_NAME}</span></div>'
         '<p>静岡県島田市を拠点に、家の片付け・不用品回収・解体前の残置物撤去・'
         '倉庫の片付け・農機具の買取りまで対応します。個人のお客様も法人・事業者さまも、'
         'お見積り・ご相談は無料です。</p></div>'
-        f'<div class="foot-col"><h4>サービス</h4><ul>{svc}</ul></div>'
-        f'<div class="foot-col"><h4>ご案内</h4><ul>{gui}</ul></div>'
-        '<div class="foot-col foot-contact"><h4>お問い合わせ</h4>'
+        f'<div class="foot-col"><p class="foot-h">サービス</p><ul>{svc}</ul></div>'
+        f'<div class="foot-col"><p class="foot-h">ご案内</p><ul>{gui}</ul></div>'
+        '<div class="foot-col foot-contact"><p class="foot-h">お問い合わせ</p>'
         f'<a class="foot-tel" href="tel:{TEL}">{TEL}</a>'
         '<p class="foot-note">お見積り・ご相談は無料</p>'
         '<a class="foot-mail" href="/contact/">メールで相談する</a>'
@@ -1424,58 +1655,74 @@ add_service_page(
 # トップページ（単一HTMLファイル index.html）を生成
 # ============================================================
 def build_index():
-    services = [
-        ("家のお片付け", "お引越し前後・空き家・実家の片付けなど。仕分けから搬出まで、ご希望に合わせて対応します。", "/katazuke/", "illust_katazuke"),
-        ("不用品の回収", "家具・家電・雑貨など、ご家庭や事業所で不要になった品物をまとめて回収します。量が多い場合もご相談ください。", "/fuyouhin/", "illust_fuyouhin"),
-        ("解体前の残置物撤去", "解体予定の建物に残った家財・設備・不用品を撤去します。当社の解体工事とあわせてのご依頼も可能です。", "/zanchibutsu/", "illust_zanchibutsu"),
-        ("倉庫の片付け", "倉庫・工場・店舗などに溜まった資材・在庫・什器の片付け。法人・事業者さまの整理もお任せください。", "/souko/", "illust_souko"),
-        ("農機具の買取り", "使わなくなったトラクター・耕運機・田植機などの農機具を買取ります。片付けと同時のご相談も歓迎です。", "/nouki-kaitori/", "illust_nouki"),
-    ]
-    cards = "".join(
-        f'<a class="card card--svc" href="{u}" style="text-decoration:none;color:inherit;display:block;">'
-        f'<div class="card-illust"><img src="{IMG[ik]}" alt="{t}のイラスト" width="280" height="280" loading="lazy"></div>'
-        f'<h3><span class="mk">■</span>{t}</h3><p>{d}</p></a>'
-        for t, d, u, ik in services
-    )
-    reasons = [
-        ("BtoB・BtoC どちらも対応", "個人のお客様から法人・事業者さままで、片付け・回収・撤去に幅広く対応します。"),
-        ("解体・金属買取も自社対応", "解体工事や金属スクラップ買取も手がけるAMTだから、残置物撤去や買取の反映まで一貫してご相談いただけます。"),
-        ("お見積り・ご相談は無料", "「いくらかかる？」だけでも大丈夫。現地を確認して、明確なお見積りをご提示します。"),
-    ]
-    reason_cards = "".join(
-        f'<div class="card"><h3><span class="mk">◆</span>{t}</h3><p>{d}</p></div>'
-        for t, d in reasons
-    )
-    steps = [
-        ("お問い合わせ", "電話またはメールでご相談ください。"),
-        ("現地確認・ヒアリング", "お品物の量や搬出経路を確認し、ご要望をうかがいます。"),
-        ("お見積り", "内容をもとに明確なお見積りをご提示します（無料）。"),
-        ("日程調整・作業", "ご都合に合わせて、仕分け・搬出・回収を行います。"),
-        ("完了", "作業後の状態をご確認いただき完了です。"),
-    ]
-    step_html = "".join(
-        f'<div class="flow-step"><h3>{t}</h3><p>{d}</p></div>' for t, d in steps
-    )
+    # ---- 2026-10-05 リニューアル v2：解体サイトと同じ作り込み（黄色×スレート） ----
+    ICON = {
+        "people": '<svg viewBox="0 0 24 24" fill="none" stroke="#f7b500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/></svg>',
+        "coin": '<svg viewBox="0 0 24 24" fill="none" stroke="#f7b500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6"/><path d="M17.5 2.5v4h-4M6.5 21.5v-4h4"/><path d="M12 8.5v7M9.8 10.2c0-1 1-1.7 2.2-1.7s2.2.6 2.2 1.6c0 2.2-4.4 1.2-4.4 3.5 0 1 1 1.6 2.2 1.6s2.2-.7 2.2-1.7"/></svg>',
+        "build": '<svg viewBox="0 0 24 24" fill="none" stroke="#f7b500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l6-4 6 4v11"/><path d="M9 21v-5h4v5"/><path d="M17 7l3-3M18.5 2.5l3 3"/></svg>',
+        "doc": '<svg viewBox="0 0 24 24" fill="none" stroke="#f7b500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8.5 14l2.2 2.2 4.6-4.6"/></svg>',
+    }
 
     hero = (
-        '<div class="hero hero--home"><div class="hero-inner">'
-        '<div class="hero-text">'
-        '<span class="badge">静岡県内中心に対応｜お見積り無料</span>'
-        '<h1>家の片付け・不用品回収・残置物撤去、<br>まずは<em>無料見積り</em>から。</h1>'
-        '<p>ご自宅の片付けや不用品の回収から、解体前の残置物撤去、倉庫・工場の片付け、'
+        '<section class="kz-hero">'
+        f'<picture><source media="(max-width:760px)" srcset="{IMG["hero_v2_sp"]}">'
+        f'<img class="kz-hero-bg" src="{IMG["hero_v2"]}" alt="" width="1600" height="900" fetchpriority="high" decoding="async"></picture>'
+        '<div class="kz-hero-in"><div class="kz-hero-tx">'
+        '<p class="kz-badge">静岡県内中心に対応｜お見積り無料</p>'
+        '<h1>家の片付け・不用品回収・<br>残置物撤去、<br>まずは<em>無料見積り</em>から。</h1>'
+        '<p class="kz-hero-copy">ご自宅の片付けや不用品の回収から、解体前の残置物撤去、倉庫・工場の片付け、'
         '農機具の買取りまで。個人のお客様も法人のお客様も、静岡県内を中心に対応します。'
         '解体工事とあわせたご相談も可能です。</p>'
         '<div class="hero-cta">'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}<small>受付時間内にお気軽にお電話ください</small></a>'
-        '<a class="btn-mail" href="/contact/">メールで相談する</a>'
-        '</div></div></div></div>'
+        '<a class="btn-mail" href="/contact/">メールで相談する</a></div>'
+        '<ul class="kz-points"><li>個人・法人どちらも対応</li><li>使えるものは買取で還元</li><li>解体工事まで自社で一貫</li></ul>'
+        '</div></div></section>'
+    )
+
+    passion = (
+        '<section class="kz-pas">'
+        f'<img class="kz-pas-mark" src="{IMG["logo_v2"]}" alt="" aria-hidden="true" width="192" height="192" loading="lazy" decoding="async">'
+        '<div class="kz-pas-in"><p class="kz-eye">OUR PROMISE</p>'
+        '<h2>おうちのお片付け隊の想い</h2>'
+        '<div class="kz-pas-grid">'
+        '<p class="kz-state">片付けは、<br>捨てることではなく、<br><em>次へつなぐこと</em>。</p>'
+        '<div class="kz-pas-body">'
+        '<p>家には、暮らしてきた時間が詰まっています。<br>思い出の品、まだ使える家具や家電、手入れしてきた農機具。</p>'
+        '<p>だから私たちは、ただ運び出すだけの片付けはしません。<br>まだ使えるものは買取で次の使い手へ。処分が必要なものは提携する許可業者へ適正に。<br>'
+        '<strong>お客様の負担を減らし、モノの価値を次へつなぎます。</strong></p>'
+        '</div></div>'
+        '<div class="kz-pcards">'
+        '<div class="kz-pcard"><span class="kz-num" aria-hidden="true">01</span><h3>活かす</h3>'
+        '<p>まだ使えるもの・価値のあるものは買取の対象に。買取できたぶんは、片付けの費用に反映してお客様にお返しします。</p></div>'
+        '<div class="kz-pcard"><span class="kz-num" aria-hidden="true">02</span><h3>正しく手放す</h3>'
+        '<p>処分が必要なものは、提携する許可業者へ適正処理を委託します。「どこに出せばいいかわからない」も、まとめてご相談ください。</p></div>'
+        '<div class="kz-pcard"><span class="kz-num" aria-hidden="true">03</span><h3>その先まで</h3>'
+        '<p>解体工事や金属スクラップの買取も手がけるAMTだから、空き家の片付けから<a href="/zanchibutsu/">残置物撤去</a>・解体まで、一つの窓口でご相談いただけます。</p></div>'
+        '</div><p class="kz-sign">株式会社AMT　おうちのお片付け隊</p></div></section>'
+    )
+
+    services = [
+        ("家のお片付け", "お引越し前後・空き家・実家の片付けなど。仕分けから搬出まで、ご希望に合わせて対応します。", "/katazuke/", "svc_katazuke"),
+        ("不用品の回収", "家具・家電・雑貨など、ご家庭や事業所で不要になった品物をまとめて回収します。量が多い場合もご相談ください。", "/fuyouhin/", "svc_fuyouhin"),
+        ("解体前の残置物撤去", "解体予定の建物に残った家財・設備・不用品を撤去します。当社の解体工事とあわせてのご依頼も可能です。", "/zanchibutsu/", "svc_zanchibutsu"),
+        ("倉庫の片付け", "倉庫・工場・店舗などに溜まった資材・在庫・什器の片付け。法人・事業者さまの整理もお任せください。", "/souko/", "svc_souko"),
+        ("農機具の買取り", "使わなくなったトラクター・耕運機・田植機などの農機具を買取ります。片付けと同時のご相談も歓迎です。", "/nouki-kaitori/", "svc_nouki"),
+    ]
+    scards = "".join(
+        f'<a class="kz-scard" href="{u}"><div class="kz-sph">'
+        f'<img src="{IMG[ik]}" alt="{t}の作業風景" width="720" height="480" loading="lazy" decoding="async">'
+        f'<span class="kz-sno">SERVICE {i + 1:02d}</span></div>'
+        f'<div class="kz-sbody"><h3>{t}</h3><p>{d}</p><span class="kz-more">詳しく見る</span></div></a>'
+        for i, (t, d, u, ik) in enumerate(services)
     )
     works = (
-        '<section class="k-section works"><div class="inner">'
-        '<h2 class="sec-title">対応業務</h2>'
+        '<section class="k-section kz-svc"><div class="inner">'
+        '<span class="sec-eye">SERVICE</span><h2 class="sec-title">対応業務</h2>'
         '<p class="sec-lead">ご家庭の片付けから法人・事業者さまの倉庫整理まで、規模を問わず対応します。</p>'
-        f'<div class="card-grid card-grid--c">{cards}</div></div></section>'
+        f'<div class="kz-sgrid">{scards}</div></div></section>'
     )
+
     scenes = [
         ("生前整理・遺品整理", "元気なうちの整理から、遺品整理まで。", "/seiri/", "illust_seiri"),
         ("空き家・実家の片付け", "遠方でも、解体前でもまとめて対応。", "/akiya/", "illust_akiya"),
@@ -1486,58 +1733,105 @@ def build_index():
     ]
     scene_cards = "".join(
         f'<a class="card card--svc" href="{u}" style="text-decoration:none;color:inherit;display:block;">'
-        f'<div class="card-illust"><img src="{IMG[ik]}" alt="{t}のイラスト" width="280" height="260" loading="lazy"></div>'
+        f'<div class="card-illust"><img src="{IMG[ik]}" alt="{t}のイラスト" width="280" height="260" loading="lazy" decoding="async"></div>'
         f'<h3><span class="mk">●</span>{t}</h3><p>{d}</p></a>'
         for t, d, u, ik in scenes
     )
     scenes_sec = (
-        '<section class="k-section scenes"><div class="inner">'
-        '<h2 class="sec-title">こんなお困りごとにも対応します</h2>'
+        '<section class="k-section scenes kz-scn"><div class="inner">'
+        '<span class="sec-eye">CASE</span><h2 class="sec-title">こんなお困りごとにも対応します</h2>'
         '<p class="sec-lead">「どこに頼めばいい？」というお困りごとも、片付けから買取・処分・解体まで見据えてお手伝いします。</p>'
         f'<div class="card-grid card-grid--c">{scene_cards}</div></div></section>'
     )
+
+    reasons = [
+        ("people", "個人のお客様も、<br>法人・事業者さまも", "ご自宅の片付けから、倉庫・工場・店舗の整理まで。BtoC・BtoBどちらにも対応します。"),
+        ("coin", "買取できるものは<br>費用に反映", f"古物商許可（{KOBUTSU_CATEGORY}）を取得。まだ使えるもの・価値のあるものは買取し、片付けの費用に反映します。"),
+        ("build", "解体・金属買取まで<br>自社で一貫", "解体工事や金属スクラップ買取も手がけるAMTだから、残置物撤去から解体まで窓口ひとつでご相談いただけます。"),
+        ("doc", "お見積り・ご相談は<br>無料", "「いくらかかる？」だけでも大丈夫。現地を確認して、明確なお見積りをご提示します。"),
+    ]
+    rcards = "".join(
+        f'<div class="kz-rcard" data-n="{i + 1:02d}"><span class="kz-ric">{ICON[ic]}</span><h3>{t}</h3><p>{d}</p></div>'
+        for i, (ic, t, d) in enumerate(reasons)
+    )
     reasons_sec = (
-        '<section class="k-section reasons"><div class="inner">'
-        '<h2 class="sec-title">選ばれる理由</h2>'
+        '<section class="k-section kz-rsn"><div class="inner">'
+        '<span class="sec-eye">REASON</span><h2 class="sec-title">選ばれる理由</h2>'
         '<p class="sec-lead">片付けだけでなく、その先の「処分」「買取」「解体」まで見据えて対応します。</p>'
-        f'<div style="text-align:center;margin:0 0 10px;"><img src="{IMG["mascot_worker"]}" '
-        'alt="おうちのお片付け隊 スタッフ" width="200" height="225" loading="lazy" '
-        'style="height:180px;width:auto;display:inline-block;"></div>'
-        f'<div class="card-grid">{reason_cards}</div></div></section>'
+        f'<div class="kz-rgrid">{rcards}</div></div></section>'
+    )
+
+    license_sec = (
+        '<section class="k-section kz-lic"><div class="inner">'
+        '<span class="sec-eye">LICENSE</span><h2 class="sec-title">許可・登録</h2>'
+        '<p class="sec-lead">買取は、公安委員会の許可のもとで行っています。</p>'
+        '<div class="kz-cert"><p class="kz-cert-t">古物商許可</p><p class="kz-cert-s">SECONDHAND DEALER LICENSE</p>'
+        f'<dl><dt>許可番号</dt><dd>第{KOBUTSU_NO}号</dd><dt>許可</dt><dd>{KOBUTSU_AUTH}</dd>'
+        f'<dt>取扱品目</dt><dd>{KOBUTSU_CATEGORY}</dd><dt>許可業者</dt><dd>{COMPANY_NAME}</dd></dl>'
+        '<span class="kz-seal" aria-hidden="true">株式会社<br>AMT</span></div>'
+        '<p class="kz-cert-note">処分が必要な品物は、提携する許可業者へ適正処理を委託しています。<br>'
+        '何を買取・回収できるかは<a href="/hinmoku/">回収・買取できるもの</a>をご覧ください。</p>'
+        '</div></section>'
+    )
+
+    steps = [
+        ("お問い合わせ", "電話またはメールでご相談ください。"),
+        ("現地確認・<wbr>ヒアリング", "お品物の量や搬出経路を確認し、ご要望をうかがいます。"),
+        ("お見積り", "内容をもとに明確なお見積りをご提示します（無料）。"),
+        ("日程調整・作業", "ご都合に合わせて、仕分け・搬出・回収を行います。"),
+        ("完了", "作業後の状態をご確認いただき完了です。"),
+    ]
+    step_html = "".join(
+        f'<li><span class="kz-sn">{i + 1:02d}</span><h3>{t}</h3><p>{d}</p></li>'
+        for i, (t, d) in enumerate(steps)
     )
     flow_sec = (
-        '<section class="k-section flow"><div class="inner">'
-        '<h2 class="sec-title">ご利用の流れ</h2>'
+        '<section class="k-section kz-flow"><div class="inner">'
+        '<span class="sec-eye">FLOW</span><h2 class="sec-title">ご利用の流れ</h2>'
         '<p class="sec-lead">お問い合わせから完了まで、わかりやすくご案内します。</p>'
-        f'<div class="flow-steps">{step_html}</div></div></section>'
+        f'<div class="kz-fwrap"><ol class="kz-steps">{step_html}</ol>'
+        f'<div class="kz-fmascot"><img src="{IMG["mascot_worker_v2"]}" alt="おうちのお片付け隊 スタッフ" width="220" height="248" loading="lazy" decoding="async"></div></div>'
+        '<p class="kz-flow-more"><a class="kz-btn" href="/flow/">ご利用の流れを詳しく見る</a></p>'
+        '</div></section>'
+    )
+
+    cities = ["島田市", "金谷", "藤枝市", "焼津市", "静岡市", "掛川市", "菊川市", "牧之原市", "浜松市"]
+    chips = "".join(
+        ('<li class="is-base">' if c == "島田市" else '<li>') + c + '</li>' for c in cities
     )
     area_sec = (
-        '<section class="k-section area"><div class="inner">'
-        '<h2 class="sec-title">対応エリア</h2>'
-        f'<div class="area-map"><img src="{IMG["area_map"]}" alt="対応エリアマップ：静岡県島田市を中心に藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市など" width="1200" height="761" loading="lazy"></div>'
-        '<p><strong>静岡県内を中心</strong>に対応しています。'
-        '島田市・金谷・藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市・浜松市ほか、'
-        '近隣エリアもまずはご相談ください。</p></div></section>'
+        '<section class="k-section kz-area"><div class="inner">'
+        '<span class="sec-eye">AREA</span><h2 class="sec-title">対応エリア</h2>'
+        '<div class="kz-agrid">'
+        f'<div class="area-map"><img src="{IMG["area_map"]}" alt="対応エリアマップ：静岡県島田市を中心に藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市など" width="1200" height="761" loading="lazy" decoding="async"></div>'
+        f'<div class="kz-atx"><ul class="kz-chips">{chips}<li>ほか近隣エリア</li></ul>'
+        '<p><strong>静岡県島田市を拠点に、静岡県内を中心</strong>に対応しています。</p>'
+        '<p>上記以外の地域も、まずはお気軽にご相談ください。</p>'
+        '<p><a class="kz-btn" href="/area/">対応エリアを詳しく見る</a></p></div>'
+        '</div></div></section>'
+    )
+
+    biz = ["お片付け・不用品回収", "残置物撤去", "農機具買取", "解体工事", "非鉄金属・工業雑品スクラップ買取", "中古太陽光パネル買取・輸出", "通販・卸売"]
+    biz_html = "".join(
+        ('<li class="is-here">' if i < 3 else '<li>') + b + '</li>' for i, b in enumerate(biz)
     )
     company_sec = (
-        '<section class="k-section company"><div class="inner">'
-        '<h2 class="sec-title">会社概要</h2>'
-        '<table>'
-        '<tr><th>会社名</th><td>株式会社AMT</td></tr>'
-        ''
-        '<tr><th>所在地</th><td>〒428-0013　静岡県島田市金谷東2丁目3483-290</td></tr>'
-        f'<tr><th>電話番号</th><td><a href="tel:{TEL}">{TEL}</a></td></tr>'
-        f'<tr><th>メール</th><td><a href="mailto:{MAIL}">{MAIL}</a></td></tr>'
-        f'<tr><th>許認可</th><td>{KOBUTSU_TD}</td></tr>'
-        '<tr><th>事業内容</th><td>お片付け・不用品回収・残置物撤去・農機具買取（おうちのお片付け隊）、'
-        '解体工事、非鉄金属・工業雑品スクラップ買取、中古太陽光パネル買取・輸出、通販・卸売</td></tr>'
-        '<tr><th>コーポレートサイト</th><td><a href="https://amt-eco.com/" target="_blank" rel="noopener">https://amt-eco.com/</a></td></tr>'
-        '</table></div></section>'
+        '<section class="k-section kz-co"><div class="inner">'
+        '<span class="sec-eye">COMPANY</span><h2 class="sec-title">会社概要</h2>'
+        '<div class="kz-cogrid">'
+        f'<div class="kz-tile"><span class="t">会社名</span><span class="v">{COMPANY_NAME}</span></div>'
+        '<div class="kz-tile"><span class="t">所在地</span><span class="v">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</span></div>'
+        f'<div class="kz-tile"><span class="t">電話番号</span><span class="v"><a href="tel:{TEL}">{TEL}</a></span></div>'
+        f'<div class="kz-tile"><span class="t">メール</span><span class="v"><a href="mailto:{MAIL}">{MAIL}</a></span></div>'
+        f'<div class="kz-tile"><span class="t">許認可</span><span class="v">{KOBUTSU_TD}</span></div>'
+        '<div class="kz-tile"><span class="t">コーポレートサイト</span><span class="v"><a href="https://amt-eco.com/" target="_blank" rel="noopener">amt-eco.com ↗</a></span></div>'
+        f'<div class="kz-tile kz-tile--wide"><span class="t">事業内容</span><ul class="kz-biz">{biz_html}</ul></div>'
+        '</div></div></section>'
     )
 
     body = ('<div class="amt-katazuke">'
-            + header("/") + hero + works + scenes_sec + reasons_sec + flow_sec
-            + area_sec + company_sec + cta() + footer() + '</div>')
+            + header("/") + hero + passion + works + scenes_sec + reasons_sec + license_sec
+            + flow_sec + area_sec + company_sec + cta() + footer() + '</div>')
 
     jsonld = {
         "@context": "https://schema.org",
@@ -1569,10 +1863,7 @@ def build_index():
         '<meta property="og:description" content="家の片付け・不用品回収・解体前の残置物撤去・倉庫片付け・農機具買取。個人・法人どちらも対応。静岡県内中心、お見積り無料。">\n'
         '<meta property="og:type" content="website">\n'
         f'<meta property="og:url" content="{DOMAIN}/">\n'
-        f'<meta property="og:image" content="{IMG["ogp"]}">\n'
-        '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
-        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
-        '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">\n'
+        f'<meta property="og:image" content="{IMG["ogp_v2"]}">\n'
         '<style>\n' + DESIGN_CSS + '\n</style>\n'
         '<script type="application/ld+json">' + json.dumps(jsonld, ensure_ascii=False) + '</script>\n'
         '</head>\n<body>\n' + body + '\n</body>\n</html>\n'
@@ -1588,6 +1879,30 @@ def build_index():
     )
     home_title = "おうちのお片付け隊｜片付け・不用品回収・残置物撤去｜静岡県島田市の株式会社AMT"
     return len(doc), home_title, home_block
+
+
+# 各固定ページの meta description（AIOSEO に公開時に設定。docs/live-apply-sheet.md が元）
+PAGE_DESC = {
+    "home": "静岡県島田市の株式会社AMT「おうちのお片付け隊」。家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・農機具買取に、個人・法人とも対応。静岡県内中心、お見積り無料。TEL 0547-39-3750。",
+    "katazuke": "静岡県島田市で家の片付けなら株式会社AMT。引越し前後・空き家・実家の片付けを、仕分けから搬出まで対応。個人・法人OK、お見積り無料。TEL 0547-39-3750。",
+    "fuyouhin": "静岡県島田市の不用品回収は株式会社AMT。家具・家電・雑貨などをまとめて回収。買取できる品は買取、処分品は提携の許可業者へ適正委託。見積り無料。TEL 0547-39-3750。",
+    "zanchibutsu": "静岡県島田市で解体前の残置物撤去なら株式会社AMT。家財・設備・不用品を撤去。自社の解体工事とあわせた相談も可能。個人・法人対応、見積り無料。TEL 0547-39-3750。",
+    "souko": "静岡県島田市で倉庫・工場・店舗の片付けは株式会社AMT。資材・在庫・什器の整理・搬出に法人対応。お見積り無料。TEL 0547-39-3750。",
+    "nouki-kaitori": "静岡県島田市で農機具の買取りは株式会社AMT。トラクター・耕運機・田植機などを買取。片付けと同時の相談も歓迎。見積り無料。TEL 0547-39-3750。",
+    "hinmoku": "静岡県島田市のおうちのお片付け隊（AMT）が、回収・買取できる品目を一覧でご案内。買取品は古物商許可のもと買取。見積り無料。TEL 0547-39-3750。",
+    "tenpo": "静岡県島田市で店舗・オフィスの片付けは株式会社AMT。閉店・移転・原状回復までワンストップ。法人対応、見積り無料。TEL 0547-39-3750。",
+    "ryoukin": "静岡県島田市の片付け・不用品回収の料金は株式会社AMT。現地確認のうえ明確なお見積りをご提示（無料）。TEL 0547-39-3750。",
+    "seiri": "静岡県島田市で生前整理・遺品整理なら株式会社AMT。元気なうちの整理から遺品整理まで、ていねいに対応。個人・法人OK、見積り無料。TEL 0547-39-3750。",
+    "akiya": "静岡県島田市で空き家・実家の片付けは株式会社AMT。遠方・解体前でもまとめて対応。片付けから解体の相談まで。見積り無料。TEL 0547-39-3750。",
+    "gomiyashiki-katazuke": "静岡県島田市でゴミ屋敷・汚部屋の片付けは株式会社AMT。足の踏み場がなくても、まずご相談を。見積り無料。TEL 0547-39-3750。",
+    "hikkoshi": "静岡県島田市で引っ越しの片付け・不用品回収は株式会社AMT。期日までにまとめて搬出・処分・買取。見積り無料。TEL 0547-39-3750。",
+    "area": "株式会社AMT（おうちのお片付け隊）の対応エリア。静岡県島田市を中心に、藤枝・焼津・掛川・菊川・牧之原ほか静岡県内に対応。見積り無料。",
+    "flow": "おうちのお片付け隊（静岡県島田市・株式会社AMT）のご利用の流れ。お問い合わせ→現地確認→お見積り→作業→完了まで分かりやすくご案内。",
+    "faq": "静岡県島田市の片付け・不用品回収「おうちのお片付け隊」（AMT）へのよくある質問。料金・日数・近隣配慮などにお答えします。",
+    "company": "株式会社AMT（静岡県島田市）の会社概要。片付け・不用品回収・残置物撤去・農機具買取、解体、金属スクラップ買取、通販・卸売を手がけます。",
+    "contact": "静岡県島田市の片付け・不用品回収のご相談・お見積りは株式会社AMTへ。電話・メールで受付。見積り無料。TEL 0547-39-3750。",
+    "privacy-policy": "株式会社AMT（おうちのお片付け隊）のプライバシーポリシー。お問い合わせ等でお預かりする個人情報の取り扱いについて定めています。",
+}
 
 
 # ============================================================
@@ -1608,7 +1923,7 @@ def build_all():
         fn = os.path.join(OUT, slug + ".html")
         with io.open(fn, "w", encoding="utf-8") as f:
             f.write(content)
-        manifest.append({"slug": slug, "title": title,
+        manifest.append({"slug": slug, "title": title, "desc": PAGE_DESC.get(slug, ""),
                          "b64": base64.b64encode(content.encode("utf-8")).decode("ascii")})
     with io.open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False)

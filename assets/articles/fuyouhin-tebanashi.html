@@ -1,38 +1,38 @@
 <!-- wp:html -->
 <style id="amt-katazuke-css">
-/* テーマの枠を隠し、コラム本文だけを表示 */
+
 header.wp-block-template-part{display:none!important;}
 footer.wp-block-template-part{display:none!important;}
 .wp-block-post-title,.wp-block-post-date,.wp-block-post-terms,.wp-block-post-author,
 .wp-block-post-author-name,.wp-block-post-author-biography,.wp-block-avatar,
 .wp-block-comments,.wp-block-post-navigation-link,.wp-block-query-pagination{display:none!important;}
-/* 投稿ヘッダーの著者・カテゴリ・日付メタ（テーマの wp-block-group）を丸ごと隠す */
+
 .wp-block-group.has-small-font-size{display:none!important;}
-/* 本文(entry-content)より後ろに続くテーマ要素（投稿ナビ・関連投稿など）を隠す */
+
 .wp-site-blocks main .entry-content ~ *{display:none!important;}
 .wp-site-blocks main > .wp-block-group.alignwide{display:none!important;}
 .wp-block-query{display:none!important;}
 .wp-site-blocks{padding:0!important;margin:0!important;}
 .wp-site-blocks>main{margin-block:0!important;padding:0!important;}
+
+.wp-site-blocks>main>.wp-block-group{padding-block:0!important;margin-block:0!important;}
 .entry-content{margin-block-start:0!important;max-width:none!important;}
 .entry-content>.alignfull,.entry-content>*{margin-block:0;}
 
-/* ===== 株式会社AMT おうちのお片付け隊 デザインシステム =====
-   スコープ: .amt-katazuke（解体サイトの .amt-kaitai を黄色系統に置換）
-   使い方: この内容を WordPress「追加CSS」に貼る。各ページ本文は .amt-katazuke で囲む。 */
+
 
 .amt-katazuke{
-  --primary:#f7b500;        /* ブランド黄（アクセント・ボタン・見出し飾り・現在地ナビ） */
-  --primary-dark:#e0a000;   /* 濃い黄（グラデ・ホバー） */
-  --primary-bright:#ffd23f; /* 明るい黄 */
-  --primary-light:#fff5d6;  /* 淡い黄（背景面） */
-  --ink:#2a2724;            /* 本文の黒 */
-  --dark:#2f3a41;           /* 構造色スレート（白文字を載せる：ナビ・CTA・見出しマーク等） */
-  --dark-2:#212a30;         /* さらに濃い */
+  --primary:#f7b500;        
+  --primary-dark:#e0a000;   
+  --primary-bright:#ffd23f; 
+  --primary-light:#fff5d6;  
+  --ink:#2a2724;            
+  --dark:#2f3a41;           
+  --dark-2:#212a30;         
   --gray:#f6f5f2;
   --white:#ffffff;
-  --link:#9a6a00;           /* 白背景で読めるリンク色（黄系） */
-  font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif;
+  --link:#9a6a00;           
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium",YuGothic,"Yu Gothic",Meiryo,sans-serif;  
   color:var(--ink);
   background:var(--white);
   line-height:1.8;
@@ -43,7 +43,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke img{max-width:100%;}
 .amt-katazuke a{color:var(--link);}
 
-/* ===== ヘッダー ===== */
+
 .amt-katazuke .k-header{background:var(--white);border-bottom:none;box-shadow:0 2px 12px rgba(0,0,0,.09);}
 .amt-katazuke .hdr-topbar{height:5px;background:linear-gradient(90deg,var(--dark),var(--primary-dark) 40%,var(--primary) 70%,var(--primary-bright));}
 .amt-katazuke .header-inner{max-width:1080px;margin:0 auto;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
@@ -69,7 +69,7 @@ html,body{overflow-x:hidden;}
   .amt-katazuke .tel-btn{font-size:1.15rem;padding:10px 20px;}
 }
 
-/* ===== グローバルナビ ===== */
+
 .amt-katazuke .k-nav{background:var(--dark);position:relative;}
 .amt-katazuke .k-nav ul{max-width:1080px;margin:0 auto;padding:0 16px;list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:2px 0;}
 .amt-katazuke .k-nav a{display:block;color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;padding:12px 14px;white-space:nowrap;position:relative;}
@@ -79,7 +79,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .k-nav a[aria-current="page"]{background:var(--primary);color:var(--ink);}
 .amt-katazuke .k-nav a[aria-current="page"]::after{display:none;}
 
-/* ハンバーガー（スマホ） */
+
 .amt-katazuke .amt-navtoggle{display:none;}
 .amt-katazuke .amt-navbtn{display:none;}
 @media(max-width:860px){
@@ -99,12 +99,12 @@ html,body{overflow-x:hidden;}
   .amt-katazuke .amt-navtoggle:checked ~ .amt-navbtn .bars::after{top:7px;transform:rotate(-45deg);}
 }
 
-/* ===== パンくず ===== */
+
 .amt-katazuke .breadcrumb{max-width:1080px;margin:0 auto;padding:14px 16px;font-size:.82rem;color:#666;}
 .amt-katazuke .breadcrumb a{color:var(--link);text-decoration:none;}
 .amt-katazuke .breadcrumb span{color:#999;margin:0 6px;}
 
-/* ===== トップの大ヒーロー（黄色地・黒文字） ===== */
+
 .amt-katazuke .hero{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 55%,var(--primary-bright) 100%);color:var(--ink);padding:72px 16px 88px;position:relative;overflow:hidden;}
 .amt-katazuke .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:repeating-linear-gradient(45deg,var(--dark) 0 24px,var(--primary-dark) 24px 48px);}
 .amt-katazuke .hero-inner{max-width:1080px;margin:0 auto;position:relative;z-index:1;}
@@ -112,7 +112,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .hero h1{font-size:clamp(1.7rem,4.5vw,3rem);font-weight:900;line-height:1.4;margin-bottom:18px;color:var(--ink);}
 .amt-katazuke .hero h1 em{font-style:normal;color:var(--dark);background:rgba(255,255,255,.55);padding:0 .2em;border-radius:4px;}
 .amt-katazuke .hero p{font-size:clamp(.95rem,2vw,1.15rem);max-width:660px;margin-bottom:32px;color:#3a352d;}
-/* トップの写真ヒーロー（左に文字スクリム） */
+
 .amt-katazuke .hero--home{background:linear-gradient(100deg, rgba(255,251,240,.96) 0%, rgba(255,251,240,.84) 30%, rgba(255,251,240,.38) 58%, rgba(255,251,240,0) 82%), url("https://katazuke.amt-eco.com/wp-content/uploads/2026/09/hero-bg.jpg"); background-size:cover; background-position:center right; padding:66px 16px 80px;}
 .amt-katazuke .hero--home .hero-text{max-width:620px;}
 @media(max-width:760px){.amt-katazuke .hero--home{background:linear-gradient(180deg,rgba(255,251,240,.95) 0%,rgba(255,251,240,.9) 40%,rgba(255,251,240,.5) 72%,rgba(255,251,240,.15) 100%), url("https://katazuke.amt-eco.com/wp-content/uploads/2026/09/hero-bg.jpg"); background-size:cover; background-position:center;}}
@@ -128,59 +128,59 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .btn-mail:hover{background:var(--dark);color:#fff;}
 .amt-katazuke .btn-tel:hover{filter:brightness(1.1);}
 
-/* トップのヒーローバナー画像＋CTA帯 */
+
 .amt-katazuke .hero-banner{line-height:0;}
 .amt-katazuke .hero-banner img{width:100%;height:auto;display:block;}
 .amt-katazuke .hero-cta-strip{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:28px 16px;}
 .amt-katazuke .hero-cta-strip .hcs-lead{font-weight:700;margin-bottom:16px;font-size:clamp(.95rem,2.2vw,1.1rem);}
 .amt-katazuke .hero-cta-strip .hero-cta{justify-content:center;}
 
-/* サービスページ上部の写真 */
+
 .amt-katazuke .svc-hero{max-width:1080px;margin:0 auto;padding:0 16px;}
 .amt-katazuke .svc-hero img{width:100%;height:auto;display:block;border-radius:10px;margin:22px auto 0;box-shadow:0 2px 14px rgba(0,0,0,.12);}
-/* 透過イラストの見出し画像：伸ばさず中央に、影・角丸なし */
+
 .amt-katazuke .svc-hero--illust{text-align:center;}
 .amt-katazuke .svc-hero--illust img{width:auto;max-width:100%;height:auto;max-height:300px;display:inline-block;border-radius:0;box-shadow:none;margin:18px auto 0;}
 
-/* 下層ページ用のコンパクトなヒーロー */
+
 .amt-katazuke .page-hero{padding:46px 16px 54px;}
 .amt-katazuke .page-hero h1{font-size:clamp(1.5rem,3.6vw,2.3rem);margin-bottom:0;}
 .amt-katazuke .page-hero p{margin-top:12px;margin-bottom:0;font-size:clamp(.95rem,2vw,1.1rem);max-width:760px;}
 
-/* ===== 共通セクション ===== */
+
 .amt-katazuke .k-section{padding:64px 16px;}
 .amt-katazuke .inner{max-width:1080px;margin:0 auto;}
 .amt-katazuke .sec-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:900;text-align:center;margin-bottom:8px;}
 .amt-katazuke .sec-title::after{content:"";display:block;width:64px;height:5px;margin:14px auto 0;background:linear-gradient(90deg,var(--primary) 50%,var(--dark) 50%);}
 .amt-katazuke .sec-lead{text-align:center;color:#555;margin-bottom:40px;}
 
-/* サービスカード */
+
 .amt-katazuke .works{background:var(--gray);}
 .amt-katazuke .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
 .amt-katazuke .card{background:var(--white);border-radius:10px;padding:26px 22px;border-top:6px solid var(--primary);box-shadow:0 2px 10px rgba(0,0,0,.06);}
 .amt-katazuke .card h3{font-size:1.1rem;font-weight:700;margin-bottom:10px;}
 .amt-katazuke .card h3 .mk{color:var(--primary-dark);margin-right:6px;}
 .amt-katazuke .card p{font-size:.92rem;color:#444;}
-/* カード中央寄せグリッド（3列・端数の行も中央に） */
+
 .amt-katazuke .card-grid--c{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
 .amt-katazuke .card-grid--c>.card{flex:0 1 calc((100% - 40px)/3);box-sizing:border-box;}
 @media(max-width:900px){.amt-katazuke .card-grid--c>.card{flex-basis:calc((100% - 20px)/2);}}
 @media(max-width:560px){.amt-katazuke .card-grid--c>.card{flex-basis:100%;}}
-/* サービスカードのイラスト */
+
 .amt-katazuke .card--svc{padding-top:16px;transition:box-shadow .2s,transform .2s;}
 .amt-katazuke .card--svc:hover{box-shadow:0 8px 22px rgba(0,0,0,.12);transform:translateY(-3px);}
 .amt-katazuke .card-illust{text-align:center;margin:0 0 10px;}
 .amt-katazuke .card-illust img{height:132px;width:auto;display:inline-block;}
 
-/* 対応エリアの地図 */
+
 .amt-katazuke .area-map{margin:0 0 26px;}
 .amt-katazuke .area-map img{width:100%;max-width:860px;height:auto;display:block;margin:0 auto;border-radius:12px;box-shadow:0 3px 16px rgba(0,0,0,.10);}
 
-/* 選ばれる理由 */
+
 .amt-katazuke .reasons .card{border-top-color:var(--dark);}
 .amt-katazuke .reasons .card h3 .mk{color:var(--dark);}
 
-/* 流れ */
+
 .amt-katazuke .flow{background:var(--gray);}
 .amt-katazuke .flow-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;counter-reset:step;}
 .amt-katazuke .flow-step{background:var(--white);border-radius:10px;padding:22px 16px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06);position:relative;}
@@ -188,18 +188,18 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .flow-step h3{font-size:1rem;font-weight:700;margin-bottom:8px;}
 .amt-katazuke .flow-step p{font-size:.85rem;color:#555;}
 
-/* エリア */
+
 .amt-katazuke .area p{max-width:760px;margin:0 auto;text-align:center;}
 .amt-katazuke .area strong{color:var(--primary-dark);}
 
-/* 会社概要 */
+
 .amt-katazuke .company{background:var(--gray);}
 .amt-katazuke .company table{width:100%;max-width:760px;margin:0 auto;border-collapse:collapse;background:var(--white);box-shadow:0 2px 10px rgba(0,0,0,.06);border-radius:10px;overflow:hidden;}
 .amt-katazuke .company th,.amt-katazuke .company td{padding:16px 20px;text-align:left;border-bottom:1px solid #eee;font-size:.95rem;vertical-align:top;}
 .amt-katazuke .company th{width:32%;background:var(--dark);color:var(--white);font-weight:700;white-space:nowrap;}
 @media(max-width:560px){.amt-katazuke .company th{width:38%;}}
 
-/* 本文（prose） */
+
 .amt-katazuke .prose{max-width:820px;margin:0 auto;}
 .amt-katazuke .prose h2{font-size:clamp(1.3rem,2.6vw,1.7rem);font-weight:900;margin:40px 0 14px;padding-left:14px;border-left:6px solid var(--primary);line-height:1.5;}
 .amt-katazuke .prose h3{font-size:1.15rem;font-weight:700;margin:28px 0 10px;color:var(--dark);}
@@ -213,13 +213,13 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .prose thead th{background:var(--dark);color:#fff;}
 .amt-katazuke .prose tbody th{background:var(--primary-light);white-space:nowrap;width:34%;}
 .amt-katazuke .note{font-size:.88rem;color:#666;background:#f7f7f5;border-radius:6px;padding:14px 16px;margin:0 0 24px;}
-/* 要点（結論先出し）ブロック：SEO/AIO対策 */
+
 .amt-katazuke .answer{background:var(--dark);color:#fff;border-radius:10px;padding:18px 22px;margin:0 0 8px;box-shadow:0 4px 14px rgba(0,0,0,.12);}
 .amt-katazuke .answer .answer-h{display:inline-block;background:var(--primary);color:var(--ink);font-weight:900;font-size:.78rem;padding:3px 14px;border-radius:999px;margin-bottom:10px;}
 .amt-katazuke .answer p{color:#fff;margin:0;font-size:1.02rem;line-height:1.85;}
 .amt-katazuke .answer strong{color:var(--primary-bright);}
 
-/* FAQ */
+
 .amt-katazuke .faq{max-width:820px;margin:0 auto;}
 .amt-katazuke .faq-item{background:#fff;border:1px solid #eee;border-radius:8px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04);overflow:hidden;}
 .amt-katazuke .faq-q{display:flex;gap:12px;align-items:flex-start;padding:18px 20px;font-weight:700;font-size:1.02rem;background:var(--primary-light);}
@@ -227,7 +227,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .faq-a{display:flex;gap:12px;align-items:flex-start;padding:18px 20px;color:#444;font-size:.95rem;}
 .amt-katazuke .faq-a::before{content:"A";flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--primary);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;}
 
-/* お問い合わせフォーム（自作フォーム＋Contact Form 7 共通） */
+
 .amt-katazuke .amt-form{max-width:640px;margin:8px auto 0;}
 .amt-katazuke .amt-form label{display:block;font-weight:700;margin:16px 0 6px;color:var(--dark);font-size:.95rem;}
 .amt-katazuke .amt-form label .req{color:#c0392b;font-size:.8rem;margin-left:6px;}
@@ -237,7 +237,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .amt-form button,.amt-katazuke .amt-form input[type="submit"],.amt-katazuke .amt-form .wpcf7-submit{width:auto;background:var(--dark);color:#fff;font-weight:900;font-size:1.1rem;padding:14px 44px;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25);}
 .amt-katazuke .amt-form button:hover,.amt-katazuke .amt-form input[type="submit"]:hover,.amt-katazuke .amt-form .wpcf7-submit:hover{filter:brightness(1.15);}
 .amt-katazuke .amt-form .form-note{font-size:.82rem;color:#666;margin-top:12px;text-align:center;}
-/* Contact Form 7 個別調整 */
+
 .amt-katazuke .amt-cf7 p{margin:0 0 4px;}
 .amt-katazuke .amt-cf7 .wpcf7-form-control-wrap{display:block;margin-bottom:6px;}
 .amt-katazuke .amt-cf7 br{display:none;}
@@ -246,7 +246,7 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .amt-cf7 .wpcf7-not-valid-tip{color:#c0392b;font-size:.85rem;}
 .amt-katazuke .amt-cf7 .wpcf7-response-output{margin:16px 0 0!important;border-radius:8px;font-size:.9rem;}
 
-/* 下部CTA帯（濃色地・白文字＋黄ボタン） */
+
 .amt-katazuke .cta-band{background:linear-gradient(135deg,var(--dark-2),var(--dark));color:#fff;text-align:center;padding:48px 16px;}
 .amt-katazuke .cta-band h2{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:900;margin-bottom:10px;color:#fff;}
 .amt-katazuke .cta-band p{margin-bottom:24px;color:#e7e7e7;}
@@ -260,14 +260,14 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .cta-band .cta-content{flex:0 1 auto;}
 @media(max-width:700px){.amt-katazuke .cta-band .cta-mascot{display:none;}}
 
-/* 関連ページ */
+
 .amt-katazuke .rel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;max-width:1080px;margin:0 auto;}
 .amt-katazuke .rel-card{display:block;background:#fff;border-top:5px solid var(--primary);border-radius:10px;padding:20px;text-decoration:none;color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.06);}
 .amt-katazuke .rel-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12);}
 .amt-katazuke .rel-card b{display:block;font-size:1.05rem;margin-bottom:6px;color:var(--dark);}
 .amt-katazuke .rel-card span{font-size:.88rem;color:#555;}
 
-/* ===== フッター ===== */
+
 .amt-katazuke .k-footer{background:#1f2529;color:#ddd;border-top:6px solid var(--primary);}
 .amt-katazuke .foot-inner{max-width:1080px;margin:0 auto;padding:44px 20px 26px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:30px;}
 .amt-katazuke .foot-logo{font-weight:900;font-size:1.15rem;color:#fff;margin-bottom:12px;}
@@ -293,7 +293,217 @@ html,body{overflow-x:hidden;}
 @media(max-width:480px){.amt-katazuke .foot-inner{grid-template-columns:1fr;}}
 
 
-/* ===== コラム記事 追加スタイル ===== */
+body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium",YuGothic,"Yu Gothic",Meiryo,sans-serif;}
+.amt-katazuke{--deep:#1c2328;}
+.amt-katazuke .logo-mark{width:64px;height:64px;}
+@media(max-width:640px){.amt-katazuke .logo-mark{width:52px;height:52px;}}
+
+
+.amt-katazuke .page-hero{background:radial-gradient(ellipse 60% 75% at 100% 100%,rgba(247,181,0,.30),transparent 70%),radial-gradient(ellipse 45% 55% at 0% 0%,rgba(255,210,63,.10),transparent 70%),var(--deep);color:#fff;padding:60px 16px 70px;isolation:isolate;}
+.amt-katazuke .page-hero::before{content:"";position:absolute;right:-50px;top:50%;width:min(44vw,400px);aspect-ratio:1/1;transform:translateY(-50%);background:url("https://katazuke.amt-eco.com/wp-content/uploads/2026/10/logo-v2-mark.webp") no-repeat center/contain;opacity:.12;z-index:-1;pointer-events:none;}
+.amt-katazuke .page-hero::after{height:8px;background:repeating-linear-gradient(45deg,var(--primary) 0 18px,var(--deep) 18px 36px);}
+.amt-katazuke .page-hero .hero-inner::before{content:"OUCHI NO OKATAZUKE-TAI";display:block;margin:0 0 12px;font-size:.72rem;font-weight:700;letter-spacing:.3em;color:var(--primary);}
+.amt-katazuke .page-hero h1{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.3);}
+.amt-katazuke .page-hero h1 em{background:none;color:var(--primary-bright);padding:0;}
+.amt-katazuke .page-hero p{color:#d6dbde;line-height:1.9;}
+@media(max-width:700px){.amt-katazuke .page-hero{padding:46px 16px 56px;}.amt-katazuke .page-hero::before{width:62vw;right:-18vw;opacity:.09;}}
+
+
+.amt-katazuke .prose h2{border-left:none;padding:0 0 12px 18px;position:relative;border-bottom:1px solid #ece7da;}
+.amt-katazuke .prose h2::before{content:"";position:absolute;left:0;top:.2em;bottom:14px;width:6px;border-radius:3px;background:linear-gradient(180deg,var(--primary-bright),var(--primary-dark));}
+.amt-katazuke .prose h3{padding-left:1.1em;position:relative;}
+.amt-katazuke .prose h3::before{content:"";position:absolute;left:0;top:.5em;width:.55em;height:.55em;border-radius:2px;background:var(--primary);}
+.amt-katazuke .prose strong{background:linear-gradient(transparent 62%,rgba(247,181,0,.32) 62%);}
+.amt-katazuke .prose a{color:var(--link);text-underline-offset:3px;}
+.amt-katazuke .prose .lead{border-left:none;border-radius:14px;padding:20px 22px 20px 28px;position:relative;}
+.amt-katazuke .prose .lead::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:6px;border-radius:3px;background:var(--primary);}
+.amt-katazuke .prose table{border-radius:14px;box-shadow:0 8px 24px rgba(30,36,40,.08);}
+.amt-katazuke .note{border-left:4px solid var(--primary);border-radius:10px;}
+.amt-katazuke .answer{border-radius:16px;position:relative;overflow:hidden;}
+.amt-katazuke .answer::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--primary-dark),var(--primary-bright));}
+.amt-katazuke .svc-hero img{border-radius:16px;box-shadow:0 14px 34px rgba(30,36,40,.16);}
+
+
+.amt-katazuke .sec-eye{display:block;text-align:center;font-size:.74rem;font-weight:700;letter-spacing:.32em;color:#8a6200;margin:0 0 8px;}
+.amt-katazuke .sec-title::after{width:72px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--primary) 0 60%,var(--dark) 60%);}
+
+
+.amt-katazuke .faq-item{border:1px solid #ece7da;border-radius:14px;box-shadow:0 6px 18px rgba(30,36,40,.06);transition:box-shadow .25s,transform .25s;}
+.amt-katazuke .faq-item:hover{box-shadow:0 14px 30px rgba(30,36,40,.12);transform:translateY(-2px);}
+.amt-katazuke .faq-q::before{box-shadow:0 0 0 4px rgba(247,181,0,.28);}
+
+
+.amt-katazuke .rel-grid{gap:14px;}
+.amt-katazuke .rel-card{position:relative;border-top:none;border:1px solid #ece7da;border-left:5px solid var(--primary);border-radius:12px;padding:18px 44px 18px 20px;transition:transform .25s,box-shadow .25s;}
+.amt-katazuke .rel-card::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--dark);font-weight:900;transition:right .25s;}
+.amt-katazuke .rel-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(30,36,40,.12);}
+.amt-katazuke .rel-card:hover::after{right:12px;}
+
+
+.amt-katazuke .cta-band{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse 55% 70% at 100% 100%,rgba(247,181,0,.25),transparent 70%),linear-gradient(135deg,#161c20,var(--dark));padding:70px 16px 64px;}
+.amt-katazuke .cta-band::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(45deg,var(--primary) 0 18px,var(--deep) 18px 36px);}
+.amt-katazuke .cta-band .btn-tel{border-radius:18px;padding:16px 44px;box-shadow:0 12px 30px rgba(0,0,0,.3);transition:transform .2s;}
+.amt-katazuke .cta-band .btn-tel:hover{transform:translateY(-3px);}
+.amt-katazuke .cta-band .btn-mail{border-radius:999px;padding:12px 30px;}
+
+
+.amt-katazuke .foot-h{color:#fff;font-size:.95rem;font-weight:700;margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid var(--primary);}
+.amt-katazuke .foot-logo{display:flex;align-items:center;gap:10px;}
+.amt-katazuke .foot-logo .fl-tx span{color:var(--primary);}
+.amt-katazuke .foot-logo img{width:44px;height:44px;background:#fff;border-radius:10px;padding:4px;}
+
+
+
+.amt-katazuke .kz-hero{position:relative;overflow:hidden;isolation:isolate;background:#fffbf0;padding:70px 16px 84px;}
+.amt-katazuke .kz-hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;z-index:-2;}
+.amt-katazuke .kz-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(255,251,240,.97) 0%,rgba(255,251,240,.88) 32%,rgba(255,251,240,.35) 60%,rgba(255,251,240,0) 82%);}
+.amt-katazuke .kz-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:repeating-linear-gradient(45deg,var(--dark) 0 22px,var(--primary) 22px 44px);}
+.amt-katazuke .kz-hero-in{max-width:1080px;margin:0 auto;}
+.amt-katazuke .kz-hero-tx{max-width:640px;}
+.amt-katazuke .kz-badge{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;font-weight:700;font-size:.85rem;padding:6px 16px;border-radius:999px;margin:0 0 20px;}
+.amt-katazuke .kz-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 3px rgba(247,181,0,.35);}
+.amt-katazuke .kz-hero h1{font-size:clamp(1.75rem,4.6vw,3.1rem);font-weight:900;line-height:1.38;margin:0 0 18px;color:var(--ink);letter-spacing:.01em;}
+.amt-katazuke .kz-hero h1 em{font-style:normal;background:linear-gradient(transparent 58%,rgba(247,181,0,.75) 58%);padding:0 .1em;}
+.amt-katazuke .kz-hero-copy{font-size:clamp(.95rem,2vw,1.1rem);margin:0 0 28px;color:#3a352d;line-height:1.95;}
+.amt-katazuke .kz-hero .hero-cta{margin:0 0 26px;}
+.amt-katazuke .kz-hero .btn-tel{border-radius:14px;box-shadow:0 10px 24px rgba(30,36,40,.28);}
+.amt-katazuke .kz-hero .btn-mail{border-radius:999px;background:rgba(255,255,255,.85);}
+.amt-katazuke .kz-points{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;}
+.amt-katazuke .kz-points li{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #efe3bf;border-radius:999px;padding:7px 16px 7px 10px;font-weight:700;font-size:.88rem;box-shadow:0 4px 12px rgba(30,36,40,.08);}
+.amt-katazuke .kz-points li::before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--primary);color:var(--ink);font-size:.8rem;font-weight:900;}
+@media(max-width:760px){.amt-katazuke .kz-hero{padding:44px 16px 230px;}.amt-katazuke .kz-hero-bg{object-position:70% 100%;}.amt-katazuke .kz-hero::before{background:linear-gradient(180deg,rgba(255,251,240,.97) 0%,rgba(255,251,240,.93) 55%,rgba(255,251,240,.35) 78%,rgba(255,251,240,0) 100%);}}
+
+
+.amt-katazuke .kz-pas{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse 70% 60% at 100% 100%,rgba(247,181,0,.22),transparent 70%),radial-gradient(ellipse 50% 45% at 0% 0%,rgba(255,210,63,.08),transparent 70%),var(--deep);color:#fff;padding:88px 16px 80px;}
+.amt-katazuke .kz-pas::after{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(45deg,var(--primary) 0 18px,var(--deep) 18px 36px);}
+.amt-katazuke .kz-pas-mark{position:absolute;right:-4%;bottom:-10%;width:min(56vw,620px);opacity:.10;z-index:-1;pointer-events:none;}
+.amt-katazuke .kz-pas-in{max-width:1080px;margin:0 auto;}
+.amt-katazuke .kz-eye{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-size:.76rem;font-weight:700;letter-spacing:.32em;color:var(--primary);}
+.amt-katazuke .kz-eye::before{content:"";width:40px;height:2px;background:var(--primary);}
+.amt-katazuke .kz-pas h2{margin:0 0 34px;font-size:clamp(1rem,1.6vw,1.15rem);font-weight:700;letter-spacing:.12em;color:#cfd5d8;}
+.amt-katazuke .kz-pas-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:end;margin:0 0 54px;}
+.amt-katazuke .kz-state{margin:0;font-size:clamp(1.9rem,4.2vw,3.25rem);font-weight:900;line-height:1.3;color:#fff;}
+.amt-katazuke .kz-state em{font-style:normal;color:var(--primary-bright);text-shadow:0 0 28px rgba(247,181,0,.35);}
+.amt-katazuke .kz-pas-body p{margin:0 0 16px;font-size:clamp(.98rem,1.6vw,1.05rem);line-height:2.05;color:#d9dee1;}
+.amt-katazuke .kz-pas-body strong{color:#fff;}
+.amt-katazuke .kz-pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.amt-katazuke .kz-pcard{position:relative;padding:30px 24px 26px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.10);transition:transform .25s,border-color .25s,box-shadow .25s;}
+.amt-katazuke .kz-pcard::before{content:"";position:absolute;left:24px;right:24px;top:-1px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--primary-bright),var(--primary-dark));box-shadow:0 0 18px rgba(247,181,0,.5);}
+.amt-katazuke .kz-pcard:hover{transform:translateY(-6px);border-color:rgba(247,181,0,.45);box-shadow:0 18px 40px rgba(0,0,0,.45);}
+.amt-katazuke .kz-num{display:block;margin:0 0 10px;font-size:3.3rem;font-weight:900;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--primary);}
+.amt-katazuke .kz-pcard h3{margin:0 0 12px;font-size:1.22rem;font-weight:900;color:#fff;}
+.amt-katazuke .kz-pcard p{margin:0;font-size:.95rem;line-height:1.9;color:#cdd3d6;}
+.amt-katazuke .kz-pcard a{color:var(--primary-bright);}
+.amt-katazuke .kz-sign{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin:42px 0 0;font-size:.95rem;font-weight:700;letter-spacing:.14em;color:#b9c1c5;}
+.amt-katazuke .kz-sign::before{content:"";width:64px;height:1px;background:var(--primary);}
+@media(max-width:860px){.amt-katazuke .kz-pas-grid{grid-template-columns:1fr;gap:24px;}.amt-katazuke .kz-pcards{grid-template-columns:1fr;}.amt-katazuke .kz-pas-mark{width:110vw;right:-30%;bottom:auto;top:6%;}}
+@media(max-width:600px){.amt-katazuke .kz-pas{padding:64px 16px 56px;}.amt-katazuke .kz-pas-body p br{display:none;}.amt-katazuke .kz-sign{font-size:.8rem;letter-spacing:.06em;}.amt-katazuke .kz-sign::before{width:32px;}}
+
+
+.amt-katazuke .kz-svc{background:var(--gray);}
+.amt-katazuke .kz-sgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;}
+.amt-katazuke .kz-scard{flex:0 1 calc((100% - 44px)/3);display:flex;flex-direction:column;background:#fff;border-radius:18px;overflow:hidden;text-decoration:none;color:var(--ink);box-shadow:0 10px 28px rgba(30,36,40,.09);transition:transform .25s,box-shadow .25s;}
+.amt-katazuke .kz-scard:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(30,36,40,.16);}
+.amt-katazuke .kz-sph{position:relative;aspect-ratio:3/2;overflow:hidden;background:#ddd;}
+.amt-katazuke .kz-sph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;}
+.amt-katazuke .kz-scard:hover .kz-sph img{transform:scale(1.06);}
+.amt-katazuke .kz-sno{position:absolute;left:14px;top:14px;background:var(--primary);color:var(--ink);font-weight:900;font-size:.82rem;letter-spacing:.08em;padding:4px 12px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.2);}
+.amt-katazuke .kz-sbody{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1;}
+.amt-katazuke .kz-sbody h3{font-size:1.2rem;font-weight:900;margin:0 0 8px;}
+.amt-katazuke .kz-sbody p{font-size:.93rem;color:#4a4740;margin:0 0 14px;flex:1;}
+.amt-katazuke .kz-more{font-weight:900;font-size:.9rem;color:var(--dark);}
+.amt-katazuke .kz-more::after{content:" →";color:var(--primary-dark);}
+@media(max-width:900px){.amt-katazuke .kz-scard{flex-basis:calc((100% - 22px)/2);}}
+@media(max-width:560px){.amt-katazuke .kz-scard{flex-basis:100%;}}
+
+
+.amt-katazuke .kz-scn .card{border-top:none;border-radius:18px;border:1px solid #efe8d4;box-shadow:0 8px 22px rgba(30,36,40,.07);}
+.amt-katazuke .kz-scn .card h3 .mk{display:none;}
+.amt-katazuke .kz-scn .card h3{text-align:center;}
+.amt-katazuke .kz-scn .card p{text-align:center;}
+.amt-katazuke .kz-scn .card-illust{background:radial-gradient(circle at 50% 60%,var(--primary-light),transparent 70%);border-radius:14px;padding:6px 0;}
+
+
+.amt-katazuke .kz-rsn{background:#fff;}
+.amt-katazuke .kz-rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.amt-katazuke .kz-rcard{position:relative;background:#fff;border:1px solid #efe8d4;border-radius:18px;padding:30px 22px 24px;box-shadow:0 10px 26px rgba(30,36,40,.07);overflow:hidden;transition:transform .25s,box-shadow .25s;}
+.amt-katazuke .kz-rcard:hover{transform:translateY(-5px);box-shadow:0 18px 36px rgba(30,36,40,.13);}
+.amt-katazuke .kz-rcard::after{content:attr(data-n);position:absolute;right:12px;top:2px;font-size:4.2rem;font-weight:900;line-height:1;color:rgba(247,181,0,.16);}
+.amt-katazuke .kz-ric{display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:16px;background:var(--dark);margin:0 0 16px;box-shadow:0 8px 18px rgba(30,36,40,.25);}
+.amt-katazuke .kz-ric svg{width:30px;height:30px;}
+.amt-katazuke .kz-rcard h3{font-size:1.08rem;font-weight:900;margin:0 0 10px;line-height:1.5;}
+.amt-katazuke .kz-rcard p{font-size:.9rem;color:#4a4740;margin:0;line-height:1.85;}
+@media(max-width:960px){.amt-katazuke .kz-rgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.amt-katazuke .kz-rgrid{grid-template-columns:1fr;}}
+
+
+.amt-katazuke .kz-lic{background:var(--gray);}
+.amt-katazuke .kz-cert{max-width:760px;margin:0 auto;position:relative;background:#fffdf6;border-radius:6px;padding:44px 40px 36px;box-shadow:0 16px 40px rgba(30,36,40,.12);border:1px solid #e8dcb6;}
+.amt-katazuke .kz-cert::before{content:"";position:absolute;inset:10px;border:2px solid var(--primary);border-radius:4px;pointer-events:none;}
+.amt-katazuke .kz-cert::after{content:"";position:absolute;inset:16px;border:1px solid rgba(224,160,0,.45);border-radius:2px;pointer-events:none;}
+.amt-katazuke .kz-cert-t{text-align:center;font-size:clamp(1.35rem,3vw,1.8rem);font-weight:900;letter-spacing:.3em;margin:0 0 6px;color:var(--ink);}
+.amt-katazuke .kz-cert-s{text-align:center;font-size:.8rem;letter-spacing:.2em;color:#8a6200;margin:0 0 24px;}
+.amt-katazuke .kz-cert dl{display:grid;grid-template-columns:9em 1fr;gap:0;margin:0 auto;max-width:520px;}
+.amt-katazuke .kz-cert dt,.amt-katazuke .kz-cert dd{padding:12px 6px;border-bottom:1px dashed #e2d3a6;margin:0;}
+.amt-katazuke .kz-cert dt{font-weight:700;color:#6b5a2a;}
+.amt-katazuke .kz-cert dd{font-weight:900;}
+.amt-katazuke .kz-seal{position:absolute;right:34px;bottom:26px;width:86px;height:86px;border-radius:50%;border:3px solid rgba(224,160,0,.75);display:flex;align-items:center;justify-content:center;text-align:center;font-size:.72rem;font-weight:900;line-height:1.3;color:rgba(160,110,0,.9);transform:rotate(-12deg);background:rgba(255,245,214,.6);}
+.amt-katazuke .kz-cert-note{max-width:760px;margin:22px auto 0;font-size:.88rem;color:#555;text-align:center;line-height:1.85;}
+@media(max-width:600px){.amt-katazuke .kz-cert{padding:36px 22px 110px;}.amt-katazuke .kz-cert dl{grid-template-columns:1fr;}.amt-katazuke .kz-cert dt{border-bottom:none;padding-bottom:0;}.amt-katazuke .kz-seal{right:50%;transform:translateX(50%) rotate(-12deg);bottom:16px;}}
+
+
+.amt-katazuke .kz-flow{background:#fff;}
+.amt-katazuke .kz-fwrap{display:grid;grid-template-columns:1fr 220px;gap:28px;align-items:center;}
+.amt-katazuke .kz-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative;}
+.amt-katazuke .kz-steps::before{content:"";position:absolute;left:8%;right:8%;top:30px;height:4px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--primary) 0 14px,transparent 14px 22px);}
+.amt-katazuke .kz-steps li{position:relative;text-align:center;}
+.amt-katazuke .kz-sn{position:relative;display:flex;align-items:center;justify-content:center;width:62px;height:62px;margin:0 auto 14px;border-radius:50%;background:var(--dark);color:var(--primary);font-weight:900;font-size:1.25rem;border:4px solid #fff;box-shadow:0 0 0 3px var(--primary),0 10px 20px rgba(30,36,40,.2);}
+.amt-katazuke .kz-steps h3{font-size:1rem;font-weight:900;margin:0 0 6px;}
+.amt-katazuke .kz-steps p{font-size:.85rem;color:#555;margin:0;line-height:1.75;}
+.amt-katazuke .kz-fmascot img{width:100%;max-width:220px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 12px 18px rgba(0,0,0,.18));}
+.amt-katazuke .kz-flow-more{text-align:center;margin:30px 0 0;}
+.amt-katazuke .kz-btn{display:inline-block;background:var(--dark);color:#fff!important;font-weight:900;text-decoration:none;padding:13px 34px;border-radius:999px;box-shadow:0 8px 20px rgba(30,36,40,.22);transition:transform .2s;}
+.amt-katazuke .kz-btn:hover{transform:translateY(-2px);}
+.amt-katazuke .kz-btn::after{content:" →";color:var(--primary);}
+@media(max-width:960px){.amt-katazuke .kz-fwrap{grid-template-columns:1fr;}.amt-katazuke .kz-fmascot{display:none;}}
+@media(max-width:760px){.amt-katazuke .kz-steps{grid-template-columns:1fr;gap:0;}.amt-katazuke .kz-steps::before{left:30px;right:auto;top:20px;bottom:20px;width:4px;height:auto;background:repeating-linear-gradient(180deg,var(--primary) 0 14px,transparent 14px 22px);}.amt-katazuke .kz-steps li{display:grid;grid-template-columns:62px 1fr;column-gap:16px;text-align:left;padding:0 0 18px;}.amt-katazuke .kz-sn{grid-row:span 2;margin:0;}.amt-katazuke .kz-steps h3{align-self:end;}}
+
+
+.amt-katazuke .kz-area{background:var(--gray);}
+.amt-katazuke .kz-agrid{display:grid;grid-template-columns:1.3fr 1fr;gap:34px;align-items:center;}
+.amt-katazuke .kz-agrid .area-map{margin:0;}
+.amt-katazuke .kz-agrid .area-map img{border-radius:18px;box-shadow:0 14px 34px rgba(30,36,40,.14);}
+.amt-katazuke .kz-chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:0;}
+.amt-katazuke .kz-chips li{background:#fff;border:1px solid #e8dcb6;border-radius:999px;padding:6px 14px;font-weight:700;font-size:.9rem;}
+.amt-katazuke .kz-chips li.is-base{background:var(--dark);border-color:var(--dark);color:#fff;}
+.amt-katazuke .kz-chips li.is-base::before{content:"● ";color:var(--primary);}
+.amt-katazuke .kz-atx p{margin:0 0 12px;line-height:1.9;}
+@media(max-width:860px){.amt-katazuke .kz-agrid{grid-template-columns:1fr;}}
+
+
+.amt-katazuke .kz-co{background:#fff;}
+.amt-katazuke .kz-cogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.amt-katazuke .kz-tile{background:var(--gray);border-radius:16px;padding:20px 22px;border:1px solid #efe8d4;}
+.amt-katazuke .kz-tile .t{display:block;font-size:.76rem;font-weight:700;letter-spacing:.14em;color:#8a6200;margin:0 0 6px;}
+.amt-katazuke .kz-tile .v{font-weight:900;font-size:1.02rem;line-height:1.65;word-break:break-word;}
+.amt-katazuke .kz-tile .v a{color:var(--ink);}
+.amt-katazuke .kz-tile--wide{grid-column:span 3;background:var(--deep);border-color:var(--deep);color:#fff;}
+.amt-katazuke .kz-tile--wide .t{color:var(--primary);}
+.amt-katazuke .kz-biz{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 0;padding:0;}
+.amt-katazuke .kz-biz li{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.88rem;}
+.amt-katazuke .kz-biz li.is-here{background:var(--primary);border-color:var(--primary);color:var(--ink);}
+@media(max-width:860px){.amt-katazuke .kz-cogrid{grid-template-columns:1fr 1fr;}.amt-katazuke .kz-tile--wide{grid-column:span 2;}}
+@media(max-width:520px){.amt-katazuke .kz-cogrid{grid-template-columns:1fr;}.amt-katazuke .kz-tile--wide{grid-column:auto;}}
+
+
+.amt-katazuke .kz-pas-mark{height:auto;}
+.amt-katazuke .kz-seal{color:#7a5200;border-color:#b07a00;}
+.amt-katazuke .kz-cert-note a,.amt-katazuke .kz-lic a{color:#7a5200;}
+.amt-katazuke .foot-col a.foot-mail{color:var(--ink);}
+.amt-katazuke .foot-bottom{color:#a9afb3;}
+
+
+
 .amt-katazuke .art-meta{display:flex;gap:14px;align-items:center;margin-bottom:14px;font-size:.85rem;color:#eee;}
 .amt-katazuke .art-cat{background:var(--primary);color:var(--ink);padding:3px 14px;border-radius:999px;font-weight:900;font-size:.78rem;}
 .amt-katazuke .k-toc{background:#fff;border:1px solid #eee;border-left:6px solid var(--primary);border-radius:8px;padding:18px 24px;margin:0 0 32px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
@@ -308,13 +518,13 @@ html,body{overflow-x:hidden;}
 .amt-katazuke .k-article .checklist li::before{content:"\2713";position:absolute;left:14px;top:11px;color:var(--primary-dark);font-weight:900;}
 .amt-katazuke .k-article .point{background:#fff;border:1px solid #eee;border-top:5px solid var(--dark);border-radius:8px;padding:18px 22px;margin:0 0 24px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
 .amt-katazuke .k-article .point b{color:var(--dark);}
-/* 結論を先に示すブロック（AIO：AI検索・強調スニペット向けの要点先出し） */
+
 .amt-katazuke .k-article .answer{background:var(--dark);color:#fff;border-radius:10px;padding:18px 22px;margin:0 0 28px;box-shadow:0 4px 14px rgba(0,0,0,.12);}
 .amt-katazuke .k-article .answer .answer-h{display:inline-block;background:var(--primary);color:var(--ink);font-weight:900;font-size:.78rem;padding:3px 12px;border-radius:999px;margin-bottom:10px;}
 .amt-katazuke .k-article .answer p{color:#fff;margin:0;font-size:1.02rem;line-height:1.85;}
 .amt-katazuke .k-article .answer strong{color:var(--primary-bright);}
 </style>
-<div class="amt-katazuke"><header class="k-header"><div class="hdr-topbar"></div><div class="header-inner"><a class="logo" href="/"><span class="logo-mark"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/09/logo.png" alt="おうちのお片付け隊 ロゴ" width="46" height="46"></span><span class="logo-tx"><span class="logo-name"><b>株式会社AMT</b> おうちのお片付け隊</span><small>静岡県島田市｜片付け・不用品回収・残置物撤去・農機具買取</small></span></a><div class="header-tel"><a class="tel-btn" href="tel:0547-39-3750"><svg viewBox="0 0 24 24" width="19" height="19" fill="#2a2724" style="flex-shrink:0"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5 3 3.9 3.4 3.5 4 3.5H7.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 1.7z"/></svg>TEL 0547-39-3750</a><small>お見積り・ご相談無料</small></div></div></header><nav class="k-nav"><input type="checkbox" id="amtnav" class="amt-navtoggle"><label class="amt-navbtn" for="amtnav"><span class="bars"><i></i></span>メニュー</label><ul><li><a href="/">ホーム</a></li><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品回収</a></li><li><a href="/zanchibutsu/">残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/nouki-kaitori/">農機具買取</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/ryoukin/">料金・費用</a></li><li><a href="/column/">コラム</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/company/">会社概要</a></li><li><a href="/flow/">ご利用の流れ</a></li><li><a href="/area/">対応エリア</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></nav><div class="breadcrumb"><a href="/">ホーム</a><span>›</span><a href="/column/">コラム</a><span>›</span>不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分け</div><div class="page-hero hero"><div class="hero-inner"><div class="art-meta"><span class="art-cat">コラム</span><time datetime="2026-09-27">2026年9月27日</time></div><h1>不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分け</h1></div></div><div class="svc-hero svc-hero--illust"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/09/illust-fuyouhin.png" alt="不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分けのイメージイラスト" width="560" height="520" loading="lazy"></div><section class="k-section"><article class="prose k-article"><p class="lead">不要になったものを手放す方法はひとつではありません。「まだ使えるか」「量はどれくらいか」で最適な手段が変わります。損をせず、正しく手放すための使い分けを整理しました。</p><nav class="k-toc" aria-label="目次"><p class="k-toc-h">目次</p><ol><li><a href="#s1">まず「使えるか・使えないか」で分ける</a></li><li><a href="#s2">まだ使えるものは「買取」を検討する</a></li><li><a href="#s3">自治体の粗大ごみ・ごみ出しルールを使う</a></li><li><a href="#s4">家電リサイクル法の対象品に注意</a></li><li><a href="#s5">量が多い・搬出が大変なときは片付け業者へ</a></li><li><a href="#s6">「無料回収」をうたう業者に注意</a></li><li><a href="#s7">まとめ</a></li></ol></nav><h2 id="s1">まず「使えるか・使えないか」で分ける</h2><p>不用品を前にしたら、最初に次の2つに分けると判断がスムーズです。</p>
+<div class="amt-katazuke"><header class="k-header"><div class="hdr-topbar"></div><div class="header-inner"><a class="logo" href="/"><span class="logo-mark"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/logo-v2-mark.webp" alt="おうちのお片付け隊 ロゴ" width="64" height="64"></span><span class="logo-tx"><span class="logo-name"><b>株式会社AMT</b> おうちのお片付け隊</span><small>静岡県島田市｜片付け・不用品回収・残置物撤去・農機具買取</small></span></a><div class="header-tel"><a class="tel-btn" href="tel:0547-39-3750"><svg viewBox="0 0 24 24" width="19" height="19" fill="#2a2724" style="flex-shrink:0"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5 3 3.9 3.4 3.5 4 3.5H7.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 1.7z"/></svg>TEL 0547-39-3750</a><small>お見積り・ご相談無料</small></div></div></header><nav class="k-nav"><input type="checkbox" id="amtnav" class="amt-navtoggle"><label class="amt-navbtn" for="amtnav"><span class="bars"><i></i></span>メニュー</label><ul><li><a href="/">ホーム</a></li><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品回収</a></li><li><a href="/zanchibutsu/">残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/nouki-kaitori/">農機具買取</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/ryoukin/">料金・費用</a></li><li><a href="/column/">コラム</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/company/">会社概要</a></li><li><a href="/flow/">ご利用の流れ</a></li><li><a href="/area/">対応エリア</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></nav><div class="breadcrumb"><a href="/">ホーム</a><span>›</span><a href="/column/">コラム</a><span>›</span>不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分け</div><div class="page-hero hero"><div class="hero-inner"><div class="art-meta"><span class="art-cat">コラム</span><time datetime="2026-09-27">2026年9月27日</time></div><h1>不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分け</h1></div></div><div class="svc-hero svc-hero--illust"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/09/illust-fuyouhin.png" alt="不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分けのイメージイラスト" width="560" height="520" loading="lazy"></div><section class="k-section"><article class="prose k-article"><p class="lead">不要になったものを手放す方法はひとつではありません。「まだ使えるか」「量はどれくらいか」で最適な手段が変わります。損をせず、正しく手放すための使い分けを整理しました。</p><nav class="k-toc" aria-label="目次"><p class="k-toc-h">目次</p><ol><li><a href="#s1">まず「使えるか・使えないか」で分ける</a></li><li><a href="#s2">まだ使えるものは「買取」を検討する</a></li><li><a href="#s3">自治体の粗大ごみ・ごみ出しルールを使う</a></li><li><a href="#s4">家電リサイクル法の対象品に注意</a></li><li><a href="#s5">量が多い・搬出が大変なときは片付け業者へ</a></li><li><a href="#s6">「無料回収」をうたう業者に注意</a></li><li><a href="#s7">まとめ</a></li></ol></nav><h2 id="s1">まず「使えるか・使えないか」で分ける</h2><p>不用品を前にしたら、最初に次の2つに分けると判断がスムーズです。</p>
 <ul>
 <li><b>まだ使える／価値がある</b>：買取・譲渡を検討する</li>
 <li><b>壊れている／古い／需要がない</b>：適正に処分する</li>
@@ -343,11 +553,11 @@ html,body{overflow-x:hidden;}
 <li>「無料」を強調する一方で、内訳が示されない場合は注意する</li>
 <li>大切な情報を含む機器（パソコンなど）は、扱いを確認してから渡す</li>
 </ul>
-<p>信頼できる依頼先を選ぶことが、結果的にいちばん安心で確実です。</p><h2 id="s7">まとめ</h2><p>不用品は「使えるものは買取」「少量は自治体ルール」「対象家電は法令どおり」「量が多いときは業者へ」と使い分けるのが賢い手放し方です。当社は買取と搬出、適正処理の手配までまとめて対応します。静岡県内を中心に、まずはお気軽にご相談ください。</p></article></section><section class="k-section"><div class="inner"><h2 class="sec-title">よくある質問</h2><div class="faq"><div class="faq-item"><div class="faq-q">使えるかどうか分からないものも見てもらえますか？</div><div class="faq-a">はい、買取できるかどうかを含めて現地で確認します。まとめてご相談ください。</div></div><div class="faq-item"><div class="faq-q">自治体で出せるものは自分で、大物だけ頼むこともできますか？</div><div class="faq-a">できます。量や品目に応じて、必要な部分だけのご依頼も承ります。</div></div><div class="faq-item"><div class="faq-q">家電リサイクル法の対象品も相談できますか？</div><div class="faq-a">回収の可否や方法を現地確認時にご案内します。取り扱いに迷う場合もお問い合わせください。</div></div></div></div></section><section class="k-section"><div class="inner"><h2 class="sec-title">関連ページ</h2><div class="rel-grid"><a class="rel-card" href="/fuyouhin/"><b>不用品の回収</b><span>買取＋搬出＋適正処理の手配</span></a><a class="rel-card" href="/nouki-kaitori/"><b>農機具の買取り</b><span>使わない農機具を買取</span></a><a class="rel-card" href="/ryoukin/"><b>料金・費用について</b><span>費用の決まり方・抑え方</span></a><a class="rel-card" href="/contact/"><b>お問い合わせ</b><span>ご相談・お見積りは無料</span></a></div></div></section><section class="cta-band"><div class="cta-inner"><div class="cta-mascot"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/09/mascot-hero.png" alt="おうちのお片付け隊 マスコット" width="210" height="213" loading="lazy"></div><div class="cta-content"><h2>お片付けのご相談・お見積りは無料です</h2><p>「いくらかかる？」「これは回収できる？」だけでもお気軽にどうぞ。個人のお客様も法人のお客様も、静岡県内を中心に対応します。</p><a class="btn-tel" href="tel:0547-39-3750">0547-39-3750</a><div class="btn-line"><a class="btn-mail" href="/contact/">メールで相談する</a></div></div></div></section><footer class="k-footer"><div class="foot-inner"><div class="foot-col foot-about"><div class="foot-logo"><span>株式会社AMT</span> おうちのお片付け隊</div><p>静岡県島田市を拠点に、家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・農機具の買取りまで対応します。個人のお客様も法人・事業者さまも、お見積り・ご相談は無料です。</p></div><div class="foot-col"><h4>サービス</h4><ul><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品の回収</a></li><li><a href="/zanchibutsu/">解体前の残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/nouki-kaitori/">農機具の買取り</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/akiya/">空き家・実家の片付け</a></li><li><a href="/gomiyashiki-katazuke/">ゴミ屋敷の片付け</a></li><li><a href="/hikkoshi/">引っ越しの片付け</a></li><li><a href="/tenpo/">店舗・オフィスの片付け</a></li><li><a href="/hinmoku/">対応品目一覧</a></li><li><a href="/ryoukin/">料金・費用について</a></li></ul></div><div class="foot-col"><h4>ご案内</h4><ul><li><a href="/flow/">ご利用の流れ</a></li><li><a href="/area/">対応エリア</a></li><li><a href="/company/">会社概要</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/column/">コラム</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></div><div class="foot-col foot-contact"><h4>お問い合わせ</h4><a class="foot-tel" href="tel:0547-39-3750">0547-39-3750</a><p class="foot-note">お見積り・ご相談は無料</p><a class="foot-mail" href="/contact/">メールで相談する</a><p class="foot-addr">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</p><p class="foot-corp"><a href="https://amt-eco.com/" target="_blank" rel="noopener">コーポレートサイト ↗</a></p></div></div><div class="foot-bottom"><p><a href="/privacy-policy/">プライバシーポリシー</a>　｜　&copy; 株式会社AMT All Rights Reserved.</p></div></footer></div>
+<p>信頼できる依頼先を選ぶことが、結果的にいちばん安心で確実です。</p><h2 id="s7">まとめ</h2><p>不用品は「使えるものは買取」「少量は自治体ルール」「対象家電は法令どおり」「量が多いときは業者へ」と使い分けるのが賢い手放し方です。当社は買取と搬出、適正処理の手配までまとめて対応します。静岡県内を中心に、まずはお気軽にご相談ください。</p></article></section><section class="k-section"><div class="inner"><h2 class="sec-title">よくある質問</h2><div class="faq"><div class="faq-item"><div class="faq-q">使えるかどうか分からないものも見てもらえますか？</div><div class="faq-a">はい、買取できるかどうかを含めて現地で確認します。まとめてご相談ください。</div></div><div class="faq-item"><div class="faq-q">自治体で出せるものは自分で、大物だけ頼むこともできますか？</div><div class="faq-a">できます。量や品目に応じて、必要な部分だけのご依頼も承ります。</div></div><div class="faq-item"><div class="faq-q">家電リサイクル法の対象品も相談できますか？</div><div class="faq-a">回収の可否や方法を現地確認時にご案内します。取り扱いに迷う場合もお問い合わせください。</div></div></div></div></section><section class="k-section"><div class="inner"><h2 class="sec-title">関連ページ</h2><div class="rel-grid"><a class="rel-card" href="/fuyouhin/"><b>不用品の回収</b><span>買取＋搬出＋適正処理の手配</span></a><a class="rel-card" href="/nouki-kaitori/"><b>農機具の買取り</b><span>使わない農機具を買取</span></a><a class="rel-card" href="/ryoukin/"><b>料金・費用について</b><span>費用の決まり方・抑え方</span></a><a class="rel-card" href="/contact/"><b>お問い合わせ</b><span>ご相談・お見積りは無料</span></a></div></div></section><section class="cta-band"><div class="cta-inner"><div class="cta-mascot"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/mascot-hero-420.webp" alt="おうちのお片付け隊 マスコット" width="210" height="213" loading="lazy" decoding="async"></div><div class="cta-content"><h2>お片付けのご相談・お見積りは無料です</h2><p>「いくらかかる？」「これは回収できる？」だけでもお気軽にどうぞ。個人のお客様も法人のお客様も、静岡県内を中心に対応します。</p><a class="btn-tel" href="tel:0547-39-3750">0547-39-3750</a><div class="btn-line"><a class="btn-mail" href="/contact/">メールで相談する</a></div></div></div></section><footer class="k-footer"><div class="foot-inner"><div class="foot-col foot-about"><div class="foot-logo"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/logo-v2-mark.webp" alt="" width="44" height="44" loading="lazy" decoding="async"><span class="fl-tx"><span>株式会社AMT</span> おうちのお片付け隊</span></div><p>静岡県島田市を拠点に、家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・農機具の買取りまで対応します。個人のお客様も法人・事業者さまも、お見積り・ご相談は無料です。</p></div><div class="foot-col"><p class="foot-h">サービス</p><ul><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品の回収</a></li><li><a href="/zanchibutsu/">解体前の残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/nouki-kaitori/">農機具の買取り</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/akiya/">空き家・実家の片付け</a></li><li><a href="/gomiyashiki-katazuke/">ゴミ屋敷の片付け</a></li><li><a href="/hikkoshi/">引っ越しの片付け</a></li><li><a href="/tenpo/">店舗・オフィスの片付け</a></li><li><a href="/hinmoku/">対応品目一覧</a></li><li><a href="/ryoukin/">料金・費用について</a></li></ul></div><div class="foot-col"><p class="foot-h">ご案内</p><ul><li><a href="/flow/">ご利用の流れ</a></li><li><a href="/area/">対応エリア</a></li><li><a href="/company/">会社概要</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/column/">コラム</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></div><div class="foot-col foot-contact"><p class="foot-h">お問い合わせ</p><a class="foot-tel" href="tel:0547-39-3750">0547-39-3750</a><p class="foot-note">お見積り・ご相談は無料</p><a class="foot-mail" href="/contact/">メールで相談する</a><p class="foot-addr">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</p><p class="foot-corp"><a href="https://amt-eco.com/" target="_blank" rel="noopener">コーポレートサイト ↗</a></p></div></div><div class="foot-bottom"><p><a href="/privacy-policy/">プライバシーポリシー</a>　｜　&copy; 株式会社AMT All Rights Reserved.</p></div></footer></div>
 <!-- /wp:html -->
 
 <!-- wp:html -->
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分け", "description": "不用品の手放し方を、買取(古物商)・自治体の粗大ごみ・家電リサイクル法・片付け業者への依頼の使い分けで解説。悪質な無料回収の注意点も。静岡県島田市のおうちのお片付け隊。", "inLanguage": "ja", "datePublished": "2026-09-27", "dateModified": "2026-09-27", "image": "https://katazuke.amt-eco.com/wp-content/uploads/2026/09/ogp-katazuke.jpg", "author": {"@type": "Organization", "name": "株式会社AMT（おうちのお片付け隊）", "url": "https://katazuke.amt-eco.com/"}, "publisher": {"@type": "Organization", "name": "株式会社AMT", "logo": {"@type": "ImageObject", "url": "https://katazuke.amt-eco.com/wp-content/uploads/2026/09/logo.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://katazuke.amt-eco.com/fuyouhin-tebanashi/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "不用品を賢く手放す方法｜買取・自治体の粗大ごみ・片付け業者の使い分け", "description": "不用品の手放し方を、買取(古物商)・自治体の粗大ごみ・家電リサイクル法・片付け業者への依頼の使い分けで解説。悪質な無料回収の注意点も。静岡県島田市のおうちのお片付け隊。", "inLanguage": "ja", "datePublished": "2026-09-27", "dateModified": "2026-09-27", "image": "https://katazuke.amt-eco.com/wp-content/uploads/2026/10/ogp-katazuke-v2.jpg", "author": {"@type": "Organization", "name": "株式会社AMT（おうちのお片付け隊）", "url": "https://katazuke.amt-eco.com/"}, "publisher": {"@type": "Organization", "name": "株式会社AMT", "logo": {"@type": "ImageObject", "url": "https://katazuke.amt-eco.com/wp-content/uploads/2026/10/favicon-v2-512.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://katazuke.amt-eco.com/fuyouhin-tebanashi/"}}</script>
 <!-- /wp:html -->
 
 <!-- wp:html -->

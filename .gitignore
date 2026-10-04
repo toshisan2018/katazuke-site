@@ -5,3 +5,5 @@ Thumbs.db
 # Python
 __pycache__/
 *.pyc
+assets/publish/
+assets/__pycache__/

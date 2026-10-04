@@ -14,7 +14,7 @@ WordPressの「投稿（コラム）」として公開するための自己完�
   - 古物商許可（機械工具類・静岡県公安委員会）は「あり」→農機具・機械の買取に言及可。
   - 掲載する電話番号は build_pages.py の TEL のみ。
 """
-import os, sys, json, base64, io
+import os, sys, json, base64, io, re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -42,6 +42,8 @@ footer.wp-block-template-part{display:none!important;}
 .wp-block-query{display:none!important;}
 .wp-site-blocks{padding:0!important;margin:0!important;}
 .wp-site-blocks>main{margin-block:0!important;padding:0!important;}
+/* 固定ページテンプレートの本文グループ上下の余白(70px)を消す（ヘッダー上の白い帯の原因） */
+.wp-site-blocks>main>.wp-block-group{padding-block:0!important;margin-block:0!important;}
 .entry-content{margin-block-start:0!important;max-width:none!important;}
 .entry-content>.alignfull,.entry-content>*{margin-block:0;}
 """
@@ -71,6 +73,8 @@ ARTICLE_CSS = """
 """
 
 CSS = HIDE_CSS + "\n" + bp.DESIGN_CSS + "\n" + ARTICLE_CSS
+# 公開用CSSからコメントを除く（AIOSEOが本文先頭のCSSコメントを説明文に拾うのを防ぐ・軽量化）
+CSS = re.sub(r"/\*.*?\*/", "", CSS, flags=re.S)
 
 
 def toc(sections):
@@ -96,12 +100,12 @@ def article_jsonld(slug, title, desc):
         "inLanguage": "ja",
         "datePublished": TODAY_ISO,
         "dateModified": TODAY_ISO,
-        "image": bp.IMG["ogp"],
+        "image": bp.IMG["ogp_v2"],
         "author": {"@type": "Organization",
                    "name": bp.COMPANY_NAME + "（" + bp.SITE_NAME + "）",
                    "url": bp.DOMAIN + "/"},
         "publisher": {"@type": "Organization", "name": bp.COMPANY_NAME,
-                      "logo": {"@type": "ImageObject", "url": bp.IMG["logo"]}},
+                      "logo": {"@type": "ImageObject", "url": bp.IMG["logo_v2_png"]}},
         "mainEntityOfPage": {"@type": "WebPage", "@id": bp.DOMAIN + "/" + slug + "/"},
     }
 
