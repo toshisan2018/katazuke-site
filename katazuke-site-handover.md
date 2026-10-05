@@ -247,3 +247,11 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - Google公式SEOガイド（NotebookLM「SEO対策について」）の「関連ページへ文脈に沿った内部リンク」に基づき、記事6本（ihin-seiri / akiya-katazuke / gomiyashiki / fuyouhin-hiyou / kaden-shobun / fuyouhin-tebanashi）の本文に `/katazuke-shimada/` への1文を追加（アンカーは「島田市の片付け・不用品回収」）。それまで島田市ページへの導線はフッターとトップのみだった。
 - 生成元は `build_articles.py` の各セクションHTML。公開は bundle.json を使わず、管理画面のREST（`/wp/v2/posts?slug=…&context=edit` → `content.raw` を文字列置換 → POST）で行った。小さな差分ならこの方法のほうが速い。
 - Chromeが2台（Windows / Mac）接続されていると接続先の選択を求められる。両サイトの管理画面にログイン済みなのは **WindowsのChrome**。
+
+## 17. 2026-10-05 Search Console 確認（直近90日）
+
+- 検索流入はまだごく少量（8ページに表示、クリック1）。「農機具 買取静岡」で /nouki-kaitori/ が平均2.9位・表示7・クリック0 → タイトル/説明文でクリックを取りにいく余地あり。/katazuke/ は12.2位（2ページ目の上位）。
+- URL検査：10/1に登録待ちだった hikkoshi / area / flow / seizen-seiri / ihin-seiri / gomiyashiki は**すべて登録済み**。
+- **/katazuke-shimada/ は未登録（Googleに未検出）**。サイトマップ(page-sitemap.xml)には入っている。登録リクエストは当日の割り当て超過で不可 → **10/6以降にURL検査から「インデックス登録をリクエスト」を実施すること**。
+- 「ページのインデックス登録」レポートは両サイトとも「データを処理しています」で未集計（URLプレフィックス型プロパティを最近追加したため）。
+- GSC操作のコツ（追記）：検索欄は find で textbox の ref を取り、クリック→End→Backspace連打→入力→Enter が確実（ctrl+a は「a」が入力されてしまう）。browser_batch は1〜2URL分までに分けないとタイムアウトする。URL検査の直リンク（inspect?…&id=）は404。
