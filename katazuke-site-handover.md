@@ -241,3 +241,9 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **トップの検索タイトル**：「島田市の片付け・不用品回収ならおうちのお片付け隊｜残置物撤去・農機具買取｜株式会社AMT」。※トップ（ID6）は AIOSEO 側にタイトルが固定入力されているため、変更時は REST `aioseo_meta_data.title` も更新すること。
 - フッター「ご案内」とトップの対応エリア章に `/katazuke-shimada/` へのリンクを追加。
 - **コーポレートサイト amt-eco.com**：`/services/cleanup/` を片付けサイトのトップへ 301 転送（プラグイン Redirection）。島田市の地域ページ（/area/shizuoka/shimada/）に片付けサイトへの案内枠（黄色）を追加。
+
+## 16. 2026-10-05 コラム→島田市ページの本文内部リンク
+
+- Google公式SEOガイド（NotebookLM「SEO対策について」）の「関連ページへ文脈に沿った内部リンク」に基づき、記事6本（ihin-seiri / akiya-katazuke / gomiyashiki / fuyouhin-hiyou / kaden-shobun / fuyouhin-tebanashi）の本文に `/katazuke-shimada/` への1文を追加（アンカーは「島田市の片付け・不用品回収」）。それまで島田市ページへの導線はフッターとトップのみだった。
+- 生成元は `build_articles.py` の各セクションHTML。公開は bundle.json を使わず、管理画面のREST（`/wp/v2/posts?slug=…&context=edit` → `content.raw` を文字列置換 → POST）で行った。小さな差分ならこの方法のほうが速い。
+- Chromeが2台（Windows / Mac）接続されていると接続先の選択を求められる。両サイトの管理画面にログイン済みなのは **WindowsのChrome**。
