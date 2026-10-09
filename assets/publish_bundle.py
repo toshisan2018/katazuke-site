@@ -5,7 +5,7 @@ WordPress 公開用バンドルを作る（固定ページ＋コラム一覧＋�
   → assets/publish/bundle.json  [{type, slug, title, desc, content}]
 
 管理画面（ログイン済み）でこの JSON を読み込み、REST(/wp-json/wp/v2/pages, /posts) へ slug 一致で上書きする。
-  body: {title, content, aioseo_meta_data: {description: desc}}
+  body: {title, content, aioseo_meta_data: {title: seo_title, description: desc}}
 固定ページは本文の前に、デザインCSS（テーマ枠を隠すCSS込み・コメント除去済み）を <style id="amt-katazuke-css"> で同梱する
 （記事・コラム一覧は build_articles.py の出力に既に同梱済み）。
 """
@@ -31,12 +31,15 @@ def main():
     style = '<!-- wp:html -->\n<style id="amt-katazuke-css">' + PAGE_CSS + '</style>\n<!-- /wp:html -->\n\n'
     for p in json.load(io.open(os.path.join(HERE, "pages", "manifest.json"), encoding="utf-8")):
         items.append({"type": "pages", "slug": p["slug"], "title": p["title"], "desc": p.get("desc", ""),
+                      "seo_title": p.get("seo_title", ""),
                       "content": style + _content(p)})
     for p in json.load(io.open(os.path.join(HERE, "articles", "page_manifest.json"), encoding="utf-8")):
         items.append({"type": "pages", "slug": p["slug"], "title": p["title"], "desc": p.get("desc", ""),
+                      "seo_title": p.get("seo_title") or p["title"],
                       "content": _content(p)})
     for p in json.load(io.open(os.path.join(HERE, "articles", "manifest.json"), encoding="utf-8")):
         items.append({"type": "posts", "slug": p["slug"], "title": p["title"], "desc": p.get("desc", ""),
+                      "seo_title": p.get("seo_title") or p["title"],
                       "content": _content(p)})
     out = os.path.join(HERE, "publish")
     os.makedirs(out, exist_ok=True)

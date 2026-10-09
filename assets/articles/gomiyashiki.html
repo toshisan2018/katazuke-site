@@ -504,6 +504,249 @@ body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu
 
 
 
+
+.amt-katazuke .k-header{position:sticky;top:0;z-index:60;background:var(--white);
+  box-shadow:0 2px 18px rgba(20,26,30,.12);}
+.amt-katazuke .hdr-topbar{height:4px;
+  background:linear-gradient(90deg,var(--dark),var(--primary-dark) 38%,var(--primary) 66%,var(--primary-bright));}
+.amt-katazuke .hdr-trust{background:var(--dark-2);color:#e8ebed;}
+.amt-katazuke .hdr-trust-in{max-width:1080px;margin:0 auto;padding:6px 16px;display:flex;flex-wrap:wrap;
+  gap:4px 20px;font-size:.74rem;font-weight:700;letter-spacing:.2px;}
+.amt-katazuke .hdr-trust-in span{position:relative;padding-left:14px;white-space:nowrap;}
+.amt-katazuke .hdr-trust-in span::before{content:"";position:absolute;left:0;top:50%;width:6px;height:6px;
+  margin-top:-3px;border-radius:50%;background:var(--primary);}
+.amt-katazuke .header-inner{max-width:1080px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;}
+.amt-katazuke .hdr-act{display:flex;align-items:stretch;gap:10px;flex-shrink:0;}
+
+
+.amt-katazuke .k-header .header-tel{text-align:left;}
+.amt-katazuke .tel-btn{display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+  color:var(--ink) !important;text-decoration:none;padding:9px 20px;border-radius:12px;
+  box-shadow:0 5px 14px rgba(224,160,0,.35);border:1px solid rgba(0,0,0,.06);
+  transition:transform .15s,box-shadow .15s;}
+.amt-katazuke .tel-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(224,160,0,.45);}
+.amt-katazuke .tel-btn svg{flex-shrink:0;}
+.amt-katazuke .tel-btn .tb-tx{display:flex;flex-direction:column;line-height:1.15;}
+.amt-katazuke .tel-btn .tb-tx small{font-size:.68rem;font-weight:700;opacity:.8;}
+.amt-katazuke .tel-btn .tb-tx b{font-size:1.3rem;font-weight:900;letter-spacing:.4px;}
+
+
+.amt-katazuke .hdr-quote{display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:var(--dark);color:#fff !important;text-decoration:none;padding:9px 20px;border-radius:12px;
+  line-height:1.2;box-shadow:0 5px 14px rgba(47,58,65,.3);transition:transform .15s,background .15s;}
+.amt-katazuke .hdr-quote:hover{background:var(--dark-2);transform:translateY(-1px);}
+.amt-katazuke .hdr-quote b{font-size:1rem;font-weight:900;}
+.amt-katazuke .hdr-quote small{font-size:.66rem;color:var(--primary-bright);font-weight:700;margin-top:2px;}
+
+@media(max-width:900px){
+  .amt-katazuke .hdr-quote{display:none;}
+  .amt-katazuke .hdr-trust-in span:nth-child(n+3){display:none;}
+}
+@media(max-width:760px){
+  .amt-katazuke .k-header{position:static;}
+  .amt-katazuke .header-inner{flex-wrap:wrap;justify-content:center;text-align:center;gap:8px;padding:10px 14px;}
+  .amt-katazuke .k-header .logo{justify-content:center;}
+  .amt-katazuke .hdr-act{display:none;}
+  .amt-katazuke .hdr-trust-in{justify-content:center;font-size:.68rem;gap:2px 14px;}
+}
+
+
+.amt-katazuke .k-nav{background:var(--dark);position:relative;box-shadow:inset 0 -1px 0 rgba(255,255,255,.07);}
+.amt-katazuke .k-nav a{font-size:.86rem;letter-spacing:.2px;}
+.amt-katazuke .k-nav a::after{height:3px;bottom:4px;border-radius:2px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-bright));}
+.amt-katazuke .k-nav a[aria-current="page"]{background:linear-gradient(180deg,var(--primary-bright),var(--primary));}
+
+
+.amt-katazuke .kz-price{margin:22px 0 12px;padding:24px 26px;border-radius:18px;
+  background:linear-gradient(135deg,var(--dark),var(--dark-2));color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 14px 34px rgba(31,37,41,.26);}
+.amt-katazuke .kz-price::after{content:"";position:absolute;right:-50px;top:-50px;width:190px;height:190px;
+  border-radius:50%;background:radial-gradient(circle,rgba(247,181,0,.45),transparent 68%);}
+.amt-katazuke .kz-price-lbl{margin:0 0 4px;font-size:.88rem;font-weight:700;color:var(--primary-bright);
+  letter-spacing:.4px;position:relative;}
+.amt-katazuke .kz-price-val{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 6px;position:relative;}
+.amt-katazuke .kz-price-num{font-size:3.4rem;font-weight:900;line-height:1;letter-spacing:-1px;
+  color:var(--primary-bright);}
+.amt-katazuke .kz-price-yen{font-size:1.5rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .kz-price-unit{font-size:1.05rem;font-weight:700;color:#fff;}
+.amt-katazuke .kz-price-unit b{font-size:1.3rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .kz-price-note{margin:10px 0 0;font-size:.84rem;color:#cfd5d9;position:relative;line-height:1.7;}
+@media(max-width:560px){
+  .amt-katazuke .kz-price{padding:20px 18px;}
+  .amt-katazuke .kz-price-num{font-size:2.6rem;}
+}
+
+
+.amt-katazuke .k-footer{background:linear-gradient(180deg,#232a2e,#1b2125);color:#d7dcdf;
+  border-top:5px solid var(--primary);}
+.amt-katazuke .foot-inner{max-width:1180px;margin:0 auto;padding:46px 20px 26px;display:grid;
+  grid-template-columns:1.55fr .9fr .9fr .9fr 1.05fr;gap:30px;}
+.amt-katazuke .foot-h{color:#fff;font-size:.93rem;font-weight:800;margin:0 0 14px;padding-bottom:8px;
+  border-bottom:2px solid var(--primary);letter-spacing:.3px;}
+.amt-katazuke .foot-price{display:flex;flex-direction:column;gap:2px;margin:14px 0 10px;padding:12px 14px;
+  border-radius:12px;background:rgba(247,181,0,.1);border:1px solid rgba(247,181,0,.3);}
+.amt-katazuke .foot-price span{font-size:.74rem;font-weight:700;color:#c8cdd1;}
+.amt-katazuke .foot-price b{font-size:1.08rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .foot-lic{margin:0;font-size:.74rem;color:#9aa1a6;line-height:1.6;}
+.amt-katazuke .foot-area{max-width:1180px;margin:0 auto;padding:0 20px 20px;}
+.amt-katazuke .foot-area p{margin:0;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.045);
+  font-size:.8rem;color:#b6bcc0;line-height:1.8;}
+.amt-katazuke .foot-area b{color:var(--primary-bright);margin-right:4px;}
+.amt-katazuke .foot-area a{color:#d7dcdf;}
+.amt-katazuke .foot-col a{transition:color .15s;}
+@media(max-width:1000px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr 1fr 1fr;}
+  .amt-katazuke .foot-about{grid-column:1 / -1;}
+}
+@media(max-width:620px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr 1fr;gap:22px;}
+}
+@media(max-width:420px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr;}
+}
+
+
+.amt-katazuke .kz-sticky{display:none;}
+@media(max-width:760px){
+  .amt-katazuke .kz-sticky{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;
+    bottom:0;z-index:80;padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(33,42,48,.96);backdrop-filter:blur(6px);box-shadow:0 -4px 18px rgba(0,0,0,.3);}
+  .amt-katazuke .kz-sticky a{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-decoration:none;border-radius:12px;padding:9px 6px;line-height:1.2;}
+  .amt-katazuke .kz-sticky a span{font-size:.64rem;font-weight:700;opacity:.85;}
+  .amt-katazuke .kz-sticky a b{font-size:1.02rem;font-weight:900;letter-spacing:.3px;}
+  .amt-katazuke .kz-sticky .ks-tel{background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+    color:var(--ink);}
+  .amt-katazuke .kz-sticky .ks-mail{background:#fff;color:var(--dark);}
+  
+  .amt-katazuke .k-footer .foot-bottom{padding-bottom:76px;}
+}
+
+
+.amt-katazuke .jr-list{display:grid;gap:26px;}
+.amt-katazuke .jr-card{background:var(--white);border:1px solid #ece7da;border-radius:18px;
+  padding:26px 26px 22px;box-shadow:0 10px 28px rgba(31,37,41,.07);}
+.amt-katazuke .jr-card h2{margin:4px 0 16px;font-size:1.3rem;line-height:1.5;}
+.amt-katazuke .jr-card h3{margin:20px 0 6px;font-size:1.02rem;}
+.amt-katazuke .jr-tag{display:inline-block;margin:0;padding:4px 12px;border-radius:30px;
+  background:var(--primary-light);color:#7a5400;font-size:.76rem;font-weight:800;}
+.amt-katazuke .jr-img{margin:0 0 16px;border-radius:14px;overflow:hidden;}
+.amt-katazuke .jr-img img{width:100%;height:auto;display:block;}
+.amt-katazuke .jr-card table{margin:0 0 4px;}
+.amt-katazuke .jr-card table th{width:34%;white-space:nowrap;}
+.amt-katazuke .jr-voice{margin:18px 0 0;padding:14px 18px;border-left:4px solid var(--primary);
+  background:var(--gray);border-radius:0 10px 10px 0;}
+.amt-katazuke .jr-voice p{margin:0;font-size:.94rem;line-height:1.8;color:#4a453e;}
+.amt-katazuke .jr-link{margin:16px 0 0;font-weight:700;}
+@media(max-width:560px){
+  .amt-katazuke .jr-card{padding:20px 16px 18px;}
+  .amt-katazuke .jr-card h2{font-size:1.12rem;}
+  .amt-katazuke .jr-card table th{width:40%;font-size:.84rem;}
+}
+
+
+.amt-katazuke .kz-hprice{display:inline-flex;flex-direction:column;gap:1px;margin:0 0 18px;
+  padding:12px 20px;border-radius:14px;background:rgba(33,42,48,.92);color:#fff;
+  box-shadow:0 10px 26px rgba(20,26,30,.3);border:1px solid rgba(247,181,0,.4);}
+.amt-katazuke .kz-hprice span{font-size:.76rem;font-weight:700;color:#cfd5d9;letter-spacing:.3px;}
+.amt-katazuke .kz-hprice b{font-size:1.5rem;font-weight:900;color:var(--primary-bright);line-height:1.2;}
+.amt-katazuke .kz-hprice small{font-size:.68rem;color:#aeb5ba;line-height:1.5;}
+@media(max-width:560px){.amt-katazuke .kz-hprice{padding:10px 16px;}
+  .amt-katazuke .kz-hprice b{font-size:1.25rem;}}
+
+
+.amt-katazuke .kz-prc{background:var(--gray);}
+.amt-katazuke .kz-prc-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:26px;align-items:start;}
+.amt-katazuke .kz-prc .kz-price{margin:0;}
+.amt-katazuke .kz-inc{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
+.amt-katazuke .kz-inc li{background:#fff;border:1px solid #ece7da;border-radius:12px;padding:13px 16px;
+  font-size:.9rem;line-height:1.75;color:#4a453e;}
+.amt-katazuke .kz-inc li b{display:block;font-size:.78rem;font-weight:800;color:#8a6200;
+  letter-spacing:.4px;margin-bottom:2px;}
+@media(max-width:860px){.amt-katazuke .kz-prc-grid{grid-template-columns:1fr;}}
+
+
+.amt-katazuke .kz-nouki{background:linear-gradient(170deg,var(--dark),var(--dark-2));color:#eef1f3;
+  position:relative;overflow:hidden;}
+.amt-katazuke .kz-nouki::before{content:"";position:absolute;left:-80px;bottom:-80px;width:320px;height:320px;
+  border-radius:50%;background:radial-gradient(circle,rgba(247,181,0,.2),transparent 70%);}
+.amt-katazuke .kz-nouki .sec-eye{color:var(--primary-bright);}
+.amt-katazuke .kz-nouki .sec-title{color:#fff;}
+.amt-katazuke .kz-nouki .sec-title::after{background:var(--primary-bright);}
+.amt-katazuke .kz-nouki .sec-lead{color:#c6ccd0;}
+.amt-katazuke .kz-nouki .sec-lead strong{color:var(--primary-bright);}
+.amt-katazuke .kz-npoints{list-style:none;margin:0 0 26px;padding:0;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:12px;}
+.amt-katazuke .kz-npoints li{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+  border-radius:12px;padding:13px 15px;font-size:.8rem;line-height:1.6;color:#c6ccd0;}
+.amt-katazuke .kz-npoints li b{display:block;font-size:.95rem;font-weight:900;color:var(--primary-bright);
+  margin-bottom:3px;}
+.amt-katazuke .kz-ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.amt-katazuke .kz-ncard{display:block;background:#fff;border-radius:14px;padding:20px 20px 16px;
+  text-decoration:none;color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.2);
+  border-top:4px solid var(--primary);transition:transform .16s,box-shadow .16s;}
+.amt-katazuke .kz-ncard:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.28);}
+.amt-katazuke .kz-ncard h3{margin:0 0 6px;font-size:1.08rem;font-weight:900;color:var(--dark);}
+.amt-katazuke .kz-ncard p{margin:0 0 10px;font-size:.84rem;color:#6b655c;line-height:1.65;}
+.amt-katazuke .kz-narr{font-size:.8rem;font-weight:800;color:#8a6200;}
+.amt-katazuke .kz-narr::after{content:" →";}
+.amt-katazuke .kz-nlic{margin:20px 0 0;font-size:.78rem;color:#aeb5ba;line-height:1.75;}
+.amt-katazuke .kz-nlic strong{color:#e8ebed;}
+.amt-katazuke .kz-nouki .kz-btn{border-color:rgba(255,255,255,.3);color:#fff;}
+.amt-katazuke .kz-nouki .kz-btn:hover{background:rgba(255,255,255,.1);}
+@media(max-width:900px){
+  .amt-katazuke .kz-npoints{grid-template-columns:1fr 1fr;}
+  .amt-katazuke .kz-ngrid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:560px){
+  .amt-katazuke .kz-npoints{grid-template-columns:1fr;}
+  .amt-katazuke .kz-ngrid{grid-template-columns:1fr;}
+}
+
+
+.amt-katazuke .kz-btn--fill{background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+  color:var(--ink) !important;border-color:transparent;box-shadow:0 6px 16px rgba(224,160,0,.35);}
+.amt-katazuke .kz-btn--fill:hover{filter:brightness(1.05);background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));}
+.amt-katazuke .kz-flow-more{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.amt-katazuke .kz-abtns{display:flex;flex-wrap:wrap;gap:10px;}
+
+
+.amt-katazuke .kz-collist{list-style:none;margin:0 0 24px;padding:0;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:12px;}
+.amt-katazuke .kz-collist a{display:block;background:#fff;border:1px solid #ece7da;border-radius:12px;
+  padding:16px 18px;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;line-height:1.6;
+  transition:border-color .15s,box-shadow .15s,transform .15s;}
+.amt-katazuke .kz-collist a::before{content:"COLUMN";display:block;font-size:.64rem;font-weight:800;
+  color:#b08a1e;letter-spacing:1px;margin-bottom:5px;}
+.amt-katazuke .kz-collist a:hover{border-color:var(--primary);transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(31,37,41,.09);}
+@media(max-width:860px){.amt-katazuke .kz-collist{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.amt-katazuke .kz-collist{grid-template-columns:1fr;}}
+
+
+
+@media(min-width:761px){
+  .amt-katazuke .k-nav a{padding:12px 11px;font-size:.84rem;}
+}
+@media(min-width:761px) and (max-width:1040px){
+  .amt-katazuke .k-nav a{padding:11px 8px;font-size:.79rem;}
+}
+
+.amt-katazuke .kz-hprice{display:flex;max-width:min(100%,420px);}
+.amt-katazuke .kz-hprice small{white-space:normal;word-break:break-word;}
+
+@media(max-width:600px){
+  .amt-katazuke .kz-sign{font-size:.74rem;letter-spacing:0;white-space:normal;text-align:right;}
+}
+
+.amt-katazuke h1,.amt-katazuke h2,.amt-katazuke h3{overflow-wrap:anywhere;}
+.amt-katazuke .foot-logo .fl-tx{overflow-wrap:anywhere;}
+
+
+
 .amt-katazuke .art-meta{display:flex;gap:14px;align-items:center;margin-bottom:14px;font-size:.85rem;color:#eee;}
 .amt-katazuke .art-cat{background:var(--primary);color:var(--ink);padding:3px 14px;border-radius:999px;font-weight:900;font-size:.78rem;}
 .amt-katazuke .k-toc{background:#fff;border:1px solid #eee;border-left:6px solid var(--primary);border-radius:8px;padding:18px 24px;margin:0 0 32px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
@@ -524,7 +767,7 @@ body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu
 .amt-katazuke .k-article .answer p{color:#fff;margin:0;font-size:1.02rem;line-height:1.85;}
 .amt-katazuke .k-article .answer strong{color:var(--primary-bright);}
 </style>
-<div class="amt-katazuke"><header class="k-header"><div class="hdr-topbar"></div><div class="header-inner"><a class="logo" href="/"><span class="logo-mark"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/logo-v2-mark.webp" alt="おうちのお片付け隊 ロゴ" width="64" height="64"></span><span class="logo-tx"><span class="logo-name"><b>株式会社AMT</b> おうちのお片付け隊</span><small>静岡県島田市｜片付け・不用品回収・残置物撤去・農機具買取</small></span></a><div class="header-tel"><a class="tel-btn" href="tel:0547-39-3750"><svg viewBox="0 0 24 24" width="19" height="19" fill="#2a2724" style="flex-shrink:0"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5 3 3.9 3.4 3.5 4 3.5H7.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 1.7z"/></svg>TEL 0547-39-3750</a><small>お見積り・ご相談無料</small></div></div></header><nav class="k-nav"><input type="checkbox" id="amtnav" class="amt-navtoggle"><label class="amt-navbtn" for="amtnav"><span class="bars"><i></i></span>メニュー</label><ul><li><a href="/">ホーム</a></li><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品回収</a></li><li><a href="/zanchibutsu/">残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/nouki-kaitori/">農機具買取</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/ryoukin/">料金・費用</a></li><li><a href="/column/">コラム</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/company/">会社概要</a></li><li><a href="/flow/">ご利用の流れ</a></li><li><a href="/area/">対応エリア</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></nav><div class="breadcrumb"><a href="/">ホーム</a><span>›</span><a href="/column/">コラム</a><span>›</span>ゴミ屋敷の片付けはどう進める？自力とプロの違い・手順・費用の考え方</div><div class="page-hero hero"><div class="hero-inner"><div class="art-meta"><span class="art-cat">コラム</span><time datetime="2026-09-27">2026年9月27日</time></div><h1>ゴミ屋敷の片付けはどう進める？自力とプロの違い・手順・費用の考え方</h1></div></div><div class="svc-hero svc-hero--illust"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/illust-gomiyashiki-v2.png" alt="ゴミ屋敷の片付けはどう進める？自力とプロの違い・手順・費用の考え方のイメージイラスト" width="560" height="520" loading="lazy"></div><section class="k-section"><article class="prose k-article"><p class="lead">物があふれて足の踏み場がない状態でも、正しい手順で進めれば片付けられます。ひとりで抱え込まず、無理のない進め方と業者に頼む判断の目安をまとめました。</p><div class="answer"><span class="answer-h">結論</span><p>ゴミ屋敷は<strong>安全確保→貴重品の確保→仕分け（残す・売る・処分）→清掃</strong>の順で片付けます。量が多い・大型の家具家電が多い場合は、買取と搬出・清掃までまとめて任せられる業者への依頼が確実です。費用は物量や搬出条件で決まるため、現地確認のうえ無料でお見積りします。</p></div><nav class="k-toc" aria-label="目次"><p class="k-toc-h">目次</p><ol><li><a href="#s1">ゴミ屋敷は自力で片付けられる？</a></li><li><a href="#s2">自力とプロの違い</a></li><li><a href="#s3">片付けの手順（4ステップ）</a></li><li><a href="#s4">費用はどう決まる？</a></li><li><a href="#s5">業者選びの注意点</a></li><li><a href="#s6">まとめ</a></li></ol></nav><h2 id="s1">ゴミ屋敷は自力で片付けられる？</h2><p>量が比較的少なく、体力と時間に余裕があれば自力でも可能です。ただし、床が見えないほど物が積もっている、大型家具・家電が多い、衛生面が心配、といった場合はプロに任せた方が安全で早く終わります。無理をして体調を崩したり、途中で止まってしまうケースが少なくありません。</p><h2 id="s2">自力とプロの違い</h2><table><thead><tr><th>比較</th><th>自力</th><th>業者に依頼</th></tr></thead><tbody>
+<div class="amt-katazuke"><header class="k-header"><div class="hdr-topbar"></div><div class="hdr-trust"><div class="hdr-trust-in"><span>静岡県島田市・金谷の片付け屋</span><span>古物商許可（静岡県公安委員会） 第49118K000008号</span><span>個人・法人対応</span><span>出張見積り無料</span></div></div><div class="header-inner"><a class="logo" href="/"><span class="logo-mark"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/logo-v2-mark.webp" alt="おうちのお片付け隊 ロゴ" width="64" height="64"></span><span class="logo-tx"><span class="logo-name"><b>株式会社AMT</b> おうちのお片付け隊</span><small>静岡県島田市｜片付け・不用品回収・残置物撤去・農機具買取</small></span></a><div class="hdr-act"><div class="header-tel"><a class="tel-btn" href="tel:0547-39-3750"><svg viewBox="0 0 24 24" width="19" height="19" fill="#2a2724" style="flex-shrink:0"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5 3 3.9 3.4 3.5 4 3.5H7.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 1.7z"/></svg><span class="tb-tx"><small>お電話でのご相談</small><b>0547-39-3750</b></span></a></div><a class="hdr-quote" href="/contact/"><b>無料見積り</b><small>24時間受付</small></a></div></div></header><nav class="k-nav"><input type="checkbox" id="amtnav" class="amt-navtoggle"><label class="amt-navbtn" for="amtnav"><span class="bars"><i></i></span>メニュー</label><ul><li><a href="/">ホーム</a></li><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品回収</a></li><li><a href="/zanchibutsu/">残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/nouki-kaitori/">農機具買取</a></li><li><a href="/ryoukin/">料金・費用</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/column/">コラム</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></nav><div class="breadcrumb"><a href="/">ホーム</a><span>›</span><a href="/column/">コラム</a><span>›</span>ゴミ屋敷の片付けはどう進める？自力とプロの違い・手順・費用の考え方</div><div class="page-hero hero"><div class="hero-inner"><div class="art-meta"><span class="art-cat">コラム</span><time datetime="2026-09-27">2026年9月27日</time></div><h1>ゴミ屋敷の片付けはどう進める？自力とプロの違い・手順・費用の考え方</h1></div></div><div class="svc-hero svc-hero--illust"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/illust-gomiyashiki-v2.png" alt="ゴミ屋敷の片付けはどう進める？自力とプロの違い・手順・費用の考え方のイメージイラスト" width="560" height="520" loading="lazy"></div><section class="k-section"><article class="prose k-article"><p class="lead">物があふれて足の踏み場がない状態でも、正しい手順で進めれば片付けられます。ひとりで抱え込まず、無理のない進め方と業者に頼む判断の目安をまとめました。</p><div class="answer"><span class="answer-h">結論</span><p>ゴミ屋敷は<strong>安全確保→貴重品の確保→仕分け（残す・売る・処分）→清掃</strong>の順で片付けます。量が多い・大型の家具家電が多い場合は、買取と搬出・清掃までまとめて任せられる業者への依頼が確実です。費用は物量や搬出条件で決まるため、現地確認のうえ無料でお見積りします。</p></div><nav class="k-toc" aria-label="目次"><p class="k-toc-h">目次</p><ol><li><a href="#s1">ゴミ屋敷は自力で片付けられる？</a></li><li><a href="#s2">自力とプロの違い</a></li><li><a href="#s3">片付けの手順（4ステップ）</a></li><li><a href="#s4">費用はどう決まる？</a></li><li><a href="#s5">業者選びの注意点</a></li><li><a href="#s6">まとめ</a></li></ol></nav><h2 id="s1">ゴミ屋敷は自力で片付けられる？</h2><p>量が比較的少なく、体力と時間に余裕があれば自力でも可能です。ただし、床が見えないほど物が積もっている、大型家具・家電が多い、衛生面が心配、といった場合はプロに任せた方が安全で早く終わります。無理をして体調を崩したり、途中で止まってしまうケースが少なくありません。</p><h2 id="s2">自力とプロの違い</h2><table><thead><tr><th>比較</th><th>自力</th><th>業者に依頼</th></tr></thead><tbody>
 <tr><th>費用</th><td>抑えやすい</td><td>作業内容に応じてかかる</td></tr>
 <tr><th>時間</th><td>長くかかりがち</td><td>短期間でまとめて完了</td></tr>
 <tr><th>大物の搬出</th><td>負担が大きい</td><td>まとめて搬出できる</td></tr>
@@ -542,7 +785,7 @@ body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu
 <li>処分が必要なものを適正なルートで手放しているか</li>
 <li>「無料回収」を強調しながら後で高額請求する業者に注意する</li>
 </ul></div>
-<p>当社は使えるものは<strong>古物商許可（静岡県公安委員会）のもとで買取</strong>し、処分が必要なものは<strong>提携する許可業者に適正処理を委託</strong>します。プライバシーに配慮して作業します。</p><h2 id="s6">まとめ</h2><p>ゴミ屋敷の片付けは、安全確保と貴重品の確保から始め、「残す・売る・処分」で進めるのが基本です。量が多い・大物があるときは無理をせず、買取と搬出、清掃までまとめて任せられる業者にご相談ください。静岡県内を中心に対応します。</p></article></section><section class="k-section"><div class="inner"><h2 class="sec-title">よくある質問</h2><div class="faq"><div class="faq-item"><div class="faq-q">近所に知られずに片付けできますか？</div><div class="faq-a">できる限り目立たないよう配慮して作業します。日程や進め方もご相談いただけます。</div></div><div class="faq-item"><div class="faq-q">量が多くても一度に片付けられますか？</div><div class="faq-a">作業人数と日程を調整し、まとめて片付けます。まずは現地を確認してお見積りします。</div></div><div class="faq-item"><div class="faq-q">片付けと同時に買取もできますか？</div><div class="faq-a">はい。使えるものは古物商許可のもとで買取し、費用に反映できる場合があります。</div></div></div></div></section><section class="k-section"><div class="inner"><h2 class="sec-title">関連ページ</h2><div class="rel-grid"><a class="rel-card" href="/katazuke/"><b>家のお片付け</b><span>仕分けから搬出まで対応</span></a><a class="rel-card" href="/fuyouhin/"><b>不用品の回収</b><span>使えるものは買取で反映</span></a><a class="rel-card" href="/flow/"><b>ご利用の流れ</b><span>お問い合わせから完了まで</span></a><a class="rel-card" href="/contact/"><b>お問い合わせ</b><span>ご相談・お見積りは無料</span></a></div></div></section><section class="cta-band"><div class="cta-inner"><div class="cta-mascot"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/mascot-hero-420.webp" alt="おうちのお片付け隊 マスコット" width="210" height="213" loading="lazy" decoding="async"></div><div class="cta-content"><h2>お片付けのご相談・お見積りは無料です</h2><p>「いくらかかる？」「これは回収できる？」だけでもお気軽にどうぞ。個人のお客様も法人のお客様も、静岡県内を中心に対応します。</p><a class="btn-tel" href="tel:0547-39-3750">0547-39-3750</a><div class="btn-line"><a class="btn-mail" href="/contact/">メールで相談する</a></div></div></div></section><footer class="k-footer"><div class="foot-inner"><div class="foot-col foot-about"><div class="foot-logo"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/logo-v2-mark.webp" alt="" width="44" height="44" loading="lazy" decoding="async"><span class="fl-tx"><span>株式会社AMT</span> おうちのお片付け隊</span></div><p>静岡県島田市を拠点に、家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・農機具の買取りまで対応します。個人のお客様も法人・事業者さまも、お見積り・ご相談は無料です。</p></div><div class="foot-col"><p class="foot-h">サービス</p><ul><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品の回収</a></li><li><a href="/zanchibutsu/">解体前の残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/nouki-kaitori/">農機具の買取り</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/akiya/">空き家・実家の片付け</a></li><li><a href="/gomiyashiki-katazuke/">ゴミ屋敷の片付け</a></li><li><a href="/hikkoshi/">引っ越しの片付け</a></li><li><a href="/tenpo/">店舗・オフィスの片付け</a></li><li><a href="/hinmoku/">対応品目一覧</a></li><li><a href="/ryoukin/">料金・費用について</a></li></ul></div><div class="foot-col"><p class="foot-h">ご案内</p><ul><li><a href="/flow/">ご利用の流れ</a></li><li><a href="/area/">対応エリア</a></li><li><a href="/katazuke-shimada/">島田市の片付け・不用品回収</a></li><li><a href="/company/">会社概要</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/column/">コラム</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></div><div class="foot-col foot-contact"><p class="foot-h">お問い合わせ</p><a class="foot-tel" href="tel:0547-39-3750">0547-39-3750</a><p class="foot-note">お見積り・ご相談は無料</p><a class="foot-mail" href="/contact/">メールで相談する</a><p class="foot-addr">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</p><p class="foot-corp"><a href="https://amt-eco.com/" target="_blank" rel="noopener">コーポレートサイト ↗</a></p></div></div><div class="foot-bottom"><p><a href="/privacy-policy/">プライバシーポリシー</a>　｜　&copy; 株式会社AMT All Rights Reserved.</p></div></footer></div>
+<p>当社は使えるものは<strong>古物商許可（静岡県公安委員会）のもとで買取</strong>し、処分が必要なものは<strong>提携する許可業者に適正処理を委託</strong>します。プライバシーに配慮して作業します。</p><h2 id="s6">まとめ</h2><p>ゴミ屋敷の片付けは、安全確保と貴重品の確保から始め、「残す・売る・処分」で進めるのが基本です。量が多い・大物があるときは無理をせず、買取と搬出、清掃までまとめて任せられる業者にご相談ください。静岡県内を中心に対応します。</p></article></section><section class="k-section"><div class="inner"><h2 class="sec-title">よくある質問</h2><div class="faq"><div class="faq-item"><div class="faq-q">近所に知られずに片付けできますか？</div><div class="faq-a">できる限り目立たないよう配慮して作業します。日程や進め方もご相談いただけます。</div></div><div class="faq-item"><div class="faq-q">量が多くても一度に片付けられますか？</div><div class="faq-a">作業人数と日程を調整し、まとめて片付けます。まずは現地を確認してお見積りします。</div></div><div class="faq-item"><div class="faq-q">片付けと同時に買取もできますか？</div><div class="faq-a">はい。使えるものは古物商許可のもとで買取し、費用に反映できる場合があります。</div></div></div></div></section><section class="k-section"><div class="inner"><h2 class="sec-title">関連ページ</h2><div class="rel-grid"><a class="rel-card" href="/katazuke/"><b>家のお片付け</b><span>仕分けから搬出まで対応</span></a><a class="rel-card" href="/fuyouhin/"><b>不用品の回収</b><span>使えるものは買取で反映</span></a><a class="rel-card" href="/flow/"><b>ご利用の流れ</b><span>お問い合わせから完了まで</span></a><a class="rel-card" href="/contact/"><b>お問い合わせ</b><span>ご相談・お見積りは無料</span></a></div></div></section><section class="cta-band"><div class="cta-inner"><div class="cta-mascot"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/mascot-hero-420.webp" alt="おうちのお片付け隊 マスコット" width="210" height="213" loading="lazy" decoding="async"></div><div class="cta-content"><h2>お片付けのご相談・お見積りは無料です</h2><p>「いくらかかる？」「これは回収できる？」だけでもお気軽にどうぞ。個人のお客様も法人のお客様も、静岡県内を中心に対応します。</p><a class="btn-tel" href="tel:0547-39-3750">0547-39-3750</a><div class="btn-line"><a class="btn-mail" href="/contact/">メールで相談する</a></div></div></div></section><footer class="k-footer"><div class="foot-inner"><div class="foot-col foot-about"><div class="foot-logo"><img src="https://katazuke.amt-eco.com/wp-content/uploads/2026/10/logo-v2-mark.webp" alt="" width="44" height="44" loading="lazy" decoding="async"><span class="fl-tx"><span>株式会社AMT</span> おうちのお片付け隊</span></div><p>静岡県島田市金谷を拠点に、家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・農機具の買取りまで対応します。個人のお客様も法人・事業者さまも、お見積り・ご相談は無料です。</p><p class="foot-price"><span>片付け・不用品回収</span><b>1㎥あたり20,000円から</b></p><p class="foot-lic">古物商許可（機械工具類）　静岡県公安委員会 第49118K000008号</p></div><div class="foot-col"><p class="foot-h">サービス</p><ul><li><a href="/katazuke/">家の片付け</a></li><li><a href="/fuyouhin/">不用品の回収</a></li><li><a href="/zanchibutsu/">解体前の残置物撤去</a></li><li><a href="/souko/">倉庫の片付け</a></li><li><a href="/seiri/">生前整理・遺品整理</a></li><li><a href="/akiya/">空き家・実家の片付け</a></li><li><a href="/gomiyashiki-katazuke/">ゴミ屋敷の片付け</a></li><li><a href="/hikkoshi/">引っ越しの片付け</a></li><li><a href="/tenpo/">店舗・オフィスの片付け</a></li><li><a href="/hinmoku/">対応品目一覧</a></li></ul></div><div class="foot-col"><p class="foot-h">農機具の買取り</p><ul><li><a href="/nouki-kaitori/">農機具の買取り</a></li><li><a href="/nouki-tractor/">トラクター</a></li><li><a href="/nouki-combine/">コンバイン</a></li><li><a href="/nouki-taue/">田植機</a></li><li><a href="/nouki-kouunki/">耕運機・管理機</a></li><li><a href="/nouki-kusakari/">草刈機・運搬車</a></li><li><a href="/nouki-kaitori-shizuoka/">静岡県の農機具買取</a></li></ul></div><div class="foot-col"><p class="foot-h">ご案内</p><ul><li><a href="/ryoukin/">料金・費用について</a></li><li><a href="/flow/">ご利用の流れ</a></li><li><a href="/area/">対応エリア</a></li><li><a href="/katazuke-shimada/">島田市の片付け・不用品回収</a></li><li><a href="/company/">会社概要</a></li><li><a href="/faq/">よくある質問</a></li><li><a href="/column/">コラム</a></li><li><a href="/contact/">お問い合わせ</a></li></ul></div><div class="foot-col foot-contact"><p class="foot-h">お問い合わせ</p><a class="foot-tel" href="tel:0547-39-3750">0547-39-3750</a><p class="foot-note">お見積り・ご相談は無料</p><a class="foot-mail" href="/contact/">メールで相談する</a><p class="foot-addr">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</p><p class="foot-corp"><a href="https://amt-eco.com/" target="_blank" rel="noopener">コーポレートサイト ↗</a><br><a href="https://kaitai.amt-eco.com/" target="_blank" rel="noopener">解体工事サイト ↗</a></p></div></div><div class="foot-area"><p><b>対応エリア</b>　島田市・藤枝市・焼津市・掛川市・菊川市・牧之原市・静岡市・吉田町・川根本町・磐田市・袋井市・御前崎市　ほか静岡県内（<a href="/area/">対応エリアの詳細</a>）</p></div><div class="foot-bottom"><p><a href="/privacy-policy/">プライバシーポリシー</a>　｜　&copy; 株式会社AMT All Rights Reserved.</p></div></footer><div class="kz-sticky" role="complementary" aria-label="お問い合わせ"><a class="ks-tel" href="tel:0547-39-3750"><span>お電話</span><b>0547-39-3750</b></a><a class="ks-mail" href="/contact/"><span>かんたん</span><b>無料見積り</b></a></div></div>
 <!-- /wp:html -->
 
 <!-- wp:html -->

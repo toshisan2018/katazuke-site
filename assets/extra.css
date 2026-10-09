@@ -482,3 +482,248 @@ body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu
 .amt-katazuke .kz-cert-note a,.amt-katazuke .kz-lic a{color:#7a5200;}
 .amt-katazuke .foot-col a.foot-mail{color:var(--ink);}
 .amt-katazuke .foot-bottom{color:#a9afb3;}
+
+/* ============================================================
+   2026-10-10 v3：ヘッダー/フッターの格上げ・料金ボックス・スマホ固定CTA
+   ============================================================ */
+
+/* ---- ヘッダー：スティッキー＋信頼バー ---- */
+.amt-katazuke .k-header{position:sticky;top:0;z-index:60;background:var(--white);
+  box-shadow:0 2px 18px rgba(20,26,30,.12);}
+.amt-katazuke .hdr-topbar{height:4px;
+  background:linear-gradient(90deg,var(--dark),var(--primary-dark) 38%,var(--primary) 66%,var(--primary-bright));}
+.amt-katazuke .hdr-trust{background:var(--dark-2);color:#e8ebed;}
+.amt-katazuke .hdr-trust-in{max-width:1080px;margin:0 auto;padding:6px 16px;display:flex;flex-wrap:wrap;
+  gap:4px 20px;font-size:.74rem;font-weight:700;letter-spacing:.2px;}
+.amt-katazuke .hdr-trust-in span{position:relative;padding-left:14px;white-space:nowrap;}
+.amt-katazuke .hdr-trust-in span::before{content:"";position:absolute;left:0;top:50%;width:6px;height:6px;
+  margin-top:-3px;border-radius:50%;background:var(--primary);}
+.amt-katazuke .header-inner{max-width:1080px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;}
+.amt-katazuke .hdr-act{display:flex;align-items:stretch;gap:10px;flex-shrink:0;}
+
+/* 電話ボタン：ラベル＋番号の2段組 */
+.amt-katazuke .k-header .header-tel{text-align:left;}
+.amt-katazuke .tel-btn{display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+  color:var(--ink) !important;text-decoration:none;padding:9px 20px;border-radius:12px;
+  box-shadow:0 5px 14px rgba(224,160,0,.35);border:1px solid rgba(0,0,0,.06);
+  transition:transform .15s,box-shadow .15s;}
+.amt-katazuke .tel-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(224,160,0,.45);}
+.amt-katazuke .tel-btn svg{flex-shrink:0;}
+.amt-katazuke .tel-btn .tb-tx{display:flex;flex-direction:column;line-height:1.15;}
+.amt-katazuke .tel-btn .tb-tx small{font-size:.68rem;font-weight:700;opacity:.8;}
+.amt-katazuke .tel-btn .tb-tx b{font-size:1.3rem;font-weight:900;letter-spacing:.4px;}
+
+/* 無料見積りボタン：濃色で対比 */
+.amt-katazuke .hdr-quote{display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:var(--dark);color:#fff !important;text-decoration:none;padding:9px 20px;border-radius:12px;
+  line-height:1.2;box-shadow:0 5px 14px rgba(47,58,65,.3);transition:transform .15s,background .15s;}
+.amt-katazuke .hdr-quote:hover{background:var(--dark-2);transform:translateY(-1px);}
+.amt-katazuke .hdr-quote b{font-size:1rem;font-weight:900;}
+.amt-katazuke .hdr-quote small{font-size:.66rem;color:var(--primary-bright);font-weight:700;margin-top:2px;}
+
+@media(max-width:900px){
+  .amt-katazuke .hdr-quote{display:none;}
+  .amt-katazuke .hdr-trust-in span:nth-child(n+3){display:none;}
+}
+@media(max-width:760px){
+  .amt-katazuke .k-header{position:static;}
+  .amt-katazuke .header-inner{flex-wrap:wrap;justify-content:center;text-align:center;gap:8px;padding:10px 14px;}
+  .amt-katazuke .k-header .logo{justify-content:center;}
+  .amt-katazuke .hdr-act{display:none;}
+  .amt-katazuke .hdr-trust-in{justify-content:center;font-size:.68rem;gap:2px 14px;}
+}
+
+/* ---- グローバルナビ：下線アニメを少し上質に ---- */
+.amt-katazuke .k-nav{background:var(--dark);position:relative;box-shadow:inset 0 -1px 0 rgba(255,255,255,.07);}
+.amt-katazuke .k-nav a{font-size:.86rem;letter-spacing:.2px;}
+.amt-katazuke .k-nav a::after{height:3px;bottom:4px;border-radius:2px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-bright));}
+.amt-katazuke .k-nav a[aria-current="page"]{background:linear-gradient(180deg,var(--primary-bright),var(--primary));}
+
+/* ---- 料金ボックス（/ryoukin/・トップ） ---- */
+.amt-katazuke .kz-price{margin:22px 0 12px;padding:24px 26px;border-radius:18px;
+  background:linear-gradient(135deg,var(--dark),var(--dark-2));color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 14px 34px rgba(31,37,41,.26);}
+.amt-katazuke .kz-price::after{content:"";position:absolute;right:-50px;top:-50px;width:190px;height:190px;
+  border-radius:50%;background:radial-gradient(circle,rgba(247,181,0,.45),transparent 68%);}
+.amt-katazuke .kz-price-lbl{margin:0 0 4px;font-size:.88rem;font-weight:700;color:var(--primary-bright);
+  letter-spacing:.4px;position:relative;}
+.amt-katazuke .kz-price-val{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 6px;position:relative;}
+.amt-katazuke .kz-price-num{font-size:3.4rem;font-weight:900;line-height:1;letter-spacing:-1px;
+  color:var(--primary-bright);}
+.amt-katazuke .kz-price-yen{font-size:1.5rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .kz-price-unit{font-size:1.05rem;font-weight:700;color:#fff;}
+.amt-katazuke .kz-price-unit b{font-size:1.3rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .kz-price-note{margin:10px 0 0;font-size:.84rem;color:#cfd5d9;position:relative;line-height:1.7;}
+@media(max-width:560px){
+  .amt-katazuke .kz-price{padding:20px 18px;}
+  .amt-katazuke .kz-price-num{font-size:2.6rem;}
+}
+
+/* ---- フッター：5カラム・料金・許認可・エリア帯 ---- */
+.amt-katazuke .k-footer{background:linear-gradient(180deg,#232a2e,#1b2125);color:#d7dcdf;
+  border-top:5px solid var(--primary);}
+.amt-katazuke .foot-inner{max-width:1180px;margin:0 auto;padding:46px 20px 26px;display:grid;
+  grid-template-columns:1.55fr .9fr .9fr .9fr 1.05fr;gap:30px;}
+.amt-katazuke .foot-h{color:#fff;font-size:.93rem;font-weight:800;margin:0 0 14px;padding-bottom:8px;
+  border-bottom:2px solid var(--primary);letter-spacing:.3px;}
+.amt-katazuke .foot-price{display:flex;flex-direction:column;gap:2px;margin:14px 0 10px;padding:12px 14px;
+  border-radius:12px;background:rgba(247,181,0,.1);border:1px solid rgba(247,181,0,.3);}
+.amt-katazuke .foot-price span{font-size:.74rem;font-weight:700;color:#c8cdd1;}
+.amt-katazuke .foot-price b{font-size:1.08rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .foot-lic{margin:0;font-size:.74rem;color:#9aa1a6;line-height:1.6;}
+.amt-katazuke .foot-area{max-width:1180px;margin:0 auto;padding:0 20px 20px;}
+.amt-katazuke .foot-area p{margin:0;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.045);
+  font-size:.8rem;color:#b6bcc0;line-height:1.8;}
+.amt-katazuke .foot-area b{color:var(--primary-bright);margin-right:4px;}
+.amt-katazuke .foot-area a{color:#d7dcdf;}
+.amt-katazuke .foot-col a{transition:color .15s;}
+@media(max-width:1000px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr 1fr 1fr;}
+  .amt-katazuke .foot-about{grid-column:1 / -1;}
+}
+@media(max-width:620px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr 1fr;gap:22px;}
+}
+@media(max-width:420px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr;}
+}
+
+/* ---- スマホ下部の固定CTA（PCでは非表示） ---- */
+.amt-katazuke .kz-sticky{display:none;}
+@media(max-width:760px){
+  .amt-katazuke .kz-sticky{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;
+    bottom:0;z-index:80;padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(33,42,48,.96);backdrop-filter:blur(6px);box-shadow:0 -4px 18px rgba(0,0,0,.3);}
+  .amt-katazuke .kz-sticky a{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-decoration:none;border-radius:12px;padding:9px 6px;line-height:1.2;}
+  .amt-katazuke .kz-sticky a span{font-size:.64rem;font-weight:700;opacity:.85;}
+  .amt-katazuke .kz-sticky a b{font-size:1.02rem;font-weight:900;letter-spacing:.3px;}
+  .amt-katazuke .kz-sticky .ks-tel{background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+    color:var(--ink);}
+  .amt-katazuke .kz-sticky .ks-mail{background:#fff;color:var(--dark);}
+  /* 固定バーの高さぶん、本文末尾に余白を足す */
+  .amt-katazuke .k-footer .foot-bottom{padding-bottom:76px;}
+}
+
+/* ---- 対応事例（/jirei/） ---- */
+.amt-katazuke .jr-list{display:grid;gap:26px;}
+.amt-katazuke .jr-card{background:var(--white);border:1px solid #ece7da;border-radius:18px;
+  padding:26px 26px 22px;box-shadow:0 10px 28px rgba(31,37,41,.07);}
+.amt-katazuke .jr-card h2{margin:4px 0 16px;font-size:1.3rem;line-height:1.5;}
+.amt-katazuke .jr-card h3{margin:20px 0 6px;font-size:1.02rem;}
+.amt-katazuke .jr-tag{display:inline-block;margin:0;padding:4px 12px;border-radius:30px;
+  background:var(--primary-light);color:#7a5400;font-size:.76rem;font-weight:800;}
+.amt-katazuke .jr-img{margin:0 0 16px;border-radius:14px;overflow:hidden;}
+.amt-katazuke .jr-img img{width:100%;height:auto;display:block;}
+.amt-katazuke .jr-card table{margin:0 0 4px;}
+.amt-katazuke .jr-card table th{width:34%;white-space:nowrap;}
+.amt-katazuke .jr-voice{margin:18px 0 0;padding:14px 18px;border-left:4px solid var(--primary);
+  background:var(--gray);border-radius:0 10px 10px 0;}
+.amt-katazuke .jr-voice p{margin:0;font-size:.94rem;line-height:1.8;color:#4a453e;}
+.amt-katazuke .jr-link{margin:16px 0 0;font-weight:700;}
+@media(max-width:560px){
+  .amt-katazuke .jr-card{padding:20px 16px 18px;}
+  .amt-katazuke .jr-card h2{font-size:1.12rem;}
+  .amt-katazuke .jr-card table th{width:40%;font-size:.84rem;}
+}
+
+/* ---- ヒーローの料金バッジ ---- */
+.amt-katazuke .kz-hprice{display:inline-flex;flex-direction:column;gap:1px;margin:0 0 18px;
+  padding:12px 20px;border-radius:14px;background:rgba(33,42,48,.92);color:#fff;
+  box-shadow:0 10px 26px rgba(20,26,30,.3);border:1px solid rgba(247,181,0,.4);}
+.amt-katazuke .kz-hprice span{font-size:.76rem;font-weight:700;color:#cfd5d9;letter-spacing:.3px;}
+.amt-katazuke .kz-hprice b{font-size:1.5rem;font-weight:900;color:var(--primary-bright);line-height:1.2;}
+.amt-katazuke .kz-hprice small{font-size:.68rem;color:#aeb5ba;line-height:1.5;}
+@media(max-width:560px){.amt-katazuke .kz-hprice{padding:10px 16px;}
+  .amt-katazuke .kz-hprice b{font-size:1.25rem;}}
+
+/* ---- 料金セクション ---- */
+.amt-katazuke .kz-prc{background:var(--gray);}
+.amt-katazuke .kz-prc-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:26px;align-items:start;}
+.amt-katazuke .kz-prc .kz-price{margin:0;}
+.amt-katazuke .kz-inc{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
+.amt-katazuke .kz-inc li{background:#fff;border:1px solid #ece7da;border-radius:12px;padding:13px 16px;
+  font-size:.9rem;line-height:1.75;color:#4a453e;}
+.amt-katazuke .kz-inc li b{display:block;font-size:.78rem;font-weight:800;color:#8a6200;
+  letter-spacing:.4px;margin-bottom:2px;}
+@media(max-width:860px){.amt-katazuke .kz-prc-grid{grid-template-columns:1fr;}}
+
+/* ---- 農機具買取セクション ---- */
+.amt-katazuke .kz-nouki{background:linear-gradient(170deg,var(--dark),var(--dark-2));color:#eef1f3;
+  position:relative;overflow:hidden;}
+.amt-katazuke .kz-nouki::before{content:"";position:absolute;left:-80px;bottom:-80px;width:320px;height:320px;
+  border-radius:50%;background:radial-gradient(circle,rgba(247,181,0,.2),transparent 70%);}
+.amt-katazuke .kz-nouki .sec-eye{color:var(--primary-bright);}
+.amt-katazuke .kz-nouki .sec-title{color:#fff;}
+.amt-katazuke .kz-nouki .sec-title::after{background:var(--primary-bright);}
+.amt-katazuke .kz-nouki .sec-lead{color:#c6ccd0;}
+.amt-katazuke .kz-nouki .sec-lead strong{color:var(--primary-bright);}
+.amt-katazuke .kz-npoints{list-style:none;margin:0 0 26px;padding:0;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:12px;}
+.amt-katazuke .kz-npoints li{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+  border-radius:12px;padding:13px 15px;font-size:.8rem;line-height:1.6;color:#c6ccd0;}
+.amt-katazuke .kz-npoints li b{display:block;font-size:.95rem;font-weight:900;color:var(--primary-bright);
+  margin-bottom:3px;}
+.amt-katazuke .kz-ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.amt-katazuke .kz-ncard{display:block;background:#fff;border-radius:14px;padding:20px 20px 16px;
+  text-decoration:none;color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.2);
+  border-top:4px solid var(--primary);transition:transform .16s,box-shadow .16s;}
+.amt-katazuke .kz-ncard:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.28);}
+.amt-katazuke .kz-ncard h3{margin:0 0 6px;font-size:1.08rem;font-weight:900;color:var(--dark);}
+.amt-katazuke .kz-ncard p{margin:0 0 10px;font-size:.84rem;color:#6b655c;line-height:1.65;}
+.amt-katazuke .kz-narr{font-size:.8rem;font-weight:800;color:#8a6200;}
+.amt-katazuke .kz-narr::after{content:" →";}
+.amt-katazuke .kz-nlic{margin:20px 0 0;font-size:.78rem;color:#aeb5ba;line-height:1.75;}
+.amt-katazuke .kz-nlic strong{color:#e8ebed;}
+.amt-katazuke .kz-nouki .kz-btn{border-color:rgba(255,255,255,.3);color:#fff;}
+.amt-katazuke .kz-nouki .kz-btn:hover{background:rgba(255,255,255,.1);}
+@media(max-width:900px){
+  .amt-katazuke .kz-npoints{grid-template-columns:1fr 1fr;}
+  .amt-katazuke .kz-ngrid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:560px){
+  .amt-katazuke .kz-npoints{grid-template-columns:1fr;}
+  .amt-katazuke .kz-ngrid{grid-template-columns:1fr;}
+}
+
+/* ---- ボタン（塗り）・ボタン並び ---- */
+.amt-katazuke .kz-btn--fill{background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+  color:var(--ink) !important;border-color:transparent;box-shadow:0 6px 16px rgba(224,160,0,.35);}
+.amt-katazuke .kz-btn--fill:hover{filter:brightness(1.05);background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));}
+.amt-katazuke .kz-flow-more{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.amt-katazuke .kz-abtns{display:flex;flex-wrap:wrap;gap:10px;}
+
+/* ---- コラム導線 ---- */
+.amt-katazuke .kz-collist{list-style:none;margin:0 0 24px;padding:0;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:12px;}
+.amt-katazuke .kz-collist a{display:block;background:#fff;border:1px solid #ece7da;border-radius:12px;
+  padding:16px 18px;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;line-height:1.6;
+  transition:border-color .15s,box-shadow .15s,transform .15s;}
+.amt-katazuke .kz-collist a::before{content:"COLUMN";display:block;font-size:.64rem;font-weight:800;
+  color:#b08a1e;letter-spacing:1px;margin-bottom:5px;}
+.amt-katazuke .kz-collist a:hover{border-color:var(--primary);transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(31,37,41,.09);}
+@media(max-width:860px){.amt-katazuke .kz-collist{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.amt-katazuke .kz-collist{grid-template-columns:1fr;}}
+
+/* ---- 仕上げの微調整 ---- */
+/* ナビを1段に収める（11項目） */
+@media(min-width:761px){
+  .amt-katazuke .k-nav a{padding:12px 11px;font-size:.84rem;}
+}
+@media(min-width:761px) and (max-width:1040px){
+  .amt-katazuke .k-nav a{padding:11px 8px;font-size:.79rem;}
+}
+/* ヒーローの料金バッジ：注記が枠からはみ出さないように */
+.amt-katazuke .kz-hprice{display:flex;max-width:min(100%,420px);}
+.amt-katazuke .kz-hprice small{white-space:normal;word-break:break-word;}
+/* 「想い」の署名がスマホで切れないように */
+@media(max-width:600px){
+  .amt-katazuke .kz-sign{font-size:.74rem;letter-spacing:0;white-space:normal;text-align:right;}
+}
+/* 長い見出し・語がスマホで溢れないための保険 */
+.amt-katazuke h1,.amt-katazuke h2,.amt-katazuke h3{overflow-wrap:anywhere;}
+.amt-katazuke .foot-logo .fl-tx{overflow-wrap:anywhere;}

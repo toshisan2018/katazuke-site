@@ -49,6 +49,26 @@ _kb_no = (" 第" + KOBUTSU_NO + "号") if KOBUTSU_NO else ""
 KOBUTSU_TD = "古物商許可（" + KOBUTSU_CATEGORY + "）　" + KOBUTSU_AUTH + _kb_no
 KOBUTSU_LABEL = "古物商許可（" + KOBUTSU_AUTH + "）" + _kb_no  # 本文用
 
+# ------------------------------------------------------------
+# 料金（2026-10-10 社長指示：1㎥あたり20,000円から を公開する）
+#   ※税込/税別の表記は未確定のため本文では断定しない。確定後 PRICE_TAX を "（税込）" 等にする。
+# ------------------------------------------------------------
+PRICE_PER_M3 = 20000
+PRICE_TAX = ""                                  # 例: "（税込）" / "（税別）"
+PRICE_LABEL = "1㎥あたり{:,}円".format(PRICE_PER_M3) + PRICE_TAX + "から"
+PRICE_CURRENCY = "JPY"
+
+# 対応エリア（JSON-LD areaServed・llms.txt で使う市町。確定情報）
+AREA_CITIES = ["島田市", "藤枝市", "焼津市", "掛川市", "菊川市", "牧之原市",
+               "静岡市", "吉田町", "川根本町", "磐田市", "袋井市", "御前崎市"]
+
+# 本社の緯度経度（静岡県島田市金谷東2丁目3483-290）
+GEO_LAT = 34.8213
+GEO_LNG = 138.1312
+
+# 関連サイト（JSON-LD sameAs）
+SAME_AS = ["https://amt-eco.com/", "https://kaitai.amt-eco.com/"]
+
 # サイト画像（WordPressメディアにアップ済みのURL）
 UPLOADS = "https://katazuke.amt-eco.com/wp-content/uploads/2026/09/"
 UPLOADS_OCT = "https://katazuke.amt-eco.com/wp-content/uploads/2026/10/"   # 2026-10 以降にアップした画像
@@ -101,14 +121,11 @@ NAV_ITEMS = [
     ("/fuyouhin/", "不用品回収"),
     ("/zanchibutsu/", "残置物撤去"),
     ("/souko/", "倉庫の片付け"),
-    ("/nouki-kaitori/", "農機具買取"),
     ("/seiri/", "生前整理・遺品整理"),
+    ("/nouki-kaitori/", "農機具買取"),
     ("/ryoukin/", "料金・費用"),
-    ("/column/", "コラム"),
     ("/faq/", "よくある質問"),
-    ("/company/", "会社概要"),
-    ("/flow/", "ご利用の流れ"),
-    ("/area/", "対応エリア"),
+    ("/column/", "コラム"),
     ("/contact/", "お問い合わせ"),
 ]
 
@@ -118,16 +135,25 @@ FOOT_SERVICE = [
     ("/fuyouhin/", "不用品の回収"),
     ("/zanchibutsu/", "解体前の残置物撤去"),
     ("/souko/", "倉庫の片付け"),
-    ("/nouki-kaitori/", "農機具の買取り"),
     ("/seiri/", "生前整理・遺品整理"),
     ("/akiya/", "空き家・実家の片付け"),
     ("/gomiyashiki-katazuke/", "ゴミ屋敷の片付け"),
     ("/hikkoshi/", "引っ越しの片付け"),
     ("/tenpo/", "店舗・オフィスの片付け"),
     ("/hinmoku/", "対応品目一覧"),
-    ("/ryoukin/", "料金・費用について"),
+]
+# フッターの農機具買取カラム（2026-10-10 新設：機種別ページへの導線）
+FOOT_NOUKI = [
+    ("/nouki-kaitori/", "農機具の買取り"),
+    ("/nouki-tractor/", "トラクター"),
+    ("/nouki-combine/", "コンバイン"),
+    ("/nouki-taue/", "田植機"),
+    ("/nouki-kouunki/", "耕運機・管理機"),
+    ("/nouki-kusakari/", "草刈機・運搬車"),
+    ("/nouki-kaitori-shizuoka/", "静岡県の農機具買取"),
 ]
 FOOT_GUIDE = [
+    ("/ryoukin/", "料金・費用について"),
     ("/flow/", "ご利用の流れ"),
     ("/area/", "対応エリア"),
     ("/katazuke-shimada/", "島田市の片付け・不用品回収"),
@@ -643,6 +669,258 @@ body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu
 V2_CSS = V2_CSS.replace('__LOGO_V2__', IMG['logo_v2'])
 DESIGN_CSS = DESIGN_CSS + V2_CSS
 
+
+V3_CSS = """
+/* ============================================================
+   2026-10-10 v3：ヘッダー/フッターの格上げ・料金ボックス・スマホ固定CTA
+   ============================================================ */
+
+/* ---- ヘッダー：スティッキー＋信頼バー ---- */
+.amt-katazuke .k-header{position:sticky;top:0;z-index:60;background:var(--white);
+  box-shadow:0 2px 18px rgba(20,26,30,.12);}
+.amt-katazuke .hdr-topbar{height:4px;
+  background:linear-gradient(90deg,var(--dark),var(--primary-dark) 38%,var(--primary) 66%,var(--primary-bright));}
+.amt-katazuke .hdr-trust{background:var(--dark-2);color:#e8ebed;}
+.amt-katazuke .hdr-trust-in{max-width:1080px;margin:0 auto;padding:6px 16px;display:flex;flex-wrap:wrap;
+  gap:4px 20px;font-size:.74rem;font-weight:700;letter-spacing:.2px;}
+.amt-katazuke .hdr-trust-in span{position:relative;padding-left:14px;white-space:nowrap;}
+.amt-katazuke .hdr-trust-in span::before{content:"";position:absolute;left:0;top:50%;width:6px;height:6px;
+  margin-top:-3px;border-radius:50%;background:var(--primary);}
+.amt-katazuke .header-inner{max-width:1080px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;}
+.amt-katazuke .hdr-act{display:flex;align-items:stretch;gap:10px;flex-shrink:0;}
+
+/* 電話ボタン：ラベル＋番号の2段組 */
+.amt-katazuke .k-header .header-tel{text-align:left;}
+.amt-katazuke .tel-btn{display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+  color:var(--ink) !important;text-decoration:none;padding:9px 20px;border-radius:12px;
+  box-shadow:0 5px 14px rgba(224,160,0,.35);border:1px solid rgba(0,0,0,.06);
+  transition:transform .15s,box-shadow .15s;}
+.amt-katazuke .tel-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(224,160,0,.45);}
+.amt-katazuke .tel-btn svg{flex-shrink:0;}
+.amt-katazuke .tel-btn .tb-tx{display:flex;flex-direction:column;line-height:1.15;}
+.amt-katazuke .tel-btn .tb-tx small{font-size:.68rem;font-weight:700;opacity:.8;}
+.amt-katazuke .tel-btn .tb-tx b{font-size:1.3rem;font-weight:900;letter-spacing:.4px;}
+
+/* 無料見積りボタン：濃色で対比 */
+.amt-katazuke .hdr-quote{display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:var(--dark);color:#fff !important;text-decoration:none;padding:9px 20px;border-radius:12px;
+  line-height:1.2;box-shadow:0 5px 14px rgba(47,58,65,.3);transition:transform .15s,background .15s;}
+.amt-katazuke .hdr-quote:hover{background:var(--dark-2);transform:translateY(-1px);}
+.amt-katazuke .hdr-quote b{font-size:1rem;font-weight:900;}
+.amt-katazuke .hdr-quote small{font-size:.66rem;color:var(--primary-bright);font-weight:700;margin-top:2px;}
+
+@media(max-width:900px){
+  .amt-katazuke .hdr-quote{display:none;}
+  .amt-katazuke .hdr-trust-in span:nth-child(n+3){display:none;}
+}
+@media(max-width:760px){
+  .amt-katazuke .k-header{position:static;}
+  .amt-katazuke .header-inner{flex-wrap:wrap;justify-content:center;text-align:center;gap:8px;padding:10px 14px;}
+  .amt-katazuke .k-header .logo{justify-content:center;}
+  .amt-katazuke .hdr-act{display:none;}
+  .amt-katazuke .hdr-trust-in{justify-content:center;font-size:.68rem;gap:2px 14px;}
+}
+
+/* ---- グローバルナビ：下線アニメを少し上質に ---- */
+.amt-katazuke .k-nav{background:var(--dark);position:relative;box-shadow:inset 0 -1px 0 rgba(255,255,255,.07);}
+.amt-katazuke .k-nav a{font-size:.86rem;letter-spacing:.2px;}
+.amt-katazuke .k-nav a::after{height:3px;bottom:4px;border-radius:2px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-bright));}
+.amt-katazuke .k-nav a[aria-current="page"]{background:linear-gradient(180deg,var(--primary-bright),var(--primary));}
+
+/* ---- 料金ボックス（/ryoukin/・トップ） ---- */
+.amt-katazuke .kz-price{margin:22px 0 12px;padding:24px 26px;border-radius:18px;
+  background:linear-gradient(135deg,var(--dark),var(--dark-2));color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 14px 34px rgba(31,37,41,.26);}
+.amt-katazuke .kz-price::after{content:"";position:absolute;right:-50px;top:-50px;width:190px;height:190px;
+  border-radius:50%;background:radial-gradient(circle,rgba(247,181,0,.45),transparent 68%);}
+.amt-katazuke .kz-price-lbl{margin:0 0 4px;font-size:.88rem;font-weight:700;color:var(--primary-bright);
+  letter-spacing:.4px;position:relative;}
+.amt-katazuke .kz-price-val{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 6px;position:relative;}
+.amt-katazuke .kz-price-num{font-size:3.4rem;font-weight:900;line-height:1;letter-spacing:-1px;
+  color:var(--primary-bright);}
+.amt-katazuke .kz-price-yen{font-size:1.5rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .kz-price-unit{font-size:1.05rem;font-weight:700;color:#fff;}
+.amt-katazuke .kz-price-unit b{font-size:1.3rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .kz-price-note{margin:10px 0 0;font-size:.84rem;color:#cfd5d9;position:relative;line-height:1.7;}
+@media(max-width:560px){
+  .amt-katazuke .kz-price{padding:20px 18px;}
+  .amt-katazuke .kz-price-num{font-size:2.6rem;}
+}
+
+/* ---- フッター：5カラム・料金・許認可・エリア帯 ---- */
+.amt-katazuke .k-footer{background:linear-gradient(180deg,#232a2e,#1b2125);color:#d7dcdf;
+  border-top:5px solid var(--primary);}
+.amt-katazuke .foot-inner{max-width:1180px;margin:0 auto;padding:46px 20px 26px;display:grid;
+  grid-template-columns:1.55fr .9fr .9fr .9fr 1.05fr;gap:30px;}
+.amt-katazuke .foot-h{color:#fff;font-size:.93rem;font-weight:800;margin:0 0 14px;padding-bottom:8px;
+  border-bottom:2px solid var(--primary);letter-spacing:.3px;}
+.amt-katazuke .foot-price{display:flex;flex-direction:column;gap:2px;margin:14px 0 10px;padding:12px 14px;
+  border-radius:12px;background:rgba(247,181,0,.1);border:1px solid rgba(247,181,0,.3);}
+.amt-katazuke .foot-price span{font-size:.74rem;font-weight:700;color:#c8cdd1;}
+.amt-katazuke .foot-price b{font-size:1.08rem;font-weight:900;color:var(--primary-bright);}
+.amt-katazuke .foot-lic{margin:0;font-size:.74rem;color:#9aa1a6;line-height:1.6;}
+.amt-katazuke .foot-area{max-width:1180px;margin:0 auto;padding:0 20px 20px;}
+.amt-katazuke .foot-area p{margin:0;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.045);
+  font-size:.8rem;color:#b6bcc0;line-height:1.8;}
+.amt-katazuke .foot-area b{color:var(--primary-bright);margin-right:4px;}
+.amt-katazuke .foot-area a{color:#d7dcdf;}
+.amt-katazuke .foot-col a{transition:color .15s;}
+@media(max-width:1000px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr 1fr 1fr;}
+  .amt-katazuke .foot-about{grid-column:1 / -1;}
+}
+@media(max-width:620px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr 1fr;gap:22px;}
+}
+@media(max-width:420px){
+  .amt-katazuke .foot-inner{grid-template-columns:1fr;}
+}
+
+/* ---- スマホ下部の固定CTA（PCでは非表示） ---- */
+.amt-katazuke .kz-sticky{display:none;}
+@media(max-width:760px){
+  .amt-katazuke .kz-sticky{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;
+    bottom:0;z-index:80;padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(33,42,48,.96);backdrop-filter:blur(6px);box-shadow:0 -4px 18px rgba(0,0,0,.3);}
+  .amt-katazuke .kz-sticky a{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-decoration:none;border-radius:12px;padding:9px 6px;line-height:1.2;}
+  .amt-katazuke .kz-sticky a span{font-size:.64rem;font-weight:700;opacity:.85;}
+  .amt-katazuke .kz-sticky a b{font-size:1.02rem;font-weight:900;letter-spacing:.3px;}
+  .amt-katazuke .kz-sticky .ks-tel{background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+    color:var(--ink);}
+  .amt-katazuke .kz-sticky .ks-mail{background:#fff;color:var(--dark);}
+  /* 固定バーの高さぶん、本文末尾に余白を足す */
+  .amt-katazuke .k-footer .foot-bottom{padding-bottom:76px;}
+}
+"""
+V3_CSS = V3_CSS + """
+/* ---- 対応事例（/jirei/） ---- */
+.amt-katazuke .jr-list{display:grid;gap:26px;}
+.amt-katazuke .jr-card{background:var(--white);border:1px solid #ece7da;border-radius:18px;
+  padding:26px 26px 22px;box-shadow:0 10px 28px rgba(31,37,41,.07);}
+.amt-katazuke .jr-card h2{margin:4px 0 16px;font-size:1.3rem;line-height:1.5;}
+.amt-katazuke .jr-card h3{margin:20px 0 6px;font-size:1.02rem;}
+.amt-katazuke .jr-tag{display:inline-block;margin:0;padding:4px 12px;border-radius:30px;
+  background:var(--primary-light);color:#7a5400;font-size:.76rem;font-weight:800;}
+.amt-katazuke .jr-img{margin:0 0 16px;border-radius:14px;overflow:hidden;}
+.amt-katazuke .jr-img img{width:100%;height:auto;display:block;}
+.amt-katazuke .jr-card table{margin:0 0 4px;}
+.amt-katazuke .jr-card table th{width:34%;white-space:nowrap;}
+.amt-katazuke .jr-voice{margin:18px 0 0;padding:14px 18px;border-left:4px solid var(--primary);
+  background:var(--gray);border-radius:0 10px 10px 0;}
+.amt-katazuke .jr-voice p{margin:0;font-size:.94rem;line-height:1.8;color:#4a453e;}
+.amt-katazuke .jr-link{margin:16px 0 0;font-weight:700;}
+@media(max-width:560px){
+  .amt-katazuke .jr-card{padding:20px 16px 18px;}
+  .amt-katazuke .jr-card h2{font-size:1.12rem;}
+  .amt-katazuke .jr-card table th{width:40%;font-size:.84rem;}
+}
+"""
+V3_CSS = V3_CSS + """
+/* ---- ヒーローの料金バッジ ---- */
+.amt-katazuke .kz-hprice{display:inline-flex;flex-direction:column;gap:1px;margin:0 0 18px;
+  padding:12px 20px;border-radius:14px;background:rgba(33,42,48,.92);color:#fff;
+  box-shadow:0 10px 26px rgba(20,26,30,.3);border:1px solid rgba(247,181,0,.4);}
+.amt-katazuke .kz-hprice span{font-size:.76rem;font-weight:700;color:#cfd5d9;letter-spacing:.3px;}
+.amt-katazuke .kz-hprice b{font-size:1.5rem;font-weight:900;color:var(--primary-bright);line-height:1.2;}
+.amt-katazuke .kz-hprice small{font-size:.68rem;color:#aeb5ba;line-height:1.5;}
+@media(max-width:560px){.amt-katazuke .kz-hprice{padding:10px 16px;}
+  .amt-katazuke .kz-hprice b{font-size:1.25rem;}}
+
+/* ---- 料金セクション ---- */
+.amt-katazuke .kz-prc{background:var(--gray);}
+.amt-katazuke .kz-prc-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:26px;align-items:start;}
+.amt-katazuke .kz-prc .kz-price{margin:0;}
+.amt-katazuke .kz-inc{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
+.amt-katazuke .kz-inc li{background:#fff;border:1px solid #ece7da;border-radius:12px;padding:13px 16px;
+  font-size:.9rem;line-height:1.75;color:#4a453e;}
+.amt-katazuke .kz-inc li b{display:block;font-size:.78rem;font-weight:800;color:#8a6200;
+  letter-spacing:.4px;margin-bottom:2px;}
+@media(max-width:860px){.amt-katazuke .kz-prc-grid{grid-template-columns:1fr;}}
+
+/* ---- 農機具買取セクション ---- */
+.amt-katazuke .kz-nouki{background:linear-gradient(170deg,var(--dark),var(--dark-2));color:#eef1f3;
+  position:relative;overflow:hidden;}
+.amt-katazuke .kz-nouki::before{content:"";position:absolute;left:-80px;bottom:-80px;width:320px;height:320px;
+  border-radius:50%;background:radial-gradient(circle,rgba(247,181,0,.2),transparent 70%);}
+.amt-katazuke .kz-nouki .sec-eye{color:var(--primary-bright);}
+.amt-katazuke .kz-nouki .sec-title{color:#fff;}
+.amt-katazuke .kz-nouki .sec-title::after{background:var(--primary-bright);}
+.amt-katazuke .kz-nouki .sec-lead{color:#c6ccd0;}
+.amt-katazuke .kz-nouki .sec-lead strong{color:var(--primary-bright);}
+.amt-katazuke .kz-npoints{list-style:none;margin:0 0 26px;padding:0;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:12px;}
+.amt-katazuke .kz-npoints li{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+  border-radius:12px;padding:13px 15px;font-size:.8rem;line-height:1.6;color:#c6ccd0;}
+.amt-katazuke .kz-npoints li b{display:block;font-size:.95rem;font-weight:900;color:var(--primary-bright);
+  margin-bottom:3px;}
+.amt-katazuke .kz-ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.amt-katazuke .kz-ncard{display:block;background:#fff;border-radius:14px;padding:20px 20px 16px;
+  text-decoration:none;color:var(--ink);box-shadow:0 10px 26px rgba(0,0,0,.2);
+  border-top:4px solid var(--primary);transition:transform .16s,box-shadow .16s;}
+.amt-katazuke .kz-ncard:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.28);}
+.amt-katazuke .kz-ncard h3{margin:0 0 6px;font-size:1.08rem;font-weight:900;color:var(--dark);}
+.amt-katazuke .kz-ncard p{margin:0 0 10px;font-size:.84rem;color:#6b655c;line-height:1.65;}
+.amt-katazuke .kz-narr{font-size:.8rem;font-weight:800;color:#8a6200;}
+.amt-katazuke .kz-narr::after{content:" →";}
+.amt-katazuke .kz-nlic{margin:20px 0 0;font-size:.78rem;color:#aeb5ba;line-height:1.75;}
+.amt-katazuke .kz-nlic strong{color:#e8ebed;}
+.amt-katazuke .kz-nouki .kz-btn{border-color:rgba(255,255,255,.3);color:#fff;}
+.amt-katazuke .kz-nouki .kz-btn:hover{background:rgba(255,255,255,.1);}
+@media(max-width:900px){
+  .amt-katazuke .kz-npoints{grid-template-columns:1fr 1fr;}
+  .amt-katazuke .kz-ngrid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:560px){
+  .amt-katazuke .kz-npoints{grid-template-columns:1fr;}
+  .amt-katazuke .kz-ngrid{grid-template-columns:1fr;}
+}
+
+/* ---- ボタン（塗り）・ボタン並び ---- */
+.amt-katazuke .kz-btn--fill{background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));
+  color:var(--ink) !important;border-color:transparent;box-shadow:0 6px 16px rgba(224,160,0,.35);}
+.amt-katazuke .kz-btn--fill:hover{filter:brightness(1.05);background:linear-gradient(135deg,var(--primary-dark),var(--primary-bright));}
+.amt-katazuke .kz-flow-more{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.amt-katazuke .kz-abtns{display:flex;flex-wrap:wrap;gap:10px;}
+
+/* ---- コラム導線 ---- */
+.amt-katazuke .kz-collist{list-style:none;margin:0 0 24px;padding:0;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:12px;}
+.amt-katazuke .kz-collist a{display:block;background:#fff;border:1px solid #ece7da;border-radius:12px;
+  padding:16px 18px;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;line-height:1.6;
+  transition:border-color .15s,box-shadow .15s,transform .15s;}
+.amt-katazuke .kz-collist a::before{content:"COLUMN";display:block;font-size:.64rem;font-weight:800;
+  color:#b08a1e;letter-spacing:1px;margin-bottom:5px;}
+.amt-katazuke .kz-collist a:hover{border-color:var(--primary);transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(31,37,41,.09);}
+@media(max-width:860px){.amt-katazuke .kz-collist{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.amt-katazuke .kz-collist{grid-template-columns:1fr;}}
+"""
+V3_CSS = V3_CSS + """
+/* ---- 仕上げの微調整 ---- */
+/* ナビを1段に収める（11項目） */
+@media(min-width:761px){
+  .amt-katazuke .k-nav a{padding:12px 11px;font-size:.84rem;}
+}
+@media(min-width:761px) and (max-width:1040px){
+  .amt-katazuke .k-nav a{padding:11px 8px;font-size:.79rem;}
+}
+/* ヒーローの料金バッジ：注記が枠からはみ出さないように */
+.amt-katazuke .kz-hprice{display:flex;max-width:min(100%,420px);}
+.amt-katazuke .kz-hprice small{white-space:normal;word-break:break-word;}
+/* 「想い」の署名がスマホで切れないように */
+@media(max-width:600px){
+  .amt-katazuke .kz-sign{font-size:.74rem;letter-spacing:0;white-space:normal;text-align:right;}
+}
+/* 長い見出し・語がスマホで溢れないための保険 */
+.amt-katazuke h1,.amt-katazuke h2,.amt-katazuke h3{overflow-wrap:anywhere;}
+.amt-katazuke .foot-logo .fl-tx{overflow-wrap:anywhere;}
+"""
+DESIGN_CSS = DESIGN_CSS + V3_CSS
+
 # ロゴマーク（片付け＝きれいに整った家＋きらめき）。文字は入れない。
 LOGO_SVG = (
     '<svg viewBox="0 0 48 48" width="46" height="46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
@@ -666,16 +944,37 @@ def header(current=""):
         for u, t in NAV_ITEMS
     )
     return (
-        '<header class="k-header"><div class="hdr-topbar"></div>'
+        '<header class="k-header">'
+        '<div class="hdr-topbar"></div>'
+        # 上段：許認可・対応範囲の信頼バー
+        '<div class="hdr-trust"><div class="hdr-trust-in">'
+        '<span>静岡県島田市・金谷の片付け屋</span>'
+        f'<span>{KOBUTSU_LABEL}</span>'
+        '<span>個人・法人対応</span>'
+        '<span>出張見積り無料</span>'
+        '</div></div>'
         '<div class="header-inner">'
         f'<a class="logo" href="/"><span class="logo-mark"><img src="{IMG["logo_v2"]}" alt="おうちのお片付け隊 ロゴ" width="64" height="64"></span>'
         f'<span class="logo-tx"><span class="logo-name"><b>{COMPANY_NAME}</b> {SITE_NAME}</span>'
         f'<small>{CATCH}</small></span></a>'
-        f'<div class="header-tel"><a class="tel-btn" href="tel:{TEL}">{TEL_ICON}TEL {TEL}</a>'
-        '<small>お見積り・ご相談無料</small></div></div></header>'
+        '<div class="hdr-act">'
+        f'<div class="header-tel"><a class="tel-btn" href="tel:{TEL}">{TEL_ICON}<span class="tb-tx">'
+        f'<small>お電話でのご相談</small><b>{TEL}</b></span></a></div>'
+        '<a class="hdr-quote" href="/contact/"><b>無料見積り</b><small>24時間受付</small></a>'
+        '</div></div></header>'
         '<nav class="k-nav"><input type="checkbox" id="amtnav" class="amt-navtoggle">'
         '<label class="amt-navbtn" for="amtnav"><span class="bars"><i></i></span>メニュー</label>'
         f'<ul>{lis}</ul></nav>'
+    )
+
+
+def sticky_cta():
+    """スマホ画面の下部に固定表示するCTAバー（電話／無料見積り）。"""
+    return (
+        '<div class="kz-sticky" role="complementary" aria-label="お問い合わせ">'
+        f'<a class="ks-tel" href="tel:{TEL}"><span>お電話</span><b>{TEL}</b></a>'
+        '<a class="ks-mail" href="/contact/"><span>かんたん</span><b>無料見積り</b></a>'
+        '</div>'
     )
 
 
@@ -704,15 +1003,22 @@ def cta():
 
 def footer():
     svc = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in FOOT_SERVICE)
+    nouki = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in FOOT_NOUKI)
     gui = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in FOOT_GUIDE)
+    areas = "・".join(AREA_CITIES)
     return (
-        '<footer class="k-footer"><div class="foot-inner">'
+        '<footer class="k-footer">'
+        '<div class="foot-inner">'
         '<div class="foot-col foot-about">'
         f'<div class="foot-logo"><img src="{IMG["logo_v2"]}" alt="" width="44" height="44" loading="lazy" decoding="async"><span class="fl-tx"><span>{COMPANY_NAME}</span> {SITE_NAME}</span></div>'
-        '<p>静岡県島田市を拠点に、家の片付け・不用品回収・解体前の残置物撤去・'
+        '<p>静岡県島田市金谷を拠点に、家の片付け・不用品回収・解体前の残置物撤去・'
         '倉庫の片付け・農機具の買取りまで対応します。個人のお客様も法人・事業者さまも、'
-        'お見積り・ご相談は無料です。</p></div>'
+        'お見積り・ご相談は無料です。</p>'
+        f'<p class="foot-price"><span>片付け・不用品回収</span><b>{PRICE_LABEL}</b></p>'
+        f'<p class="foot-lic">{KOBUTSU_TD}</p>'
+        '</div>'
         f'<div class="foot-col"><p class="foot-h">サービス</p><ul>{svc}</ul></div>'
+        f'<div class="foot-col"><p class="foot-h">農機具の買取り</p><ul>{nouki}</ul></div>'
         f'<div class="foot-col"><p class="foot-h">ご案内</p><ul>{gui}</ul></div>'
         '<div class="foot-col foot-contact"><p class="foot-h">お問い合わせ</p>'
         f'<a class="foot-tel" href="tel:{TEL}">{TEL}</a>'
@@ -720,9 +1026,14 @@ def footer():
         '<a class="foot-mail" href="/contact/">メールで相談する</a>'
         '<p class="foot-addr">〒428-0013<br>静岡県島田市金谷東2丁目3483-290</p>'
         '<p class="foot-corp"><a href="https://amt-eco.com/" target="_blank" rel="noopener">'
-        'コーポレートサイト ↗</a></p></div></div>'
+        'コーポレートサイト ↗</a><br>'
+        '<a href="https://kaitai.amt-eco.com/" target="_blank" rel="noopener">'
+        '解体工事サイト ↗</a></p></div></div>'
+        f'<div class="foot-area"><p><b>対応エリア</b>　{areas}　ほか静岡県内'
+        '（<a href="/area/">対応エリアの詳細</a>）</p></div>'
         '<div class="foot-bottom"><p><a href="/privacy-policy/">プライバシーポリシー</a>'
         '　｜　&copy; 株式会社AMT All Rights Reserved.</p></div></footer>'
+        + sticky_cta()
     )
 
 
@@ -790,6 +1101,129 @@ def service_jsonld(name, desc, url):
             "telephone": TEL_INTL,
         },
         "url": DOMAIN + url,
+    }
+
+
+def local_business_jsonld():
+    """サイト共通の LocalBusiness（トップ・料金・農機具ハブで使う完全版）。"""
+    return {
+        "@context": "https://schema.org",
+        "@type": PROVIDER_TYPE,
+        "@id": DOMAIN + "/#localbusiness",
+        "name": COMPANY_NAME + "（" + SITE_NAME + "）",
+        "alternateName": SITE_NAME,
+        "url": DOMAIN + "/",
+        "telephone": TEL_INTL,
+        "email": MAIL,
+        "image": IMG["ogp_v2"],
+        "logo": IMG["logo_v2_png"],
+        "priceRange": "¥¥",
+        "currenciesAccepted": PRICE_CURRENCY,
+        "paymentAccepted": "現金, 銀行振込",
+        "sameAs": SAME_AS,
+        "address": {
+            "@type": "PostalAddress",
+            "postalCode": "428-0013",
+            "addressRegion": "静岡県",
+            "addressLocality": "島田市",
+            "streetAddress": "金谷東2丁目3483-290",
+            "addressCountry": "JP",
+        },
+        "geo": {"@type": "GeoCoordinates", "latitude": GEO_LAT, "longitude": GEO_LNG},
+        "areaServed": [{"@type": "City", "name": c} for c in AREA_CITIES],
+        "knowsAbout": ["家の片付け", "不用品回収", "残置物撤去", "倉庫・工場の片付け",
+                       "農機具買取", "生前整理", "遺品整理", "空き家の片付け"],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "片付け・不用品回収・農機具買取のサービス",
+            "itemListElement": [
+                {"@type": "Offer",
+                 "itemOffered": {"@type": "Service", "name": n, "url": DOMAIN + u}}
+                for n, u in [
+                    ("家のお片付け", "/katazuke/"),
+                    ("不用品の回収", "/fuyouhin/"),
+                    ("解体前の残置物撤去", "/zanchibutsu/"),
+                    ("倉庫・工場の片付け", "/souko/"),
+                    ("農機具の買取り", "/nouki-kaitori/"),
+                    ("生前整理・遺品整理", "/seiri/"),
+                ]
+            ],
+        },
+        "description": "静岡県島田市の株式会社AMTによる、家の片付け・不用品回収・"
+                       "解体前の残置物撤去・倉庫の片付け・農機具買取のサービス。個人・法人対応。",
+    }
+
+
+def price_offer_jsonld(url, name, desc):
+    """料金の構造化データ（1㎥あたりの単価）。AI検索・リッチリザルトで価格を拾わせる。"""
+    return {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": name,
+        "description": desc,
+        "serviceType": "不用品回収・片付け",
+        "url": DOMAIN + url,
+        "provider": {"@id": DOMAIN + "/#localbusiness"},
+        "areaServed": [{"@type": "City", "name": c} for c in AREA_CITIES],
+        "offers": {
+            "@type": "Offer",
+            "url": DOMAIN + url,
+            "priceCurrency": PRICE_CURRENCY,
+            "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": PRICE_PER_M3,
+                "priceCurrency": PRICE_CURRENCY,
+                "minPrice": PRICE_PER_M3,
+                "unitText": "立方メートル",
+                "unitCode": "MTQ",
+                "referenceQuantity": {
+                    "@type": "QuantitativeValue", "value": 1,
+                    "unitText": "立方メートル", "unitCode": "MTQ",
+                },
+            },
+            "availability": "https://schema.org/InStock",
+            "areaServed": [{"@type": "City", "name": c} for c in AREA_CITIES],
+        },
+    }
+
+
+def howto_jsonld(name, desc, url, steps):
+    """ご利用の流れ → HowTo。steps = [(見出し, 本文), ...]"""
+    return {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": name,
+        "description": desc,
+        "url": DOMAIN + url,
+        "totalTime": "P1D",
+        "estimatedCost": {"@type": "MonetaryAmount", "currency": PRICE_CURRENCY,
+                          "value": PRICE_PER_M3, "description": PRICE_LABEL},
+        "step": [
+            {"@type": "HowToStep", "position": i + 1, "name": t,
+             "text": d, "url": DOMAIN + url + "#step" + str(i + 1)}
+            for i, (t, d) in enumerate(steps)
+        ],
+    }
+
+
+def itemlist_jsonld(name, desc, url, items):
+    """一覧ページ（事例・機種別など）→ ItemList。items = [(名前, URL or None, 説明), ...]"""
+    el = []
+    for i, (t, u, d) in enumerate(items):
+        item = {"@type": "ListItem", "position": i + 1, "name": t}
+        if u:
+            item["url"] = DOMAIN + u
+        if d:
+            item["description"] = d
+        el.append(item)
+    return {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": name,
+        "description": desc,
+        "url": DOMAIN + url,
+        "numberOfItems": len(items),
+        "itemListElement": el,
     }
 
 
@@ -1057,87 +1491,607 @@ add_service_page(
 )
 
 # ------------------------------------------------------------
-# 5. 農機具の買取り
+# 5. 農機具の買取り（2026-10-10 強化：ハブ＋機種別ページ）
 # ------------------------------------------------------------
+# 対応メーカー（メーカーを問わず査定する、という当社サービスの範囲の説明。
+# 提携・代理店等を示すものではないため、本文でもその旨がわかる書き方にする）
+NOUKI_MAKERS = ["クボタ", "ヤンマー", "井関農機（ISEKI）", "三菱マヒンドラ農機",
+                "ホンダ", "スター農機", "ニプロ（松山）", "サタケ", "オーレック", "共立・新ダイワ"]
+
+# 査定で見るポイント（機種別ページでも共通で使う）
+NOUKI_SATEI = [
+    ("メーカー・型式", "需要の高いメーカー・型式ほど評価が上がります。型式は本体の銘板（プレート）に記載があります。"),
+    ("年式", "新しいほど有利ですが、古くても部品需要のある機種は値がつくことがあります。"),
+    ("稼働時間（アワーメーター）", "トラクター・コンバインなどは稼働時間が重要な判断材料になります。"),
+    ("エンジンの状態", "始動するか、異音・白煙・オイル漏れがないか。自走できるかどうかも確認します。"),
+    ("外装・サビ・破損", "外装のへこみやサビ、ガラス・ランプの割れ、タイヤの残り溝などを見ます。"),
+    ("付属品・作業機の有無", "ロータリー・プラウ・ブーム等の作業機、取扱説明書、鍵、予備部品がそろうと評価が上がります。"),
+    ("整備の記録", "点検・整備の記録や、交換した部品の履歴が残っていると状態を判断しやすくなります。"),
+]
+_satei_rows = "".join(
+    "<tr><th>" + t + "</th><td>" + d + "</td></tr>" for t, d in NOUKI_SATEI
+)
+NOUKI_SATEI_TABLE = "<table><tbody>" + _satei_rows + "</tbody></table>"
+
+# 機種別ページ（slug, ナビ用短縮名, 一覧での表示名, リード、本文の機種固有パート）
+NOUKI_TYPES = [
+    ("nouki-tractor", "トラクター", "トラクターの買取り",
+     "クボタ・ヤンマー・井関などのトラクターを、メーカー・型式を問わず査定します。自走できない機械もご相談ください。"),
+    ("nouki-combine", "コンバイン", "コンバイン・ハーベスタの買取り",
+     "自脱型・普通型のコンバイン、バインダー、ハーベスタを査定します。稲刈り後の入れ替え時期のご相談も歓迎です。"),
+    ("nouki-taue", "田植機", "田植機の買取り",
+     "乗用・歩行型の田植機を査定します。シーズン前の入れ替えや、作付けをやめるタイミングでのご相談も承ります。"),
+    ("nouki-kouunki", "耕運機・管理機", "耕運機・管理機の買取り",
+     "歩行型の耕運機・管理機・ティラーを査定します。家庭菜園規模の小型機もまとめてご相談ください。"),
+    ("nouki-kusakari", "草刈機・運搬車", "草刈機・刈払機・運搬車の買取り",
+     "乗用草刈機・ハンマーナイフモア・刈払機・運搬車（クローラ運搬車）などを査定します。"),
+]
+_type_links = "".join(
+    '<li><a href="/' + s + '/"><strong>' + n + '</strong></a>：' + lead + "</li>"
+    for s, short, n, lead in NOUKI_TYPES
+)
+
+# ------------------------------------------------------------
+# 5-0. 農機具買取ハブ
+# ------------------------------------------------------------
+NOUKI_FAQ = [
+    ("動かない農機具・故障している農機具も買取できますか？",
+     "ご相談ください。エンジンがかからない機械や自走できない機械でも、部品としての需要や、"
+     "鉄・アルミなどの金属としての価値で評価できる場合があります。"
+     "当社は古物商許可（" + KOBUTSU_AUTH + "・" + KOBUTSU_CATEGORY + "）のもとで中古機械の買取を行っており、"
+     "金属スクラップの買取も本業として手がけています。"),
+    ("出張での査定はできますか？費用はかかりますか？",
+     "静岡県内を中心に、現地にうかがって査定します。査定・出張費は無料です。"
+     "農地や倉庫に置いたままの状態でも拝見できます。"),
+    ("査定はどこを見て決まりますか？",
+     "メーカー・型式・年式・稼働時間・エンジンの状態・外装のサビや破損・作業機や付属品の有無、"
+     "そして中古市場の相場をあわせて判断します。現物を確認したうえで金額をご提示します。"),
+    ("自走できない農機具はどう運び出すのですか？",
+     "自走できない機械も、当社が搬出の方法から手配します。"
+     "ユニック車やトラックへの積み込み、倉庫からの引き出しもお任せください。"
+     "搬出の都合でご相談が必要な場合は、査定のときにご説明します。"),
+    ("農機具の買取に必要なものはありますか？",
+     "身分を確認できるもの（運転免許証など）をご用意ください。"
+     "古物営業法により、買取のときに本人確認が必要です。"
+     "取扱説明書・鍵・保証書・整備の記録が残っていれば、査定の参考になります。"),
+    ("倉庫や納屋の片付けとまとめて頼めますか？",
+     "はい。農機具の買取と、倉庫・納屋の片付け、不用品の回収をまとめて承れます。"
+     "買取できた金額は片付け費用から差し引いてご提示しますので、"
+     "片付け費用の負担を軽くできる場合があります。"),
+    ("どんなメーカーに対応していますか？",
+     "メーカーを問わず査定します。クボタ・ヤンマー・井関農機・三菱マヒンドラ農機・ホンダ・"
+     "スター農機・ニプロなど、国内メーカーの機械を幅広く拝見しています。"),
+    ("まとめて何台もありますが対応できますか？",
+     "対応できます。離農・世代交代・農地の整理などで複数台をまとめて手放されるご相談も承ります。"
+     "台数が多い場合は、搬出の日程を分けてご提案することもあります。"),
+]
+
 add_service_page(
     "nouki-kaitori", "農機具買取",
-    "農機具の買取り（トラクター等）｜静岡県島田市の株式会社AMT",
-    "使わなくなったトラクター・耕運機・田植機などの農機具を買取ります。片付けと同時のご相談も歓迎。静岡県内中心・査定無料。",
+    "農機具の買取り｜静岡県島田市の株式会社AMT",
+    "トラクター・コンバイン・田植機・耕運機などの農機具を、メーカーを問わず査定します。"
+    "動かない機械・自走できない機械もご相談ください。静岡県内中心・出張査定無料。",
     '<section class="k-section"><div class="prose">'
     '<p class="lead">使わなくなった農機具の買取に対応します。'
-    '農地の整理や世代交代、農機の入れ替えなどで不要になった機械をご相談ください。'
-    '片付け・回収とあわせてまとめて対応できます。</p>'
-    '<h2>買取・ご相談の対象になるもの（例）</h2>'
-    '<ul><li>トラクター・耕運機・管理機</li>'
-    '<li>田植機・コンバイン</li>'
-    '<li>草刈機・運搬車などの農業機械</li>'
-    '<li>農機具にともなう金属・部品類</li></ul>'
-    '<h2>片付けと同時のご相談も歓迎です</h2>'
-    '<p>農機具だけでなく、倉庫や納屋の片付けとあわせてのご依頼も承ります。'
-    '<a href="/souko/">倉庫の片付け</a>や'
-    '<a href="/fuyouhin/">不用品の回収</a>とまとめてご相談いただけます。</p>'
-    '<h2>査定・買取について</h2>'
-    '<p><strong>古物商許可（静岡県公安委員会）</strong>のもと、中古の農機具の買取に対応します。'
-    '買取の可否や金額は、<strong>機種・年式・状態・稼働の可否・市場の相場</strong>などによって変わります。'
-    '現物を確認のうえで査定します。動かない機械や古い機械も、'
-    'まずは状態をお知らせください。</p>'
+    '離農や世代交代、農地の整理、機械の入れ替えなどで不要になった機械をご相談ください。'
+    '当社は<strong>' + KOBUTSU_LABEL + '</strong>のもとで中古機械の買取を行い、'
+    '<strong>金属スクラップの買取</strong>も本業として手がけています。'
+    'そのため、<strong>値のつく機械は買取、値がつきにくい機械も金属として評価</strong>という形で、'
+    '「どこも引き取ってくれなかった機械」もまとめてご相談いただけます。</p>'
+
+    '<h2>買取・ご相談の対象になる農機具</h2>'
+    '<ul>' + _type_links + '</ul>'
+    '<p>上の機種以外でも、<strong>農業に使う機械であればまずご相談ください</strong>。'
+    '乾燥機・籾摺機・精米機・選別機、噴霧器・動力噴霧機、ハウスの暖房機、'
+    'ロータリーやプラウなどの作業機（アタッチメント）単体、'
+    '農機具にともなう金属・部品類も対象です。</p>'
+
+    '<h2>対応メーカー</h2>'
+    '<p><strong>メーカーを問わず査定します。</strong>'
+    '国内メーカーの機械を幅広く拝見しています（例：'
+    + "・".join(NOUKI_MAKERS) + ' ほか）。</p>'
+    '<p class="note">※上記は査定の対象となるメーカーの例です。'
+    '各メーカーとの提携・代理店関係を示すものではありません。</p>'
+
+    '<h2>査定で見るポイント</h2>'
+    '<p>買取の可否と金額は、次の点と中古市場の相場をあわせて判断します。'
+    '現物を確認したうえでご提示します。</p>'
+    + NOUKI_SATEI_TABLE +
+    '<p>型式がわからないときは、<strong>本体の銘板（プレート）の写真</strong>を'
+    '<a href="/contact/">お問い合わせフォーム</a>からお送りいただくと、'
+    'おおよその見通しをお伝えしやすくなります。'
+    '高く売るための準備は<a href="/nouki-kaitori-kotsu/">使わない農機具を高く売るコツ</a>にまとめています。</p>'
+
+    '<h2>動かない農機具・自走できない農機具も相談できます</h2>'
+    '<p>エンジンがかからない、自走できない、長年倉庫に眠っている——'
+    'そうした機械も、<strong>部品としての需要</strong>や'
+    '<strong>鉄・アルミなどの金属としての価値</strong>で評価できる場合があります。</p>'
+    '<p>搬出も当社が手配します。倉庫や納屋から引き出せない機械、'
+    'ぬかるんだ農地に置いたままの機械も、積み込みの方法からご相談ください。</p>'
+
+    '<h2>買取のときに必要なもの</h2>'
+    '<ul>'
+    '<li><strong>身分を確認できるもの</strong>（運転免許証など）'
+    '※古物営業法により、買取のときに本人確認が必要です</li>'
+    '<li>取扱説明書・鍵・保証書（あれば。査定の参考になります）</li>'
+    '<li>点検・整備の記録（あれば）</li>'
+    '</ul>'
     '<p class="note">※すべての農機具を買取できるとは限りません。'
     '買取が難しい場合も、回収・処分としてご相談いただけます。</p>'
+
+    '<h2>倉庫・納屋の片付けとまとめてご相談いただけます</h2>'
+    '<p>農機具だけでなく、倉庫や納屋ごとの片付けもあわせて承ります。'
+    '<strong>買取できた金額は片付け費用から差し引いてご提示</strong>しますので、'
+    '片付けの負担を軽くできる場合があります。</p>'
+    '<p><a href="/souko/">倉庫の片付け</a>・'
+    '<a href="/fuyouhin/">不用品の回収</a>・'
+    '<a href="/akiya/">空き家・実家の片付け</a>とまとめてご相談ください。'
+    '料金の考え方は<a href="/ryoukin/">料金・費用について</a>をご覧ください'
+    '（片付け・不用品回収は' + PRICE_LABEL + '）。</p>'
+
+    '<h2>対応エリア</h2>'
+    '<p>静岡県内を中心に対応します。'
+    '<a href="/nouki-kaitori-shizuoka/">静岡県の農機具買取（市町別の対応）</a>もご覧ください。</p>'
     '</div></section>',
-    [("古い農機具や動かない機械も買取できますか？",
-      "機種・状態によって異なります。動かない機械でも金属・部品として対応できる場合がありますので、まずは状態をお知らせください。"),
-     ("出張での査定は可能ですか？",
-      "静岡県内を中心に、現地での確認・査定に対応します。まずはお電話またはメールでご相談ください。")],
-    [("/souko/", "倉庫の片付け", "納屋・倉庫の整理"),
-     ("/fuyouhin/", "不用品の回収", "まとめて回収"),
-     ("/katazuke/", "家のお片付け", "住まいの片付け"),
-     ("/company/", "会社概要", "株式会社AMTについて")],
-    "農機具の買取り", "トラクター・耕運機・田植機などの農機具買取。片付けと同時対応。",
-    "農機具の買取り（トラクター等）｜静岡県島田市の株式会社AMT",
+    NOUKI_FAQ,
+    [("/nouki-kaitori-shizuoka/", "静岡県の農機具買取", "市町別の対応"),
+     ("/nouki-kaitori-kotsu/", "農機具を高く売るコツ", "準備で査定が変わります"),
+     ("/souko/", "倉庫の片付け", "納屋・倉庫の整理"),
+     ("/ryoukin/", "料金・費用について", PRICE_LABEL)],
+    "農機具の買取り", "トラクター・コンバイン・田植機・耕運機などの農機具買取。メーカー不問、動かない機械も相談可。静岡県内中心・出張査定無料。",
+    "農機具の買取り｜静岡県島田市の株式会社AMT",
     hero_img=IMG["nouki"],
 )
 
 # ------------------------------------------------------------
-# 6. 料金・費用について
+# 5-1〜5-5. 機種別ページ
 # ------------------------------------------------------------
+NOUKI_DETAIL = {
+    "nouki-tractor": {
+        "h1": "トラクターの買取り｜静岡県島田市の株式会社AMT",
+        "answer": "トラクターは<strong>メーカー・型式・年式・稼働時間（アワーメーター）・エンジンの状態</strong>で"
+                  "評価が決まります。<strong>メーカーは問いません</strong>。"
+                  "エンジンがかからない機械・自走できない機械も、部品や金属としての価値で評価できる場合があります。"
+                  "出張査定は無料です。",
+        "sections": [
+            ("買取の対象になるトラクター",
+             '<ul>'
+             '<li>乗用トラクター（装輪式・クローラ式）</li>'
+             '<li>小型・中型・大型を問わず対応（家庭菜園規模の小型機から、ほ場用の大型機まで）</li>'
+             '<li>キャビン付き・ロプス（安全フレーム）付きのいずれも対応</li>'
+             '<li>ロータリー・プラウ・ハロー・畦塗機などの<strong>作業機（アタッチメント）単体</strong></li>'
+             '<li>フロントローダー付きの機械、作業機をまとめてのご相談</li>'
+             '</ul>'
+             '<p>メーカーはクボタ・ヤンマー・井関農機・三菱マヒンドラ農機ほか、問いません。</p>'),
+            ("トラクターの査定で特に見るところ",
+             '<p>トラクターは、次の点がとくに金額に影響します。</p>'
+             '<ul>'
+             '<li><strong>アワーメーター（稼働時間）</strong>：走行時間が短いほど有利です。'
+             'メーターが動かなくなっている場合も、その旨をお伝えください。</li>'
+             '<li><strong>エンジンの始動性と異音・白煙</strong>：かかるか、かかってからの音や煙の出方を確認します。</li>'
+             '<li><strong>油圧の動作</strong>：三点リンクの上下、作業機の昇降がスムーズかどうか。</li>'
+             '<li><strong>タイヤの残り溝</strong>：前後輪の摩耗、ひび割れ。</li>'
+             '<li><strong>作業機がそろっているか</strong>：ロータリー等が付属すると評価が上がりやすくなります。</li>'
+             '</ul>'),
+        ],
+        "faq": [
+            ("古いトラクターでも買取できますか？",
+             "年式が古くても、部品需要のある型式や、整備して使える状態の機械は値がつくことがあります。"
+             "値がつきにくい場合も、鉄・アルミなどの金属として評価できる場合がありますのでご相談ください。"),
+            ("エンジンがかからないトラクターはどうなりますか？",
+             "ご相談ください。部品としての需要や金属としての価値で評価します。"
+             "自走できない機械の搬出・積み込みも当社で手配します。"),
+            ("ロータリーなどの作業機だけでも買取できますか？",
+             "はい、作業機（アタッチメント）単体でもご相談いただけます。"
+             "ロータリー・プラウ・ハロー・畦塗機などをお知らせください。"),
+        ],
+    },
+    "nouki-combine": {
+        "h1": "コンバイン・ハーベスタの買取り｜静岡県島田市の株式会社AMT",
+        "answer": "コンバインは<strong>条数・稼働時間・刈刃や脱穀部の状態</strong>が評価の中心です。"
+                  "自脱型・普通型のいずれも、<strong>メーカーを問わず</strong>査定します。"
+                  "稲刈り後の入れ替え時期のご相談も歓迎です。出張査定は無料です。",
+        "sections": [
+            ("買取の対象になる機械",
+             '<ul>'
+             '<li>自脱型コンバイン（2条・3条・4条・5条以上）</li>'
+             '<li>普通型コンバイン（汎用コンバイン）</li>'
+             '<li>バインダー（刈取結束機）</li>'
+             '<li>ハーベスタ、自走式の脱穀機</li>'
+             '<li>乾燥機・籾摺機・選別機・精米機など、収穫後の調製機械</li>'
+             '</ul>'),
+            ("コンバインの査定で特に見るところ",
+             '<ul>'
+             '<li><strong>条数</strong>：需要の多い条数ほど評価が安定します。</li>'
+             '<li><strong>稼働時間</strong>：使用時間が短いほど有利です。</li>'
+             '<li><strong>刈刃・こぎ胴・脱穀部の摩耗</strong>：消耗部品の状態を確認します。</li>'
+             '<li><strong>クローラ（ゴムキャタ）の残り</strong>：ひび割れ・摩耗の程度。</li>'
+             '<li><strong>詰まり・修理の履歴</strong>：整備の記録があれば査定の参考になります。</li>'
+             '</ul>'
+             '<p class="note">※収穫期の直前・直後は中古の需要が動きます。'
+             '入れ替えをお考えの場合は、時期も含めてご相談ください。</p>'),
+        ],
+        "faq": [
+            ("稲刈りが終わったあとに引き取ってもらえますか？",
+             "はい。収穫が終わってからのご相談も承ります。"
+             "次のシーズンまで置いたままにするより、状態が落ちる前に査定を受けられることをおすすめします。"),
+            ("乾燥機や籾摺機も買取できますか？",
+             "ご相談ください。収穫後の調製機械も査定の対象です。設置されたままの機械も、取り外しから手配します。"),
+            ("動かないコンバインはどうなりますか？",
+             "部品としての需要や、金属としての価値で評価できる場合があります。"
+             "自走できない機械の搬出も当社で手配しますのでご相談ください。"),
+        ],
+    },
+    "nouki-taue": {
+        "h1": "田植機の買取り｜静岡県島田市の株式会社AMT",
+        "answer": "田植機は<strong>条数・乗用か歩行型か・稼働時間・植付部の状態</strong>で評価が決まります。"
+                  "<strong>メーカーは問いません</strong>。シーズン前の入れ替えや、作付けをやめるタイミングでの"
+                  "ご相談も承ります。出張査定は無料です。",
+        "sections": [
+            ("買取の対象になる田植機",
+             '<ul>'
+             '<li>乗用田植機（4条・5条・6条・8条など）</li>'
+             '<li>歩行型田植機（2条・4条など）</li>'
+             '<li>施肥機・除草剤散布装置つきの機械</li>'
+             '<li>育苗箱・苗運搬車などの関連機材</li>'
+             '</ul>'),
+            ("田植機の査定で特に見るところ",
+             '<ul>'
+             '<li><strong>条数</strong>：ほ場の規模に合う条数ほど需要があります。</li>'
+             '<li><strong>植付部（爪・ロータリーケース）の状態</strong>：摩耗や曲がりを確認します。</li>'
+             '<li><strong>油圧・水平制御の動作</strong>：センサー類が正常に働くかどうか。</li>'
+             '<li><strong>保管状態</strong>：屋内保管で泥を落としてある機械は評価が上がりやすくなります。</li>'
+             '</ul>'
+             '<p>植付が終わったあとに<strong>泥を洗い落として乾かしてから保管</strong>しておくと、'
+             'サビの進行を抑えられ、査定にも有利です。</p>'),
+        ],
+        "faq": [
+            ("田植機を売るのに良い時期はありますか？",
+             "一般に、春の作付け前に中古の需要が高まります。ただし保管中に状態が落ちることもあるため、"
+             "手放すことが決まっているなら早めに査定を受けられることをおすすめします。"),
+            ("歩行型の小さな田植機でも対応できますか？",
+             "はい、歩行型の田植機もご相談いただけます。"),
+            ("育苗箱や苗運搬車もまとめて引き取れますか？",
+             "はい。関連する機材や、倉庫に残った資材もまとめてご相談ください。"),
+        ],
+    },
+    "nouki-kouunki": {
+        "h1": "耕運機・管理機の買取り｜静岡県島田市の株式会社AMT",
+        "answer": "耕運機・管理機は<strong>馬力・エンジンの始動性・爪の摩耗・付属のアタッチメント</strong>で"
+                  "評価が決まります。<strong>家庭菜園規模の小型機から対応</strong>し、メーカーは問いません。"
+                  "複数台まとめてのご相談も歓迎です。出張査定は無料です。",
+        "sections": [
+            ("買取の対象になる機械",
+             '<ul>'
+             '<li>歩行型耕運機（ロータリー式・車軸式）</li>'
+             '<li>管理機（うね立て・培土・中耕用）</li>'
+             '<li>ティラー・ミニ耕運機（家庭菜園向けの小型機も対応）</li>'
+             '<li>うね立て器・培土器・ハロー等のアタッチメント</li>'
+             '<li>発動機・エンジンポンプ・動力噴霧器などの小型農業機械</li>'
+             '</ul>'),
+            ("耕運機・管理機の査定で特に見るところ",
+             '<ul>'
+             '<li><strong>エンジンがかかるか</strong>：始動性がもっとも大きな要素です。'
+             '燃料を抜かずに長期保管していた機械は、キャブレターが詰まっていることがあります。</li>'
+             '<li><strong>馬力・排気量</strong>：用途に合う出力ほど需要があります。</li>'
+             '<li><strong>爪の摩耗</strong>：ロータリーの爪の減り具合を確認します。</li>'
+             '<li><strong>アタッチメントの有無</strong>：付属品がそろうと評価が上がります。</li>'
+             '</ul>'
+             '<p class="note">※小型機は1台だけだと搬出の手間に対して金額が小さくなりがちです。'
+             '倉庫や納屋の片付け・<a href="/fuyouhin/">不用品の回収</a>とまとめてご相談いただくと、'
+             '一度の作業で済ませられます。</p>'),
+        ],
+        "faq": [
+            ("何年も動かしていない耕運機でも見てもらえますか？",
+             "ご相談ください。長期保管でエンジンがかからなくなっている機械も、"
+             "部品や金属としての価値で評価できる場合があります。"),
+            ("小型の耕運機1台だけでも来てもらえますか？",
+             "ご相談ください。1台のみの場合は、ほかの不用品の片付けとあわせてのご依頼だと"
+             "お引き受けしやすくなります。"),
+            ("家庭菜園用のミニ耕運機も対象ですか？",
+             "はい、小型機も査定の対象です。"),
+        ],
+    },
+    "nouki-kusakari": {
+        "h1": "草刈機・刈払機・運搬車の買取り｜静岡県島田市の株式会社AMT",
+        "answer": "乗用草刈機・ハンマーナイフモア・刈払機・クローラ運搬車などを査定します。"
+                  "<strong>メーカーは問いません</strong>。小型機は<strong>まとめてのご相談</strong>だと"
+                  "お引き受けしやすくなります。出張査定は無料です。",
+        "sections": [
+            ("買取の対象になる機械",
+             '<ul>'
+             '<li>乗用草刈機（モアー）、自走式草刈機</li>'
+             '<li>ハンマーナイフモア、畦畔（けいはん）草刈機</li>'
+             '<li>刈払機・ブロワ・ヘッジトリマなどの小型エンジン機械</li>'
+             '<li>クローラ運搬車・一輪車型の動力運搬車・手押し式の動力運搬機</li>'
+             '<li>チェーンソー、高圧洗浄機、発電機、溶接機などの機械工具類</li>'
+             '</ul>'),
+            ("査定で特に見るところ",
+             '<ul>'
+             '<li><strong>エンジンがかかるか</strong>：2サイクル機は燃料の劣化で始動しなくなることがあります。</li>'
+             '<li><strong>刃・ブレードの状態</strong>：摩耗・欠け・曲がりを確認します。</li>'
+             '<li><strong>クローラ（ゴムキャタ）の残り</strong>：運搬車は足回りの状態が重要です。</li>'
+             '<li><strong>台数</strong>：小型機は複数台まとめてのほうが評価しやすくなります。</li>'
+             '</ul>'
+             '<p>工具・機械工具類は<a href="/hinmoku/">回収・買取できる品目一覧</a>にもまとめています。</p>'),
+        ],
+        "faq": [
+            ("刈払機が何台かありますが、まとめて見てもらえますか？",
+             "はい。小型機は台数がまとまっているほうが評価しやすくなります。まとめてご相談ください。"),
+            ("エンジンがかからない刈払機も対象ですか？",
+             "ご相談ください。部品や金属としての価値で評価できる場合があります。"),
+            ("農機具以外の工具や発電機も見てもらえますか？",
+             "はい。当社の古物商許可は機械工具類を取扱品目としており、"
+             "工具・発電機・溶接機などもご相談いただけます。"),
+        ],
+    },
+}
+
+for _slug, _short, _name, _lead in NOUKI_TYPES:
+    _d = NOUKI_DETAIL[_slug]
+    _body = (
+        '<section class="k-section" style="padding-bottom:0;"><div class="prose">'
+        '<div class="answer"><span class="answer-h">要点</span><p>' + _d["answer"] + '</p></div>'
+        '</div></section>'
+        '<section class="k-section"><div class="prose">'
+        '<p class="lead">' + _lead + '</p>'
+    )
+    for _h, _html in _d["sections"]:
+        _body += "<h2>" + _h + "</h2>" + _html
+    _body += (
+        '<h2>査定から買取までの流れ</h2>'
+        '<ol>'
+        '<li><strong>ご相談</strong>（<a href="tel:' + TEL + '">' + TEL + '</a> ／ '
+        '<a href="/contact/">お問い合わせフォーム</a>）。'
+        '本体の銘板（プレート）の写真をお送りいただくと見通しをお伝えしやすくなります。</li>'
+        '<li><strong>出張査定</strong>（無料）。現物を拝見して状態を確認します。</li>'
+        '<li><strong>金額のご提示</strong>。見ていただいた根拠もあわせてご説明します。</li>'
+        '<li><strong>ご契約・搬出</strong>。本人確認のうえ、搬出・積み込みまで当社で対応します。</li>'
+        '</ol>'
+        '<p class="note">※古物営業法により、買取のときは身分を確認できるもの'
+        '（運転免許証など）のご提示が必要です。</p>'
+        '<h2>片付けとまとめてご相談いただけます</h2>'
+        '<p>' + _short + 'の買取だけでなく、倉庫・納屋の片付けや不用品の回収も'
+        'あわせて承ります。買取できた金額は片付け費用から差し引いてご提示します'
+        '（片付け・不用品回収は' + PRICE_LABEL + '）。</p>'
+        '<p><a href="/nouki-kaitori/">農機具の買取り（トップ）</a>に、'
+        '対応メーカー・査定のポイント・必要なものをまとめています。</p>'
+        '</div></section>'
+    )
+    _rel = [("/nouki-kaitori/", "農機具の買取り", "対応機種・査定のポイント"),
+            ("/nouki-kaitori-shizuoka/", "静岡県の農機具買取", "市町別の対応"),
+            ("/nouki-kaitori-kotsu/", "農機具を高く売るコツ", "準備で査定が変わります"),
+            ("/souko/", "倉庫の片付け", "納屋・倉庫の整理")]
+    add_service_page(
+        _slug, _short, _d["h1"], _lead, _body, _d["faq"], _rel,
+        _name, _lead,
+        _d["h1"],
+        hero_img=IMG["nouki"],
+    )
+
+# ------------------------------------------------------------
+# 5-6. 静岡県の農機具買取（エリア）
+# ------------------------------------------------------------
+_nouki_city_rows = "".join(
+    '<li>' + c + '</li>' for c in AREA_CITIES
+)
+NOUKI_AREA_FAQ = [
+    ("静岡県内ならどこでも出張査定に来てもらえますか？",
+     "島田市（金谷）の拠点から、静岡県内を中心に出張査定にうかがいます。"
+     "査定・出張費は無料です。県境に近い地域など、距離がある場合は日程をご相談させてください。"),
+    ("農地や山あいの倉庫に置いたままでも見てもらえますか？",
+     "はい。農地・倉庫・納屋に置いたままの状態で拝見します。"
+     "自走できない機械の搬出・積み込みも当社で手配します。"),
+    ("島田市以外でも片付けとまとめて頼めますか？",
+     "はい。静岡県内中心に、農機具の買取と倉庫・納屋の片付けをまとめて承ります。"
+     "買取できた金額は片付け費用から差し引いてご提示します。"),
+]
+add_service_page(
+    "nouki-kaitori-shizuoka", "静岡県の農機具買取",
+    "静岡県の農機具買取｜出張査定無料｜株式会社AMT（島田市）",
+    "静岡県島田市（金谷）を拠点に、県内各市町へ出張査定にうかがいます。"
+    "トラクター・コンバイン・田植機・耕運機など、メーカーを問わず査定。出張査定無料。",
+    '<section class="k-section" style="padding-bottom:0;"><div class="prose">'
+    '<div class="answer"><span class="answer-h">要点</span>'
+    '<p>静岡県<strong>島田市金谷</strong>の拠点から、県内各市町へ<strong>出張査定</strong>にうかがいます。'
+    '査定・出張費は<strong>無料</strong>です。農地や倉庫に置いたままの機械、'
+    '自走できない機械も、<strong>搬出から当社で手配</strong>します。</p></div>'
+    '</div></section>'
+    '<section class="k-section"><div class="prose">'
+    '<h2>対応エリア（静岡県内）</h2>'
+    '<p>当社は静岡県島田市金谷東に拠点があります。'
+    '国道473号・東名高速（相良牧之原IC）・新東名（島田金谷IC）に近く、'
+    '県中部の農業地域へうかがいやすい場所です。'
+    '次の市町を中心に、静岡県内へ出張査定にうかがいます。</p>'
+    '<ul class="area-list">' + _nouki_city_rows + '</ul>'
+    '<p class="note">※上記以外の静岡県内の市町もご相談ください。'
+    '距離がある場合は日程をあわせてご相談させていただきます。</p>'
+    '<h2>静岡県の農機具・当社が拝見する機械</h2>'
+    '<p>静岡県の中部は茶園と水田が混在し、'
+    '牧之原・島田・菊川・掛川のあたりでは<strong>茶園向けの乗用型機械・管理機・運搬車</strong>、'
+    '大井川沿いの水田地帯では<strong>トラクター・田植機・コンバイン</strong>のご相談が多くなります。</p>'
+    '<ul>' + _type_links + '</ul>'
+    '<p>乾燥機・籾摺機などの調製機械、作業機（アタッチメント）単体、'
+    '農機具にともなう金属・部品類も対象です。'
+    '対応メーカー・査定のポイントは'
+    '<a href="/nouki-kaitori/">農機具の買取り</a>にまとめています。</p>'
+    '<h2>島田市にお住まいの方へ</h2>'
+    '<p>拠点のある島田市では、農機具の買取と'
+    '<a href="/katazuke-shimada/">島田市の片付け・不用品回収</a>をまとめて承れます。'
+    '市の粗大ごみ制度との使い分けもあわせてご案内します。</p>'
+    '<h2>片付けとあわせてのご相談</h2>'
+    '<p>離農・世代交代で<strong>倉庫や納屋ごと片付けたい</strong>というご相談も承ります。'
+    '買取できた金額は片付け費用から差し引いてご提示します'
+    '（片付け・不用品回収は' + PRICE_LABEL + '）。'
+    '<a href="/souko/">倉庫の片付け</a>・'
+    '<a href="/akiya/">空き家・実家の片付け</a>もご覧ください。</p>'
+    '</div></section>',
+    NOUKI_AREA_FAQ,
+    [("/nouki-kaitori/", "農機具の買取り", "対応機種・査定のポイント"),
+     ("/katazuke-shimada/", "島田市の片付け・不用品回収", "拠点のある島田市"),
+     ("/area/", "対応エリア", "片付け・回収の対応エリア"),
+     ("/souko/", "倉庫の片付け", "納屋・倉庫の整理")],
+    "静岡県の農機具買取", "静岡県内の出張農機具買取。島田市金谷の拠点から県内各市町へ。出張査定無料。",
+    "静岡県の農機具買取｜出張査定無料｜株式会社AMT（島田市）",
+    hero_img=IMG["nouki"],
+)
+
+
+# ------------------------------------------------------------
+# 6. 料金・費用について（2026-10-10 1㎥あたりの単価を公開）
+# ------------------------------------------------------------
+RYOUKIN_FAQ = [
+    ("片付け・不用品回収の料金はいくらですか？",
+     "荷物の体積（㎥）を基準に、" + PRICE_LABEL + "でご案内しています。"
+     "正確な金額は、間取り・階数・搬出経路・品目などを現地で確認したうえで無料でお見積りします。"),
+    ("1㎥はどのくらいの量ですか？",
+     "1㎥は、たて・よこ・高さがそれぞれ1mの立方体ぶんの体積です。"
+     "押入れの下段がおよそ1㎥、一般的な2ドア冷蔵庫1台でおよそ0.3〜0.5㎥が目安です。"),
+    ("見積りは無料ですか？", "はい、ご相談・現地確認・お見積りはすべて無料です。出張費もいただきません。"),
+    ("買取できるものがあると安くなりますか？",
+     "はい。古物商許可（" + KOBUTSU_AUTH + "）のもとで買取できる品物があれば、"
+     "その査定額を片付け費用から差し引いてご提示します。農機具・機械・金属などは買取の対象になりやすい品物です。"),
+    ("見積りより高くなることはありませんか？",
+     "お見積りでご説明した内容から作業範囲が変わる場合は、作業を進める前に必ずご相談し、"
+     "ご了解をいただいてから対応します。無断での追加請求はいたしません。"),
+    ("追加でかかる費用はありますか？",
+     "家電リサイクル法の対象品（エアコン・テレビ・冷蔵庫・洗濯機など）は、法律で定められたリサイクル料金が別途必要です。"
+     "そのほか、クレーン等の特殊な機材が必要な重量物などの個別条件は、お見積りの時点でご説明します。"),
+    ("キャンセル料はかかりますか？",
+     "お見積り後のキャンセルは無料です。作業日の直前のご連絡は、手配の都合をご相談させてください。"),
+    ("支払い方法は何がありますか？", "現金または銀行振込でお受けしています。法人のお客様は請求書払いも可能です。"),
+]
+
 c, _ = assemble(
     "ryoukin", "料金・費用",
     "片付け・不用品回収の料金｜静岡県島田市｜株式会社AMT",
-    "片付け・不用品回収の費用の決まり方と、費用を抑える考え方をご説明します。正確な金額は現地確認のうえ無料でお見積りします。",
+    "料金は荷物の体積（㎥）が基準。" + PRICE_LABEL + "でご案内しています。正確な金額は現地確認のうえ無料でお見積りします。",
+    '<section class="k-section" style="padding-bottom:0;"><div class="prose">'
+    '<div class="answer"><span class="answer-h">料金の結論</span>'
+    '<p>片付け・不用品回収の料金は、<strong>荷物の体積（㎥）を基準に算出</strong>します。'
+    '目安は<strong>' + PRICE_LABEL + '</strong>です。'
+    'この金額に<strong>搬出・運搬・適正処理の委託費用まで含みます</strong>。'
+    '買取できる品物があれば、その査定額を差し引いてご提示します。'
+    '出張費・お見積りは<strong>無料</strong>です。</p></div>'
+    '</div></section>'
+
+    # ---- 料金の基準（㎥単価） ----
     '<section class="k-section"><div class="prose">'
-    '<p class="lead">片付け・回収の費用は、品物の量や現場の条件によって変わるため、'
-    '一律の料金表ではご案内していません。ここでは費用の決まり方と、'
-    '費用を抑えるための考え方をご説明します。正確な金額は現地確認のうえ無料でお見積りします。</p>'
-    '<h2>費用を左右する主な要素</h2>'
+    '<h2>料金の基準は「体積（㎥）」です</h2>'
+    '<p>片付け・不用品回収は、トラックに積み込む荷物の量＝体積で手間が決まります。'
+    'そのため当社では、<strong>荷物の体積（立方メートル／㎥）を基準</strong>にお見積りします。</p>'
+    '<div class="kz-price"><p class="kz-price-lbl">片付け・不用品回収</p>'
+    '<p class="kz-price-val"><span class="kz-price-num">' + "{:,}".format(PRICE_PER_M3) + '</span>'
+    '<span class="kz-price-yen">円</span>'
+    '<span class="kz-price-unit">／1㎥' + PRICE_TAX + ' <b>から</b></span></p>'
+    '<p class="kz-price-note">搬出・運搬・適正処理の委託費用を含みます／出張費・お見積り無料</p></div>'
+    '<h3>1㎥はどのくらいの量？</h3>'
+    '<p>1㎥は、<strong>たて1m×よこ1m×高さ1m</strong>の立方体ぶんの体積です。'
+    'イメージしづらい単位なので、身近なものに置き換えると次のくらいです。</p>'
     '<table><tbody>'
-    '<tr><th>品物の量</th><td>家財・不用品の量が多いほど、搬出・運搬・処分の手間が増えます。</td></tr>'
-    '<tr><th>品物の種類</th><td>家電リサイクル法の対象品や、別途処理が必要なものは扱いが変わります。</td></tr>'
-    '<tr><th>間取り・階数</th><td>部屋数や階数、エレベーターの有無で搬出の手間が変わります。</td></tr>'
-    '<tr><th>搬出経路</th><td>前面道路の幅、駐車スペース、トラックの横付け可否などが影響します。</td></tr>'
-    '<tr><th>作業人数・日数</th><td>量や条件に応じて、必要な人数・日数が変わります。</td></tr>'
+    '<tr><th>押入れの下段（1間ぶん）</th><td>およそ1㎥</td></tr>'
+    '<tr><th>2ドア冷蔵庫　1台</th><td>およそ0.3〜0.5㎥</td></tr>'
+    '<tr><th>洗濯機　1台</th><td>およそ0.3㎥</td></tr>'
+    '<tr><th>3人掛けソファ　1台</th><td>およそ1〜1.5㎥</td></tr>'
+    '<tr><th>シングルベッド（フレーム＋マットレス）</th><td>およそ1〜1.5㎥</td></tr>'
+    '<tr><th>段ボール（みかん箱サイズ）　約8箱</th><td>およそ1㎥</td></tr>'
     '</tbody></table>'
-    '<h2>費用を抑えるための考え方</h2>'
-    '<ul><li>残すもの・処分するものを事前に分けておく</li>'
-    '<li>買取できる品物（金属・機械・農機具など）があれば査定に出す</li>'
-    '<li>片付け・回収・撤去をまとめて依頼して搬出を効率化する</li></ul>'
-    '<p>株式会社AMTは金属スクラップの買取や農機具の買取も行っています。'
-    '買取できるものがあれば、<a href="/nouki-kaitori/">農機具の買取り</a>などとあわせ、'
-    '<strong>費用への反映をご提案</strong>できる場合があります。</p>'
-    '<p class="note">※このページには具体的な料金表は掲載していません。'
-    '費用は現地条件で大きく変わるため、正確な金額は現地確認後に無料でお見積りします。</p>'
+    '<p class="note">※上記は体積のイメージをつかんでいただくための一般的な目安で、'
+    '品物の形状や積み方によって変わります。実際の㎥数は現地で確認して算出します。</p>'
+    '</div></section>'
+
+    # ---- 料金に含まれるもの／別途になるもの ----
+    '<section class="k-section"><div class="prose">'
+    '<h2>料金に含まれるもの・別途になるもの</h2>'
+    '<table><tbody>'
+    '<tr><th>含まれるもの</th><td>室内からの搬出作業／人件費／トラックでの運搬／'
+    '処分が必要な品物の<strong>提携許可業者への適正処理委託費用</strong>／簡単な掃き掃除</td></tr>'
+    '<tr><th>無料のもの</th><td>ご相談・現地確認・お見積り・出張費</td></tr>'
+    '<tr><th>別途になるもの</th><td><strong>家電リサイクル法の対象品</strong>'
+    '（エアコン・テレビ・冷蔵庫・冷凍庫・洗濯機・衣類乾燥機）の法定リサイクル料金／'
+    'クレーン等の特殊機材が必要な重量物／ハウスクリーニング等の専門清掃</td></tr>'
+    '<tr><th>お引きするもの</th><td><strong>買取できる品物の査定額</strong>'
+    '（農機具・機械・金属・まだ使える家具家電など）</td></tr>'
+    '</tbody></table>'
+    '<p>家電リサイクル法については'
+    '<a href="/kaden-shobun/">冷蔵庫・洗濯機・テレビの正しい処分方法</a>でくわしく解説しています。</p>'
+    '</div></section>'
+
+    # ---- 買取で費用を下げる ----
+    '<section class="k-section"><div class="prose">'
+    '<h2>買取で費用が下がることがあります</h2>'
+    '<p>当社は<strong>' + KOBUTSU_LABEL + '</strong>を持ち、金属スクラップの買取や'
+    '<a href="/nouki-kaitori/">農機具の買取り</a>も本業として手がけています。'
+    'そのため、片付けのなかに<strong>買取できる品物</strong>があれば、'
+    'その査定額を片付け費用から<strong>差し引いてご提示</strong>できます。</p>'
+    '<h3>買取の対象になりやすい品物</h3>'
+    '<ul>'
+    '<li><a href="/nouki-kaitori/">農機具</a>（トラクター・耕運機・田植機・コンバイン・管理機など。動かない機械もご相談ください）</li>'
+    '<li>鉄・アルミ・銅・ステンレスなどの金属、電線、モーター類</li>'
+    '<li>工具・建設機械・発電機・溶接機などの機械工具類</li>'
+    '<li>年式の新しい家電、状態のよい家具、業務用の厨房機器・什器</li>'
+    '</ul>'
+    '<p>買取・回収できる品物は<a href="/hinmoku/">回収・買取できる品目一覧</a>にまとめています。</p>'
+    '</div></section>'
+
+    # ---- 料金を左右する条件 ----
+    '<section class="k-section"><div class="prose">'
+    '<h2>' + PRICE_LABEL + 'の「から」が動く条件</h2>'
+    '<p>同じ㎥数でも、現場の条件によって作業の手間が変わります。'
+    'お見積りでは次の点を確認したうえで金額を確定します。</p>'
+    '<table><tbody>'
+    '<tr><th>荷物の量（㎥）</th><td>もっとも大きな要素です。量が多いほど人数・台数・日数が増えます。</td></tr>'
+    '<tr><th>品物の種類</th><td>家電リサイクル法の対象品や、別途処理が必要なものは扱いが変わります。</td></tr>'
+    '<tr><th>間取り・階数</th><td>部屋数、2階以上からの搬出、エレベーターの有無で手間が変わります。</td></tr>'
+    '<tr><th>搬出経路</th><td>前面道路の幅、駐車スペース、トラックの横付けができるかどうかが影響します。</td></tr>'
+    '<tr><th>仕分けの有無</th><td>残すもの・処分するものの仕分けからお任せの場合は作業時間が増えます。</td></tr>'
+    '<tr><th>作業日・期限</th><td>お急ぎの日程指定や、休日・夜間のご希望は手配の都合をご相談させてください。</td></tr>'
+    '</tbody></table>'
+    '</div></section>'
+
+    # ---- 費用を抑えるコツ ----
+    '<section class="k-section"><div class="prose">'
+    '<h2>費用を抑える5つのコツ</h2>'
+    '<ol>'
+    '<li><strong>残すもの・処分するものを先に分けておく</strong>。仕分けの時間が減り、㎥数も正確に出せます。</li>'
+    '<li><strong>買取できそうな品物をまとめておく</strong>。農機具・機械・金属があれば査定で費用に反映できます。</li>'
+    '<li><strong>片付け・回収・撤去をまとめて依頼する</strong>。搬出が1回で済み、運搬の回数を減らせます。</li>'
+    '<li><strong>自治体の粗大ごみも併用する</strong>。品数が少なく日程に余裕があるなら、'
+    '<a href="/katazuke-shimada/">島田市の粗大ごみ</a>のほうが安く済む場合があります。</li>'
+    '<li><strong>繁忙期を避ける</strong>。年度末・お盆・年末は依頼が集中します。日程に余裕があるとご相談しやすくなります。</li>'
+    '</ol>'
+    '<p>自治体の制度との使い分けは'
+    '<a href="/fuyouhin-tebanashi/">不用品を賢く手放す方法</a>と'
+    '<a href="/fuyouhin-hiyou/">不用品回収の費用はどう決まる？</a>でもくわしく解説しています。</p>'
+    '</div></section>'
+
+    # ---- 見積りの流れ ----
+    '<section class="k-section"><div class="prose">'
+    '<h2>お見積りまでの流れ</h2>'
+    '<ol>'
+    '<li><strong>お電話またはフォームでご相談</strong>（<a href="tel:' + TEL + '">' + TEL + '</a> ／ '
+    '<a href="/contact/">お問い合わせフォーム</a>）</li>'
+    '<li><strong>現地確認</strong>（無料・出張費なし）。量と現場の条件を拝見します。</li>'
+    '<li><strong>お見積りのご提示</strong>（無料）。㎥数の内訳と、買取で差し引ける金額をご説明します。</li>'
+    '<li><strong>ご検討</strong>。その場で決めていただく必要はありません。</li>'
+    '</ol>'
+    '<p>くわしくは<a href="/flow/">ご利用の流れ</a>をご覧ください。</p>'
+    '<p class="note">※' + PRICE_LABEL + 'は目安です。消費税の取り扱いを含む正確な金額は、'
+    '現地確認のうえ無料のお見積りでご提示します。</p>'
     '</div></section>',
-    [("見積りは無料ですか？", "はい、お見積り・ご相談は無料です。"),
-     ("料金はどうやって決まりますか？",
-      "品物の量・種類・間取り・搬出経路・作業人数などをもとに算出します。現地を確認のうえ、無料でお見積りします。"),
-     ("追加料金はかかりますか？",
-      "お見積り時にご説明した内容から大きく変わる場合は、作業前に必ずご相談します。")],
-    [("/katazuke/", "家のお片付け", "住まいの片付け"),
-     ("/fuyouhin/", "不用品の回収", "家具・家電の回収"),
+    RYOUKIN_FAQ,
+    [("/hinmoku/", "回収・買取できる品目一覧", "対応品目をまとめて確認"),
+     ("/nouki-kaitori/", "農機具の買取り", "査定額を費用に反映"),
      ("/flow/", "ご利用の流れ", "お問い合わせから完了まで"),
-     ("/faq/", "よくある質問", "費用・流れ・対応品目")],
-    [breadcrumb_jsonld("料金・費用", "/ryoukin/"),
-     faq_jsonld([("見積りは無料ですか？", "はい、お見積り・ご相談は無料です。")])],
+     ("/katazuke-shimada/", "島田市の片付け・不用品回収", "市の制度との使い分け")],
+    [price_offer_jsonld("/ryoukin/", "片付け・不用品回収（静岡県島田市）",
+                        "荷物の体積（㎥）を基準にお見積り。" + PRICE_LABEL
+                        + "。搬出・運搬・適正処理の委託費用を含む。出張費・見積り無料。"),
+     local_business_jsonld(),
+     breadcrumb_jsonld("料金・費用", "/ryoukin/"),
+     faq_jsonld(RYOUKIN_FAQ)],
 )
+
 PAGES.append(("ryoukin", "片付け・不用品回収の料金｜静岡県島田市｜株式会社AMT", c))
 
 # ------------------------------------------------------------
@@ -1162,15 +2116,61 @@ flow_body = (
     '<p class="note">※買取額や費用への反映は、品物の種類・状態・相場によって変わります。</p>'
     '</div></section>'
 )
+FLOW_STEPS = [
+    ("お問い合わせ",
+     "お電話（" + TEL + "）またはお問い合わせフォームからご相談ください。"
+     "品物の量や作業のご希望、ご希望の時期をお聞かせください。"),
+    ("現地確認（無料）",
+     "担当者が現地にうかがい、荷物の量（㎥）・間取り・階数・搬出経路を確認します。"
+     "出張費はいただきません。立ち会いが難しい場合もご相談ください。"),
+    ("お見積りのご提示（無料）",
+     "確認した内容をもとに、㎥数の内訳と、買取で差し引ける金額をあわせてご提示します。"
+     "片付け・不用品回収は" + PRICE_LABEL + "が目安です。"),
+    ("ご検討・日程の調整",
+     "内容にご納得いただけたら作業日を調整します。"
+     "その場でお決めいただく必要はありません。お見積り後のキャンセルは無料です。"),
+    ("作業・搬出",
+     "仕分け・搬出・運搬を行います。買取品は査定のうえ買取し、"
+     "処分が必要なものは提携する許可業者へ適正処理を委託します。近隣への配慮も徹底します。"),
+    ("完了のご確認",
+     "簡単な掃き掃除をして、お客様に仕上がりをご確認いただいて完了です。"
+     "お支払いは現金または銀行振込（法人は請求書払い可）です。"),
+]
+
+FLOW_FAQ = [
+    ("お問い合わせから作業までどのくらいかかりますか？",
+     "ご相談の内容と混み具合によりますが、現地確認は日程を調整のうえ早めにうかがいます。"
+     "お急ぎのご事情がある場合はお伝えください。可能な範囲で優先して調整します。"),
+    ("現地確認やお見積りに費用はかかりますか？",
+     "かかりません。ご相談・現地確認・お見積り・出張費はすべて無料です。"),
+    ("立ち会えないのですが依頼できますか？",
+     "ご相談ください。遠方にお住まいの場合や立ち会いが難しい場合も、"
+     "写真や鍵のお預かりなど、方法をあわせてご検討します。"),
+    ("見積りのあとに断ってもいいですか？",
+     "はい。お見積り後のキャンセルは無料です。ほかと比べていただいてかまいません。"),
+    ("作業当日は何を用意すればよいですか？",
+     "とくにご用意いただくものはありません。"
+     "買取をご希望の場合は、古物営業法により身分を確認できるもの（運転免許証など）が必要です。"),
+    ("支払いはいつ、どのようにしますか？",
+     "作業完了後に、現金または銀行振込でお願いしています。法人のお客様は請求書払いも可能です。"),
+]
+
 c, _ = assemble(
     "flow", "ご利用の流れ",
     "ご利用の流れ｜お問い合わせから完了まで｜株式会社AMT",
     "お問い合わせ・現地確認・お見積り・作業・完了までの流れをご案内します。お見積り無料。",
-    flow_body, [],
-    [("/ryoukin/", "料金・費用について", "費用の決まり方"),
+    flow_body, FLOW_FAQ,
+    [("/ryoukin/", "料金・費用について", PRICE_LABEL),
      ("/faq/", "よくある質問", "対応品目・流れ"),
+     ("/jirei/", "対応事例", "実際の作業の例"),
      ("/contact/", "お問い合わせ", "電話・メールで相談")],
-    [breadcrumb_jsonld("ご利用の流れ", "/flow/")],
+    [howto_jsonld(
+        "片付け・不用品回収のご依頼の流れ",
+        "お問い合わせから現地確認・お見積り・作業・完了までの流れ。現地確認とお見積りは無料です。",
+        "/flow/", FLOW_STEPS),
+     local_business_jsonld(),
+     breadcrumb_jsonld("ご利用の流れ", "/flow/"),
+     faq_jsonld(FLOW_FAQ)],
 )
 PAGES.append(("flow", "ご利用の流れ｜お問い合わせから完了まで｜株式会社AMT", c))
 
@@ -1770,6 +2770,107 @@ add_service_page(
 # ============================================================
 # トップページ（単一HTMLファイル index.html）を生成
 # ============================================================
+# ------------------------------------------------------------
+# 18. 対応事例（/jirei/）
+#   assets/jirei-data.json の confirmed=true の事例だけを掲載する。
+#   → 実在しない事例を「実績」として公開しないための仕組み。
+#   記入シート: docs/jirei-kinyu-sheet.md
+# ------------------------------------------------------------
+def _load_jirei():
+    path = os.path.join(HERE, "jirei-data.json")
+    try:
+        with io.open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (IOError, ValueError):
+        return []
+    return [it for it in data.get("items", [])
+            if it.get("confirmed") and it.get("title")]
+
+
+JIREI_ITEMS = _load_jirei()
+
+if JIREI_ITEMS:
+    def _jirei_card(it):
+        rows = []
+        for lbl, key in [("ご依頼", "service"), ("エリア", "city"), ("建物", "building"),
+                         ("ご依頼主", "who"), ("搬出量", "volume_m3"),
+                         ("作業人数", "workers"), ("作業日数", "days"),
+                         ("お見積り額", "price_note"), ("買取できたもの", "kaitori")]:
+            v = (it.get(key) or "").strip()
+            if v:
+                rows.append("<tr><th>" + lbl + "</th><td>" + v + "</td></tr>")
+        spec = "<table><tbody>" + "".join(rows) + "</tbody></table>" if rows else ""
+        img = ""
+        if (it.get("image") or "").strip():
+            src = it["image"] if it["image"].startswith("http") else UPLOADS_OCT + it["image"]
+            img = ('<div class="jr-img"><img src="' + src + '" alt="'
+                   + (it.get("image_alt") or it["title"]) + '" width="1000" height="667" '
+                   'loading="lazy" decoding="async"></div>')
+        voice = ""
+        if (it.get("voice") or "").strip():
+            voice = '<blockquote class="jr-voice"><p>' + it["voice"] + "</p></blockquote>"
+        reason = ""
+        if (it.get("reason") or "").strip():
+            reason = "<h3>ご依頼のきっかけ</h3><p>" + it["reason"] + "</p>"
+        work = ""
+        if (it.get("work") or "").strip():
+            work = "<h3>実際の作業</h3><p>" + it["work"] + "</p>"
+        link = ""
+        if (it.get("service_url") or "").strip():
+            link = ('<p class="jr-link"><a href="' + it["service_url"] + '">'
+                    + (it.get("service") or "サービス") + "のページを見る</a></p>")
+        return ('<article class="jr-card" id="jirei' + str(it.get("id", "")) + '">'
+                '<p class="jr-tag">' + (it.get("service") or "") + "</p>"
+                "<h2>" + it["title"] + "</h2>"
+                + img + spec + reason + work + voice + link + "</article>")
+
+    _cards = "".join(_jirei_card(it) for it in JIREI_ITEMS)
+    _jirei_body = (
+        '<section class="k-section" style="padding-bottom:0;"><div class="prose">'
+        '<div class="answer"><span class="answer-h">要点</span>'
+        '<p>実際にお引き受けした片付け・不用品回収・農機具買取の事例です。'
+        '搬出量（㎥）・作業人数・日数・お見積り額の実例を掲載しています。'
+        '料金の考え方は<a href="/ryoukin/">料金・費用について</a>'
+        '（' + PRICE_LABEL + '）をご覧ください。</p></div>'
+        '<p class="note">※お客様のプライバシーに配慮し、お名前・詳しい所在地は掲載していません。'
+        '写真は掲載の許可をいただいたものを使用しています。</p>'
+        '</div></section>'
+        '<section class="k-section"><div class="prose jr-list">' + _cards + '</div></section>'
+    )
+    _jirei_faq = [
+        ("同じような片付けだといくらぐらいかかりますか？",
+         "片付け・不用品回収は" + PRICE_LABEL + "を目安に、荷物の体積（㎥）を基準に算出します。"
+         "同じ㎥数でも間取り・階数・搬出経路で手間が変わるため、"
+         "現地を確認したうえで無料でお見積りします。"),
+        ("掲載されている事例と同じ作業を頼めますか？",
+         "はい。事例と同様のご依頼を承ります。まずはお電話または"
+         "お問い合わせフォームからご相談ください。"),
+        ("作業前後の写真は必ず撮るのですか？",
+         "掲載用の写真は、お客様の許可をいただいた場合のみ撮影・使用します。"
+         "掲載をご希望されない場合は撮影しません。"),
+    ]
+    c, _ = assemble(
+        "jirei", "対応事例",
+        "片付け・不用品回収の対応事例｜静岡県島田市の株式会社AMT",
+        "実際にお引き受けした片付け・不用品回収・農機具買取の事例を、"
+        "搬出量・作業人数・日数・お見積り額つきでご紹介します。",
+        _jirei_body, _jirei_faq,
+        [("/ryoukin/", "料金・費用について", PRICE_LABEL),
+         ("/katazuke/", "家のお片付け", "住まいの片付け"),
+         ("/nouki-kaitori/", "農機具の買取り", "査定額を費用に反映"),
+         ("/contact/", "お問い合わせ", "無料でお見積り")],
+        [itemlist_jsonld("片付け・不用品回収の対応事例",
+                         "株式会社AMT（おうちのお片付け隊）が静岡県内でお引き受けした事例。",
+                         "/jirei/",
+                         [(it["title"], "/jirei/#jirei" + str(it.get("id", "")),
+                           (it.get("work") or "")[:160]) for it in JIREI_ITEMS]),
+         local_business_jsonld(),
+         breadcrumb_jsonld("対応事例", "/jirei/"),
+         faq_jsonld(_jirei_faq)],
+    )
+    PAGES.append(("jirei", "片付け・不用品回収の対応事例｜静岡県島田市｜株式会社AMT", c))
+
+
 def build_index():
     # ---- 2026-10-05 リニューアル v2：解体サイトと同じ作り込み（黄色×スレート） ----
     ICON = {
@@ -1784,7 +2885,7 @@ def build_index():
         f'<picture><source media="(max-width:760px)" srcset="{IMG["hero_v2_sp"]}">'
         f'<img class="kz-hero-bg" src="{IMG["hero_v2"]}" alt="" width="1600" height="900" fetchpriority="high" decoding="async"></picture>'
         '<div class="kz-hero-in"><div class="kz-hero-tx">'
-        '<p class="kz-badge">静岡県内中心に対応｜お見積り無料</p>'
+        '<p class="kz-badge">静岡県島田市・金谷｜静岡県内中心に対応</p>'
         '<h1>家の片付け・不用品回収・<br>残置物撤去、<br>まずは<em>無料見積り</em>から。</h1>'
         '<p class="kz-hero-copy">ご自宅の片付けや不用品の回収から、解体前の残置物撤去、倉庫・工場の片付け、'
         '農機具の買取りまで。個人のお客様も法人のお客様も、静岡県内を中心に対応します。'
@@ -1792,7 +2893,10 @@ def build_index():
         '<div class="hero-cta">'
         f'<a class="btn-tel" href="tel:{TEL}">{TEL}<small>受付時間内にお気軽にお電話ください</small></a>'
         '<a class="btn-mail" href="/contact/">メールで相談する</a></div>'
-        '<ul class="kz-points"><li>個人・法人どちらも対応</li><li>使えるものは買取で還元</li><li>解体工事まで自社で一貫</li></ul>'
+        f'<p class="kz-hprice"><span>片付け・不用品回収</span><b>{PRICE_LABEL}</b>'
+        '<small>搬出・運搬・適正処理の委託費用を含む／出張費・見積り無料</small></p>'
+        '<ul class="kz-points"><li>出張費・お見積り無料</li><li>個人・法人どちらも対応</li>'
+        '<li>使えるものは買取で還元</li><li>解体工事まで自社で一貫</li></ul>'
         '</div></div></section>'
     )
 
@@ -1923,8 +3027,9 @@ def build_index():
         f'<div class="kz-atx"><ul class="kz-chips">{chips}<li>ほか近隣エリア</li></ul>'
         '<p><strong>静岡県島田市を拠点に、静岡県内を中心</strong>に対応しています。</p>'
         '<p>上記以外の地域も、まずはお気軽にご相談ください。</p>'
-        '<p><a class="kz-btn" href="/katazuke-shimada/">島田市の片付け・不用品回収</a></p>'
-        '<p><a class="kz-btn" href="/area/">対応エリアを詳しく見る</a></p></div>'
+        '<p class="kz-abtns"><a class="kz-btn" href="/katazuke-shimada/">島田市の片付け・不用品回収</a>'
+        '<a class="kz-btn" href="/nouki-kaitori-shizuoka/">静岡県の農機具買取</a>'
+        '<a class="kz-btn" href="/area/">対応エリアを詳しく見る</a></p></div>'
         '</div></div></section>'
     )
 
@@ -1946,44 +3051,119 @@ def build_index():
         '</div></div></section>'
     )
 
-    body = ('<div class="amt-katazuke">'
-            + header("/") + hero + passion + works + scenes_sec + reasons_sec + license_sec
-            + flow_sec + area_sec + company_sec + cta() + footer() + '</div>')
+    price_sec = (
+        '<section class="k-section kz-prc"><div class="inner">'
+        '<span class="sec-eye">PRICE</span><h2 class="sec-title">料金のめやす</h2>'
+        '<p class="sec-lead">片付け・不用品回収の料金は、荷物の体積（㎥）を基準に算出します。'
+        '現地を確認したうえで、無料で明確なお見積りをご提示します。</p>'
+        '<div class="kz-prc-grid">'
+        '<div class="kz-price"><p class="kz-price-lbl">片付け・不用品回収</p>'
+        '<p class="kz-price-val"><span class="kz-price-num">' + "{:,}".format(PRICE_PER_M3) + '</span>'
+        '<span class="kz-price-yen">円</span>'
+        '<span class="kz-price-unit">／1㎥' + PRICE_TAX + ' <b>から</b></span></p>'
+        '<p class="kz-price-note">1㎥は、たて・よこ・高さが各1mぶんの体積。'
+        '押入れの下段1間ぶんがおよそ1㎥です。</p></div>'
+        '<ul class="kz-inc">'
+        '<li><b>含まれるもの</b>室内からの搬出・人件費・トラックでの運搬・'
+        '処分品の提携許可業者への適正処理委託費用・簡単な掃き掃除</li>'
+        '<li><b>無料のもの</b>ご相談・現地確認・お見積り・出張費</li>'
+        '<li><b>お引きするもの</b>買取できる品物の査定額（農機具・機械・金属・'
+        'まだ使える家具家電など）</li>'
+        '<li><b>別途になるもの</b>家電リサイクル法の対象品の法定リサイクル料金ほか</li>'
+        '</ul></div>'
+        '<p class="kz-flow-more"><a class="kz-btn" href="/ryoukin/">料金・費用のくわしい説明</a>'
+        '<a class="kz-btn kz-btn--fill" href="/contact/">無料でお見積りを依頼する</a></p>'
+        '</div></section>'
+    )
+    nouki_cards = [
+        ("トラクター", "装輪・クローラ、作業機つきも。", "/nouki-tractor/"),
+        ("コンバイン", "自脱型・普通型、ハーベスタ。", "/nouki-combine/"),
+        ("田植機", "乗用・歩行型、条数を問わず。", "/nouki-taue/"),
+        ("耕運機・管理機", "家庭菜園規模の小型機も。", "/nouki-kouunki/"),
+        ("草刈機・運搬車", "乗用モア・刈払機・運搬車。", "/nouki-kusakari/"),
+        ("そのほかの農機具", "乾燥機・籾摺機・噴霧器ほか。", "/nouki-kaitori/"),
+    ]
+    ncards = "".join(
+        f'<a class="kz-ncard" href="{u}"><h3>{t}</h3><p>{d}</p><span class="kz-narr">査定を見る</span></a>'
+        for t, d, u in nouki_cards
+    )
+    nouki_sec = (
+        '<section class="k-section kz-nouki"><div class="inner">'
+        '<span class="sec-eye">BUYBACK</span><h2 class="sec-title">農機具の買取り</h2>'
+        '<p class="sec-lead">使わなくなったトラクター・コンバイン・田植機・耕運機を'
+        '<strong>メーカーを問わず</strong>査定します。'
+        '動かない機械・自走できない機械も、部品や金属としての価値で評価できる場合があります。</p>'
+        '<ul class="kz-npoints">'
+        f'<li><b>出張査定 無料</b>{AREA_NAME}内中心にうかがいます</li>'
+        '<li><b>メーカー不問</b>クボタ・ヤンマー・井関・三菱ほか</li>'
+        '<li><b>動かなくてもOK</b>自走不可でも搬出まで手配</li>'
+        '<li><b>片付けと同時可</b>買取額は片付け費用から差引き</li>'
+        '</ul>'
+        f'<div class="kz-ngrid">{ncards}</div>'
+        '<p class="kz-flow-more">'
+        '<a class="kz-btn" href="/nouki-kaitori/">農機具買取のくわしい説明</a>'
+        '<a class="kz-btn" href="/nouki-kaitori-shizuoka/">静岡県の出張査定エリア</a>'
+        f'<a class="kz-btn kz-btn--fill" href="tel:{TEL}">電話で査定を相談（{TEL}）</a></p>'
+        f'<p class="kz-nlic">買取は<strong>{KOBUTSU_LABEL}</strong>のもとで行っています。'
+        '※各メーカーとの提携・代理店関係を示すものではありません。</p>'
+        '</div></section>'
+    )
+    col_links = [
+        ("不用品回収の費用はどう決まる？", "/fuyouhin-hiyou/"),
+        ("使わない農機具を高く売るコツ", "/nouki-kaitori-kotsu/"),
+        ("生前整理は何から始める？", "/seizen-seiri/"),
+        ("空き家・実家の片付け5ステップ", "/akiya-katazuke/"),
+        ("冷蔵庫・洗濯機・テレビの処分方法", "/kaden-shobun/"),
+        ("不用品を賢く手放す方法", "/fuyouhin-tebanashi/"),
+    ]
+    col_html = "".join(f'<li><a href="{u}">{t}</a></li>' for t, u in col_links)
+    column_sec = (
+        '<section class="k-section kz-col"><div class="inner">'
+        '<span class="sec-eye">COLUMN</span><h2 class="sec-title">片付けのお役立ちコラム</h2>'
+        '<p class="sec-lead">費用の考え方、自治体制度との使い分け、農機具を高く売るコツなどを解説しています。</p>'
+        f'<ul class="kz-collist">{col_html}</ul>'
+        '<p class="kz-flow-more"><a class="kz-btn" href="/column/">コラムをすべて見る</a></p>'
+        '</div></section>'
+    )
 
-    jsonld = {
+    body = ('<div class="amt-katazuke">'
+            + header("/") + hero + passion + works + price_sec + scenes_sec
+            + nouki_sec + reasons_sec + license_sec + flow_sec + area_sec
+            + column_sec + company_sec + cta() + footer() + '</div>')
+
+    jsonld = local_business_jsonld()
+    jsonld_site = {
         "@context": "https://schema.org",
-        "@type": PROVIDER_TYPE,
-        "name": COMPANY_NAME + "（" + SITE_NAME + "）",
+        "@type": "WebSite",
+        "@id": DOMAIN + "/#website",
+        "name": SITE_NAME + "（" + COMPANY_NAME + "）",
+        "alternateName": COMPANY_NAME,
         "url": DOMAIN + "/",
-        "telephone": TEL_INTL,
-        "email": MAIL,
-        "address": {
-            "@type": "PostalAddress",
-            "postalCode": "428-0013",
-            "addressRegion": "静岡県",
-            "addressLocality": "島田市",
-            "streetAddress": "金谷東2丁目3483-290",
-            "addressCountry": "JP",
-        },
-        "areaServed": {"@type": "AdministrativeArea", "name": AREA_NAME},
-        "description": "静岡県島田市の株式会社AMTによる、家の片付け・不用品回収・"
-                       "解体前の残置物撤去・倉庫の片付け・農機具買取のサービス。個人・法人対応。",
+        "inLanguage": "ja",
+        "publisher": {"@id": DOMAIN + "/#localbusiness"},
+        "about": {"@id": DOMAIN + "/#localbusiness"},
     }
+    jsonld_price = price_offer_jsonld(
+        "/ryoukin/", "片付け・不用品回収（静岡県島田市）",
+        "荷物の体積（㎥）を基準にお見積り。" + PRICE_LABEL
+        + "。搬出・運搬・適正処理の委託費用を含む。出張費・見積り無料。")
+    jsonld_all = [jsonld, jsonld_site, jsonld_price]
 
     doc = (
         '<!DOCTYPE html>\n<html lang="ja">\n<head>\n'
         '<meta charset="UTF-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-        '<title>島田市の片付け・不用品回収ならおうちのお片付け隊｜残置物撤去・農機具買取｜株式会社AMT</title>\n'
-        '<meta name="description" content="静岡県島田市の株式会社AMT「おうちのお片付け隊」。家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・農機具の買取に、個人・法人問わず対応。静岡県内中心、お見積り無料。TEL 0547-39-3750。">\n'
+        f'<title>{SEO_TITLE["home"]}</title>\n'
+        f'<meta name="description" content="{PAGE_DESC["home"]}">\n'
         '<meta property="og:title" content="おうちのお片付け隊｜株式会社AMT｜静岡県島田市">\n'
         '<meta property="og:description" content="家の片付け・不用品回収・解体前の残置物撤去・倉庫片付け・農機具買取。個人・法人どちらも対応。静岡県内中心、お見積り無料。">\n'
         '<meta property="og:type" content="website">\n'
         f'<meta property="og:url" content="{DOMAIN}/">\n'
         f'<meta property="og:image" content="{IMG["ogp_v2"]}">\n'
         '<style>\n' + DESIGN_CSS + '\n</style>\n'
-        '<script type="application/ld+json">' + json.dumps(jsonld, ensure_ascii=False) + '</script>\n'
-        '</head>\n<body>\n' + body + '\n</body>\n</html>\n'
+        + "".join('<script type="application/ld+json">' + json.dumps(j, ensure_ascii=False)
+                      + '</script>\n' for j in jsonld_all)
+        + '</head>\n<body>\n' + body + '\n</body>\n</html>\n'
     )
     with io.open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8") as f:
         f.write(doc)
@@ -1991,8 +3171,9 @@ def build_index():
     # WordPress公開用のトップページ本文（wp:htmlブロック）も返す
     home_block = (
         "<!-- wp:html -->\n" + body + "\n<!-- /wp:html -->\n\n"
-        '<!-- wp:html -->\n<script type="application/ld+json">'
-        + json.dumps(jsonld, ensure_ascii=False) + "</script>\n<!-- /wp:html -->"
+        + "\n\n".join('<!-- wp:html -->\n<script type="application/ld+json">'
+                       + json.dumps(j, ensure_ascii=False) + "</script>\n<!-- /wp:html -->"
+                       for j in jsonld_all)
     )
     home_title = "島田市の片付け・不用品回収ならおうちのお片付け隊｜残置物撤去・農機具買取｜株式会社AMT"
     return len(doc), home_title, home_block
@@ -2001,26 +3182,143 @@ def build_index():
 # 各固定ページの meta description（AIOSEO に公開時に設定。docs/live-apply-sheet.md が元）
 PAGE_DESC = {
     "home": "島田市の片付け・不用品回収は、市内金谷の株式会社AMT「おうちのお片付け隊」へ。家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・農機具買取に、個人・法人とも対応。静岡県内中心、お見積り無料。TEL 0547-39-3750。",
-    "katazuke": "静岡県島田市で家の片付けなら株式会社AMT。引越し前後・空き家・実家の片付けを、仕分けから搬出まで対応。個人・法人OK、お見積り無料。TEL 0547-39-3750。",
-    "fuyouhin": "静岡県島田市の不用品回収は株式会社AMT。家具・家電・雑貨などをまとめて回収。買取できる品は買取、処分品は提携の許可業者へ適正委託。見積り無料。TEL 0547-39-3750。",
-    "zanchibutsu": "静岡県島田市で解体前の残置物撤去なら株式会社AMT。家財・設備・不用品を撤去。自社の解体工事とあわせた相談も可能。個人・法人対応、見積り無料。TEL 0547-39-3750。",
-    "souko": "静岡県島田市で倉庫・工場・店舗の片付けは株式会社AMT。資材・在庫・什器の整理・搬出に法人対応。お見積り無料。TEL 0547-39-3750。",
-    "nouki-kaitori": "静岡県島田市で農機具の買取りは株式会社AMT。トラクター・耕運機・田植機などを買取。片付けと同時の相談も歓迎。見積り無料。TEL 0547-39-3750。",
-    "hinmoku": "静岡県島田市のおうちのお片付け隊（AMT）が、回収・買取できる品目を一覧でご案内。買取品は古物商許可のもと買取。見積り無料。TEL 0547-39-3750。",
-    "tenpo": "静岡県島田市で店舗・オフィスの片付けは株式会社AMT。閉店・移転・原状回復までワンストップ。法人対応、見積り無料。TEL 0547-39-3750。",
-    "ryoukin": "静岡県島田市の片付け・不用品回収の料金は株式会社AMT。現地確認のうえ明確なお見積りをご提示（無料）。TEL 0547-39-3750。",
-    "seiri": "静岡県島田市で生前整理・遺品整理なら株式会社AMT。元気なうちの整理から遺品整理まで、ていねいに対応。個人・法人OK、見積り無料。TEL 0547-39-3750。",
-    "akiya": "静岡県島田市で空き家・実家の片付けは株式会社AMT。遠方・解体前でもまとめて対応。片付けから解体の相談まで。見積り無料。TEL 0547-39-3750。",
-    "gomiyashiki-katazuke": "静岡県島田市でゴミ屋敷・汚部屋の片付けは株式会社AMT。足の踏み場がなくても、まずご相談を。見積り無料。TEL 0547-39-3750。",
-    "hikkoshi": "静岡県島田市で引っ越しの片付け・不用品回収は株式会社AMT。期日までにまとめて搬出・処分・買取。見積り無料。TEL 0547-39-3750。",
-    "area": "株式会社AMT（おうちのお片付け隊）の対応エリア。静岡県島田市を中心に、藤枝・焼津・掛川・菊川・牧之原ほか静岡県内に対応。見積り無料。",
-    "flow": "おうちのお片付け隊（静岡県島田市・株式会社AMT）のご利用の流れ。お問い合わせ→現地確認→お見積り→作業→完了まで分かりやすくご案内。",
-    "faq": "静岡県島田市の片付け・不用品回収「おうちのお片付け隊」（AMT）へのよくある質問。料金・日数・近隣配慮などにお答えします。",
-    "company": "株式会社AMT（静岡県島田市）の会社概要。片付け・不用品回収・残置物撤去・農機具買取、解体、金属スクラップ買取、通販・卸売を手がけます。",
-    "contact": "静岡県島田市の片付け・不用品回収のご相談・お見積りは株式会社AMTへ。電話・メールで受付。見積り無料。TEL 0547-39-3750。",
+    "katazuke": "静岡県島田市で家の片付けなら株式会社AMT。引越し前後・空き家・実家・生前整理の片付けを、仕分けから搬出まで対応。使えるものは買取で費用に反映。1㎥20,000円から・個人法人OK・見積り無料。",
+    "fuyouhin": "静岡県島田市の不用品回収は株式会社AMT。家具・家電・雑貨を1点から家一軒分までまとめて回収。使える品は古物商許可のもと買取、処分品は提携の許可業者へ適正委託。1㎥20,000円から・見積り無料。",
+    "zanchibutsu": "静岡県島田市で解体前の残置物撤去なら株式会社AMT。家財・設備・不用品を建物からすべて搬出します。解体工事も自社対応のため撤去から解体まで一貫。買取できる品は費用に反映。個人法人対応・見積り無料。",
+    "souko": "静岡県島田市で倉庫・工場・店舗の片付けは株式会社AMT。資材・在庫・什器・機械の仕分けから搬出まで、業務を止めない段取りで法人対応。使える機械は買取、処分は許可業者へ委託。請求書払い可・見積り無料。",
+    "nouki-kaitori": "静岡県島田市の農機具買取は株式会社AMT。トラクター・コンバイン・田植機・耕運機をメーカー不問で査定。動かない機械・自走できない機械もご相談ください。出張査定無料。TEL 0547-39-3750。",
+    "hinmoku": "静岡県島田市のおうちのお片付け隊（株式会社AMT）が回収・買取できる品目を一覧でご案内。家具・家電・生活用品・事務什器・農機具・金属まで対応。買取品は古物商許可のもと買取。見積り無料。",
+    "tenpo": "静岡県島田市で店舗・オフィスの片付けは株式会社AMT。閉店・移転・原状回復まで、什器や厨房機器の買取＋撤去＋産業廃棄物の適正処理委託をワンストップ。法人対応・請求書払い可・見積り無料。",
+    "ryoukin": "島田市の片付け・不用品回収の料金は1㎥あたり20,000円から。搬出・運搬・適正処理の委託費用を含みます。買取できる品は査定額を差し引き。出張費・お見積り無料の株式会社AMT。TEL 0547-39-3750。",
+    "seiri": "静岡県島田市で生前整理・遺品整理なら株式会社AMT。仕分け・搬出・買取・適正処理までまとめて対応し、遠方や立ち会いが難しいご事情も相談可。解体が必要なら残置物撤去まで一貫。見積り無料。",
+    "akiya": "静岡県島田市で空き家・実家の片付けは株式会社AMT。遠方にお住まいでも現地確認から対応し、搬出・買取・処分・清掃まで。解体予定なら残置物撤去から解体工事まで一貫してご相談いただけます。見積り無料。",
+    "gomiyashiki-katazuke": "静岡県島田市でゴミ屋敷・汚部屋の片付けは株式会社AMT。足の踏み場がなくても、安全確保から貴重品の確保・仕分け・清掃まで対応。プライバシーに配慮します。見積り無料。",
+    "hikkoshi": "静岡県島田市で引っ越しの片付け・不用品回収は株式会社AMT。期日までに大型家具・家電もまとめて搬出・買取・処分。家電リサイクル法の対象品も法令どおり対応。引っ越し前後どちらも相談可・見積り無料。",
+    "area": "おうちのお片付け隊（株式会社AMT）の対応エリア。拠点の静岡県島田市を中心に、藤枝・焼津・掛川・菊川・牧之原・静岡市ほか静岡県内に対応。片付け・不用品回収・農機具買取。見積り無料。",
+    "flow": "島田市の片付け・不用品回収のご利用の流れ。お問い合わせ→現地確認→お見積り→作業→完了まで6ステップでご案内。現地確認・お見積りは無料、出張費もいただきません。TEL 0547-39-3750。",
+    "faq": "島田市の片付け・不用品回収「おうちのお片付け隊」（株式会社AMT）へのよくある質問。料金（1㎥20,000円から）・日数・対応品目・近隣への配慮・支払い方法などにお答えします。",
+    "company": "株式会社AMT（静岡県島田市金谷東）の会社概要。片付け・不用品回収・残置物撤去・農機具買取のほか、解体工事、金属スクラップ買取、通販・卸売を手がけます。古物商許可あり。",
+    "contact": "島田市の片付け・不用品回収のご相談・お見積りは株式会社AMTへ。お電話（0547-39-3750）とフォームで受付。現地確認・お見積り・出張費は無料です。個人・法人どちらも対応。",
     "katazuke-shimada": "島田市の片付け・不用品回収は、市内金谷に拠点を置くおうちのお片付け隊（株式会社AMT）へ。使えるものは買取、処分は提携の許可業者へ委託。市の粗大ごみの出し方も解説。見積り無料。TEL 0547-39-3750。",
-    "privacy-policy": "株式会社AMT（おうちのお片付け隊）のプライバシーポリシー。お問い合わせ等でお預かりする個人情報の取り扱いについて定めています。",
+    "privacy-policy": "株式会社AMT（おうちのお片付け隊）のプライバシーポリシー。お問い合わせ・お見積りでお預かりする個人情報の取得・利用目的・第三者提供・管理方法・開示請求の窓口について定めています。",
+    "nouki-tractor": "静岡県でトラクターの買取なら株式会社AMT（島田市）。クボタ・ヤンマー・井関などメーカー不問。アワーメーター・エンジン状態で査定し、動かない機械も相談可。出張査定無料。",
+    "nouki-combine": "静岡県でコンバイン・ハーベスタの買取は株式会社AMT（島田市）。自脱型・普通型、バインダー、乾燥機・籾摺機も対応。メーカー不問・出張査定無料。稲刈り後のご相談も歓迎。",
+    "nouki-taue": "静岡県で田植機の買取なら株式会社AMT（島田市）。乗用・歩行型、条数を問わず査定します。メーカー不問・出張査定無料。作付けをやめるタイミングでのご相談も承ります。",
+    "nouki-kouunki": "静岡県で耕運機・管理機の買取は株式会社AMT（島田市）。歩行型耕運機・管理機・ティラー、家庭菜園規模の小型機も対応。メーカー不問・出張査定無料。まとめてのご相談歓迎。",
+    "nouki-kusakari": "静岡県で草刈機・刈払機・運搬車の買取は株式会社AMT（島田市）。乗用草刈機・ハンマーナイフモア・クローラ運搬車・チェーンソー・発電機などに対応。メーカー不問、複数台まとめも歓迎。出張査定無料。",
+    "nouki-kaitori-shizuoka": "静岡県の農機具買取は島田市金谷の株式会社AMT。島田・藤枝・焼津・掛川・菊川・牧之原ほか県内各市町へ出張査定にうかがいます。農地や倉庫に置いたままでも対応・査定無料。",
+    "jirei": "静岡県島田市の株式会社AMTが実際にお引き受けした片付け・不用品回収・農機具買取の対応事例。搬出量（㎥）・作業人数・日数・お見積り額つきでご紹介します。見積り無料。",
 }
+
+
+# 検索結果用のタイトル（AIOSEO の title に入れる。全角30〜35字を目安に重要語を前方へ）
+#   ※ページ内の<h1>や固定ページのタイトルとは別。AIOSEO に明示設定すると
+#     サイト名サフィックス（「- おうち片付け隊」）が付かず、検索結果で切られにくくなる。
+SEO_TITLE = {
+    "home": "島田市の片付け・不用品回収｜1㎥20,000円から｜おうちのお片付け隊",
+    "katazuke": "家の片付け｜島田市・静岡県内｜おうちのお片付け隊",
+    "fuyouhin": "不用品回収｜1㎥20,000円から｜島田市のおうちのお片付け隊",
+    "zanchibutsu": "解体前の残置物撤去｜島田市・静岡県内｜解体まで一貫のAMT",
+    "souko": "倉庫・工場の片付け｜島田市・静岡県内｜法人対応の株式会社AMT",
+    "nouki-kaitori": "農機具買取｜静岡県｜トラクター・コンバイン・田植機｜株式会社AMT",
+    "nouki-tractor": "トラクター買取｜静岡県｜メーカー不問・出張査定無料｜AMT",
+    "nouki-combine": "コンバイン買取｜静岡県｜自脱型・普通型も出張査定無料｜AMT",
+    "nouki-taue": "田植機買取｜静岡県｜乗用・歩行型とも出張査定無料｜AMT",
+    "nouki-kouunki": "耕運機・管理機の買取｜静岡県｜小型機も出張査定無料｜AMT",
+    "nouki-kusakari": "草刈機・刈払機・運搬車の買取｜静岡県｜出張査定無料｜AMT",
+    "nouki-kaitori-shizuoka": "静岡県の農機具買取｜市町別の出張査定｜島田市の株式会社AMT",
+    "ryoukin": "片付け・不用品回収の料金｜1㎥20,000円から｜島田市の株式会社AMT",
+    "flow": "ご利用の流れ｜片付け・不用品回収｜島田市のおうちのお片付け隊",
+    "company": "会社概要｜株式会社AMT（静岡県島田市金谷東）",
+    "area": "対応エリア｜島田市ほか静岡県内｜おうちのお片付け隊",
+    "faq": "よくある質問｜料金・日数・対応品目｜島田市の株式会社AMT",
+    "katazuke-shimada": "島田市の片付け・不用品回収｜市内金谷のおうちのお片付け隊",
+    "contact": "お問い合わせ・無料見積り｜島田市のおうちのお片付け隊",
+    "privacy-policy": "プライバシーポリシー｜おうちのお片付け隊（株式会社AMT）",
+    "seiri": "生前整理・遺品整理｜島田市・静岡県内｜おうちのお片付け隊",
+    "hinmoku": "回収・買取できる品目一覧｜島田市のおうちのお片付け隊",
+    "akiya": "空き家・実家の片付け｜島田市・静岡県内｜解体まで一貫のAMT",
+    "gomiyashiki-katazuke": "ゴミ屋敷の片付け｜島田市・静岡県内｜プライバシー配慮のAMT",
+    "hikkoshi": "引っ越しの不用品回収・片付け｜島田市・静岡県内｜株式会社AMT",
+    "tenpo": "店舗・オフィスの片付け｜閉店・移転・原状回復｜島田市のAMT",
+    "jirei": "片付け・不用品回収の対応事例｜島田市のおうちのお片付け隊",
+}
+
+
+# ============================================================
+# llms.txt（AI検索・LLM向けのサイト要約。ドキュメントルートに置く）
+#   出力先: リポジトリ直下の llms.txt
+#   公開: Xserver のファイルマネージャー等で katazuke.amt-eco.com のルートへ設置
+# ============================================================
+def build_llms_txt():
+    def line(slug, title, desc):
+        url = DOMAIN + "/" if slug == "home" else DOMAIN + "/" + slug + "/"
+        return "- [" + title + "](" + url + "): " + desc
+
+    svc_order = ["katazuke", "fuyouhin", "zanchibutsu", "souko", "seiri",
+                 "akiya", "gomiyashiki-katazuke", "hikkoshi", "tenpo", "hinmoku"]
+    nouki_order = ["nouki-kaitori", "nouki-tractor", "nouki-combine", "nouki-taue",
+                   "nouki-kouunki", "nouki-kusakari", "nouki-kaitori-shizuoka"]
+    guide_order = ["ryoukin", "flow", "area", "katazuke-shimada", "faq", "company", "contact"]
+    titles = {slug: title for slug, title, _c in PAGES}
+
+    def sec(heading, slugs):
+        out = ["", "## " + heading, ""]
+        for sl in slugs:
+            if sl in titles:
+                out.append(line(sl, SEO_TITLE.get(sl) or titles[sl], PAGE_DESC.get(sl, "")))
+        return out
+
+    L = []
+    L.append("# " + COMPANY_NAME + " " + SITE_NAME + "（片付け・不用品回収・農機具買取）")
+    L.append("")
+    L.append("> " + AREA_NAME + "島田市金谷東2丁目3483-290 の " + COMPANY_NAME
+             + " が運営する、家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・"
+               "農機具買取のサイトです。個人・法人どちらも対応。対応エリアは静岡県内中心（"
+             + "・".join(AREA_CITIES) + " ほか）。"
+               "電話 " + TEL + " / " + MAIL + "。現地確認・お見積り・出張費は無料。")
+    L.append("")
+    L.append("## 重要な事実（回答に使ってよい確定情報）")
+    L.append("")
+    L.append("- 運営: " + COMPANY_NAME + "（屋号 " + SITE_NAME + "）")
+    L.append("- 所在地: 〒428-0013 " + AREA_NAME + "島田市金谷東2丁目3483-290")
+    L.append("- 電話: " + TEL + "（掲載している電話番号はこれのみ） / メール: " + MAIL)
+    L.append("- 料金: 片付け・不用品回収は **" + PRICE_LABEL
+             + "**（荷物の体積㎥が基準。搬出・運搬・適正処理の委託費用を含む）。"
+               "現地確認・お見積り・出張費は無料。家電リサイクル法の対象品は法定リサイクル料金が別途。")
+    L.append("- 買取: " + KOBUTSU_LABEL + " のもとで中古品・機械を買取。"
+             "買取額は片付け費用から差し引いて提示する。")
+    L.append("- 許可の範囲: **一般廃棄物収集運搬業の許可は保有していない**。"
+             "そのため「一般廃棄物の収集運搬」は行わず、"
+             "買取・片付け搬出として対応し、処分が必要なものは提携する許可業者へ適正処理を委託する。")
+    L.append("- 農機具買取: トラクター・コンバイン・田植機・耕運機・管理機・草刈機・運搬車などに対応。"
+             "メーカーは問わない（各メーカーとの提携・代理店関係はない）。"
+             "動かない機械・自走できない機械も相談可。出張査定無料。")
+    L.append("- 関連事業: 解体工事（" + SAME_AS[1] + "）、金属スクラップ買取、通販・卸売。"
+             "コーポレートサイトは " + SAME_AS[0])
+    L.append("- 掲載していないもの: 施工実績の件数、お客様の声の創作、"
+             "具体的な一律料金表（㎥単価以外）、代表者名")
+    L += sec("主なサービス", svc_order)
+    L += sec("農機具の買取り", nouki_order)
+    L += sec("料金・ご利用案内", guide_order)
+    if "jirei" in titles:
+        L += sec("対応事例", ["jirei"])
+    L.append("")
+    L.append("## コラム（解説記事）")
+    L.append("")
+    L.append("- [コラム一覧](" + DOMAIN + "/column/): 片付け・不用品回収・生前整理・"
+             "遺品整理・空き家・農機具買取などの解説記事。")
+    L.append("")
+    L.append("## 問い合わせ")
+    L.append("")
+    L.append("- 電話: " + TEL + "（受付時間内）")
+    L.append("- フォーム: " + DOMAIN + "/contact/")
+    L.append("- メール: " + MAIL)
+    L.append("")
+    txt = "\n".join(L) + "\n"
+    with io.open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8") as f:
+        f.write(txt)
+    return txt
 
 
 # ============================================================
@@ -2042,10 +3340,27 @@ def build_all():
         with io.open(fn, "w", encoding="utf-8") as f:
             f.write(content)
         manifest.append({"slug": slug, "title": title, "desc": PAGE_DESC.get(slug, ""),
+                         "seo_title": SEO_TITLE.get(slug, ""),
                          "b64": base64.b64encode(content.encode("utf-8")).decode("ascii")})
     with io.open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False)
 
+    # SEOタイトル・説明文の長さ点検（検索結果で切られないか）
+    for slug, _t, _c in PAGES:
+        st = SEO_TITLE.get(slug, "")
+        if not st:
+            print("  !! SEO_TITLE 未設定:", slug)
+        elif len(st) > 38:
+            print("  !! SEO_TITLE が長い(%d字): %s" % (len(st), slug))
+        d = PAGE_DESC.get(slug, "")
+        if not d:
+            print("  !! description 未設定:", slug)
+        elif not (70 <= len(d) <= 125):
+            print("  !! description の長さ(%d字): %s" % (len(d), slug))
+
+    llms = build_llms_txt()
+
+    print("llms.txt  :", len(llms), "bytes")
     print("index.html:", idx_len, "bytes")
     print("extra.css :", len(DESIGN_CSS), "bytes")
     print("pages:", len(PAGES))
