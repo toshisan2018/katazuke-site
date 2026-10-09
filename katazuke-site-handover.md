@@ -255,3 +255,105 @@ meta description / OGP（title・description・type・url）設定済み。JSON-
 - **/katazuke-shimada/ は未登録（Googleに未検出）**。サイトマップ(page-sitemap.xml)には入っている。登録リクエストは当日の割り当て超過で不可 → **10/6以降にURL検査から「インデックス登録をリクエスト」を実施すること**。
 - 「ページのインデックス登録」レポートは両サイトとも「データを処理しています」で未集計（URLプレフィックス型プロパティを最近追加したため）。
 - GSC操作のコツ（追記）：検索欄は find で textbox の ref を取り、クリック→End→Backspace連打→入力→Enter が確実（ctrl+a は「a」が入力されてしまう）。browser_batch は1〜2URL分までに分けないとタイムアウトする。URL検査の直リンク（inspect?…&id=）は404。
+
+## 18. 2026-10-10 SEO/AIO 本格強化（料金公開・農機具階層化・ヘッダー/フッター/トップ刷新）
+
+### 18-1. 料金を公開（社長指示）
+- **片付け・不用品回収＝1㎥あたり20,000円から** を公開。`build_pages.py` の
+  `PRICE_PER_M3 = 20000` / `PRICE_TAX = ""` / `PRICE_LABEL` で一元管理（金額変更はここだけ直す）。
+- `/ryoukin/` を全面改訂：㎥の目安表（押入れ下段≒1㎥ ほか）、料金に含まれるもの／無料のもの／
+  別途になるもの（家電リサイクル法の法定料金）／お引きするもの（買取査定額）、
+  「から」が動く条件、費用を抑える5つのコツ、見積りまでの流れ、FAQ 8問。
+- 構造化データに **Service + Offer + UnitPriceSpecification**（price=20000, unitCode=MTQ）を追加。
+  価格をAI検索・リッチリザルトに拾わせるため。
+- トップにも「料金のめやす」セクションを新設、ヒーローに料金バッジ、フッターに㎥単価。
+- **⚠ 未確定**: 税込／税別の表記。現在は断定せず「1㎥あたり20,000円から」とし、
+  本文の注記で「消費税の取り扱いを含む正確な金額は現地確認のうえ無料でお見積り」としている。
+  確定したら `PRICE_TAX = "（税込）"` 等にして再生成・再公開する（総額表示義務の観点で要確定）。
+
+### 18-2. 農機具買取を6ページに階層化（社長が注力したい領域）
+- ハブ `/nouki-kaitori/` を全面強化：対応機種、**対応メーカー（メーカー不問。提携・代理店ではない旨を明記）**、
+  査定で見る7ポイント、動かない/自走できない機械、古物営業法による本人確認、片付けとの同時依頼、FAQ 8問。
+- 機種別ページを新設（`NOUKI_TYPES` / `NOUKI_DETAIL` で管理）:
+  `/nouki-tractor/` `/nouki-combine/` `/nouki-taue/` `/nouki-kouunki/` `/nouki-kusakari/`
+- エリアページ `/nouki-kaitori-shizuoka/` を新設（県中部の茶園・水田の実情に触れた本文）。
+- トップに「農機具の買取り」専用セクション（濃色・機種カード6枚・出張査定無料ほか4訴求）。
+- フッターに「農機具の買取り」カラムを新設（7リンク）。
+
+### 18-3. 対応事例 `/jirei/`（**未公開。社長の記入待ち**）
+- 実在しない事例を「実績」として公開しないため、**`assets/jirei-data.json` の
+  `confirmed: true` の事例だけがページに出る**仕組み。現在は全件 false なので `/jirei/` は生成されない。
+- 記入シート: `docs/jirei-kinyu-sheet.md`（市町名まで・お名前と番地は書かない等のルール付き）。
+- **3件記入された時点で公開可**。公開したらナビ／フッターに「対応事例」を追加し、GSCで登録リクエスト。
+
+### 18-4. タイトル・説明文
+- **`SEO_TITLE` を新設**（build_pages.py）。全ページのAIOSEOタイトルを明示設定し、
+  それまで全ページに付いていた **サイト名サフィックス「- おうち片付け隊」を除去**。
+  40〜47字→13〜36字になり、検索結果で切られなくなった。
+- 記事・コラム一覧も `publish_bundle.py` で `seo_title = title` を送ってサフィックスを除去。
+- meta description を全38件 **81〜117字** に統一（短すぎた8件を加筆）。
+- **⚠ 未対応**: WordPressのサイトタイトルが **「おうち片付け隊」**（正しくは「おうちのお片付け隊」）。
+  og:site_name にだけ出る。設定変更は社長の確認待ち（設定 > 一般 > サイトのタイトル）。
+
+### 18-5. 構造化データ・AIO
+- `local_business_jsonld()` を新設：住所・緯度経度・`areaServed`（12市町）・`hasOfferCatalog`・
+  `sameAs`（amt-eco.com / kaitai.amt-eco.com）・`knowsAbout`・`priceRange` まで。トップ・料金・事例で出力。
+- トップに **WebSite** スキーマを追加（`@id` で LocalBusiness と連結）。
+- `/flow/` に **HowTo**（6ステップ・estimatedCost に㎥単価）と FAQ 6問を追加。
+- `/jirei/` に ItemList（公開時）。
+- **`llms.txt` を `build_pages.py` が生成**（リポジトリ直下 `llms.txt`、5.2KB）。
+  確定事実（料金・許可の範囲・買取方針・掲載しないもの）とページ一覧をAI検索向けに要約。
+  **⚠ 未設置**: ドキュメントルートへの配置が必要。解体サイトと同じく
+  **Xserverのファイルマネージャーで `katazuke.amt-eco.com` の直下にアップロード**する
+  （WordPress経由では配信できない。WPCodeのPHPスニペットでも可能だが本番リスクを避けて未実施）。
+
+### 18-6. ヘッダー／フッター／トップのデザイン（社長依頼）
+- ヘッダー: **スティッキー化**、上部に信頼バー（拠点・古物商許可番号・個人法人対応・出張見積り無料）、
+  電話ボタン（ラベル＋番号の2段）＋**「無料見積り」ボタン**、ナビを**11項目1段**に整理。
+- フッター: **5カラム**（会社情報＋㎥単価＋古物商許可／サービス／農機具買取／ご案内／お問い合わせ）、
+  下部に対応エリア帯、解体工事サイトへのリンクを追加。
+- **スマホ下部に固定CTAバー**（電話／無料見積り）を全ページに追加（`sticky_cta()`）。
+- トップのセクション順: ヒーロー → 想い → 対応業務 → **料金** → お困りごと → **農機具** →
+  選ばれる理由 → 許可・登録 → ご利用の流れ → 対応エリア → **コラム** → 会社概要 → CTA。
+- CSSは `V3_CSS`（build_pages.py）に追記。V2以前は触っていない。
+
+### 18-7. 点検（audit_live.py を拡張）
+- 追加した点検: title の長さ・サイト名サフィックス・重複／description の長さ(70〜125字)・重複／
+  canonical の一致／JSON-LDの種別（BreadcrumbList・LocalBusiness・HowTo・UnitPriceSpecification）／
+  h1 の有無／alt の無い img／llms.txt の配信。
+- 2026-10-10 の結果: **全38ページ 200・問題は llms.txt 未設置の1件のみ**。
+
+### 18-8. 公開の方法（bundle.json を使わない新しいやり方）
+bundle.json（2.9MB）はブラウザに渡しづらいので、**GitHub raw から再構成**する方式にした。
+1. `python assets/build_pages.py && python assets/publish_bundle.py`
+   （`assets/page-css.css` も出力される。**これはGit管理下**）
+2. `git push`（manifest 3本と page-css.css が上がる）
+3. 管理画面（`/wp-admin/post-new.php` など wpApiSettings があるページ）で、
+   `raw.githubusercontent.com/toshisan2018/katazuke-site/<コミットSHA>/assets/` から
+   `pages/manifest.json`・`articles/manifest.json`・`articles/page_manifest.json`・`page-css.css`
+   を fetch → base64デコード → 固定ページ本文の先頭に `<style id="amt-katazuke-css">` を付けて
+   `window.__BUNDLE` を組み立てる。
+   **※ raw は `main` だとCDNキャッシュで古いものが返る。必ずコミットSHAを指定する。**
+4. slug で `/wp/v2/{pages|posts}?slug=…&status=any&context=edit` を引いてIDを取得。
+   無ければ新規作成（body に `slug` を入れる）。
+5. `POST /wp/v2/{type}/{id}` に
+   `{title, content, status:'publish', aioseo_meta_data:{title: seo_title, description, og_image_type:'custom_image', og_image_custom_url, twitter_use_og:true}}`
+6. 8〜12件ずつに分けて実行（1回で38件だとタイムアウトしやすい）。
+
+### 18-9. Search Console（2026-10-10 実施）
+- **インデックス登録をリクエスト済み（8URL）**:
+  `/katazuke-shimada/`（10/5からの持ち越し）・`/nouki-kaitori-shizuoka/`・`/nouki-tractor/`・
+  `/nouki-combine/`・`/nouki-taue/`・`/nouki-kouunki/`・`/nouki-kusakari/`・`/ryoukin/`
+- page-sitemap.xml に全27固定ページが載っていることを確認済み。
+- **GSC自動操作のコツ（追記）**: 「インデックス登録をリクエスト済み」ダイアログを閉じた直後に
+  同じ browser_batch 内で検索欄へ入力すると**入力が入らない**。
+  ダイアログを閉じるのは**単独の呼び出し**にし、次の呼び出しで
+  `find`→`ref` クリック→End→Backspace×60→入力→Enter にすると確実。
+  入力後は必ずパンくず（画面上部のURL表示）をズームで確認してからリクエストを押すこと。
+
+### 18-10. 残作業
+1. **`llms.txt` をドキュメントルートへ設置**（Xserverファイルマネージャー）。
+2. **税込／税別の確定** → `PRICE_TAX` を設定して再生成・再公開。
+3. **対応事例の記入**（`docs/jirei-kinyu-sheet.md`）→ `jirei-data.json` に反映 → `/jirei/` 公開。
+4. **サイトタイトルの綴り**「おうち片付け隊」→「おうちのお片付け隊」（社長確認後）。
+5. 数週間後にGSCで「農機具 買取 静岡」「島田市 不用品回収」「不用品回収 料金」等の順位・CTRを確認。
