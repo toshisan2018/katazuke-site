@@ -41,6 +41,11 @@ def main():
         items.append({"type": "posts", "slug": p["slug"], "title": p["title"], "desc": p.get("desc", ""),
                       "seo_title": p.get("seo_title") or p["title"],
                       "content": _content(p)})
+    # ブラウザ側で bundle を組み立て直せるように、公開用CSS（コメント除去済み）も
+    # Git管理下に書き出す（raw.githubusercontent.com から取得して使う）。
+    with io.open(os.path.join(HERE, "page-css.css"), "w", encoding="utf-8") as f:
+        f.write(PAGE_CSS)
+
     out = os.path.join(HERE, "publish")
     os.makedirs(out, exist_ok=True)
     with io.open(os.path.join(out, "bundle.json"), "w", encoding="utf-8") as f:
