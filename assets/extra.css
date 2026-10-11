@@ -727,3 +727,42 @@ body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu
 /* 長い見出し・語がスマホで溢れないための保険 */
 .amt-katazuke h1,.amt-katazuke h2,.amt-katazuke h3{overflow-wrap:anywhere;}
 .amt-katazuke .foot-logo .fl-tx{overflow-wrap:anywhere;}
+
+/* ---- ページ内目次（h2が多い長いページ） ---- */
+.amt-katazuke .k-toc{background:#fff;border:1px solid #eee;border-left:6px solid var(--primary);border-radius:10px;padding:18px 24px;margin:0 0 30px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.amt-katazuke .k-toc-h{font-weight:900;color:var(--dark);margin:0 0 10px;font-size:1.05rem;}
+.amt-katazuke .k-toc ol{margin:0 0 0 1.3em;padding:0;}
+.amt-katazuke .k-toc li{margin-bottom:7px;font-size:.95rem;}
+.amt-katazuke .k-toc a{color:var(--link);text-decoration:none;}
+.amt-katazuke .k-toc a:hover{text-decoration:underline;}
+.amt-katazuke .prose h2[id]{scroll-margin-top:96px;}
+/* ---- 表のスマホ対応（はみ出さずに横スクロール） ---- */
+.amt-katazuke .prose table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.amt-katazuke .prose table tbody,.amt-katazuke .prose table thead{display:table;width:100%;}
+@media(max-width:600px){
+  .amt-katazuke .prose table{font-size:.88rem;}
+  .amt-katazuke .prose table th,.amt-katazuke .prose table td{padding:10px 12px;}
+}
+/* ---- 量のめやすツール ---- */
+.amt-katazuke .kz-calc{background:#fff;border:1px solid #eee;border-top:6px solid var(--primary);border-radius:14px;padding:26px 28px 22px;box-shadow:0 8px 24px rgba(30,36,40,.08);margin:0 0 28px;}
+.amt-katazuke .kz-calc-h{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:900;color:var(--dark);margin:0 0 6px;}
+.amt-katazuke .kz-calc-h span{background:var(--primary);color:var(--ink);font-size:.7rem;padding:3px 10px;border-radius:999px;}
+.amt-katazuke .kz-calc-lead{font-size:.95rem;color:#5c5750;margin:0 0 18px;}
+.amt-katazuke .kz-calc-list{list-style:none;margin:0 0 18px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(282px,1fr));gap:10px;}
+.amt-katazuke .kz-calc-list li{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--gray);border-radius:8px;padding:10px 12px 10px 14px;}
+.amt-katazuke .kz-calc-list .kc-nm{font-size:.92rem;line-height:1.5;}
+.amt-katazuke .kz-calc-list .kc-nm i{display:block;font-style:normal;font-size:.76rem;color:#8a8278;}
+.amt-katazuke .kz-calc-ctl{display:flex;align-items:center;gap:8px;flex:0 0 auto;}
+.amt-katazuke .kz-calc-ctl button{width:32px;height:32px;border:0;border-radius:8px;background:var(--dark);color:#fff;font-size:1.1rem;font-weight:900;line-height:1;cursor:pointer;}
+.amt-katazuke .kz-calc-ctl button:hover{background:var(--dark-2);}
+.amt-katazuke .kz-calc-ctl output{min-width:1.6em;text-align:center;font-weight:900;font-size:1.02rem;color:var(--dark);}
+.amt-katazuke .kz-calc-out{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:baseline;background:var(--dark);color:#fff;border-radius:10px;padding:16px 22px;}
+.amt-katazuke .kz-calc-out p{margin:0;font-size:.95rem;color:#e9e4da;}
+.amt-katazuke .kz-calc-out b{font-size:1.9rem;font-weight:900;color:var(--primary-bright);margin:0 4px;letter-spacing:.01em;}
+.amt-katazuke .kz-calc-note{font-size:.82rem;color:#8a8278;line-height:1.8;margin:12px 0 0;}
+.amt-katazuke .kz-calc-reset{margin:12px 0 0;}
+.amt-katazuke .kz-calc-reset button{background:none;border:1px solid #ddd;border-radius:8px;padding:6px 14px;font-size:.84rem;color:#6d665e;cursor:pointer;}
+@media(max-width:600px){
+  .amt-katazuke .kz-calc{padding:20px 16px 16px;}
+  .amt-katazuke .kz-calc-out b{font-size:1.6rem;}
+}

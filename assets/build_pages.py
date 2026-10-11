@@ -18,7 +18,9 @@ AMT共通デザインシステムを黄色系統に置き換えて使用する�
   - 掲載する電話番号は CONFIG の TEL 1件のみ。
   - 許認可・資格は保有していないため記載しない（会社概要にも資格欄を置かない）。
 """
-import json, os, base64, io, re
+import json, os, base64, io, re, sys
+
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # ㎥ などを Windows の cp932 コンソールでも表示できるように
 
 HERE = os.path.dirname(__file__)
 OUT = os.path.join(HERE, "pages")
@@ -61,6 +63,18 @@ PRICE_CURRENCY = "JPY"
 # 対応エリア（JSON-LD areaServed・llms.txt で使う市町。確定情報）
 AREA_CITIES = ["島田市", "藤枝市", "焼津市", "掛川市", "菊川市", "牧之原市",
                "静岡市", "吉田町", "川根本町", "磐田市", "袋井市", "御前崎市"]
+
+# 市町名 → 市町別ページのURL（フッターの対応エリア帯・対応エリアページをリンク化する）
+# ※ページ本体は後半の「10b. 市町別の地域ページ」で生成する。
+CITY_PAGE_BY_NAME = {
+    "島田市": "/katazuke-shimada/",
+    "藤枝市": "/katazuke-fujieda/",
+    "焼津市": "/katazuke-yaizu/",
+    "掛川市": "/katazuke-kakegawa/",
+    "菊川市": "/katazuke-kikugawa/",
+    "牧之原市": "/katazuke-makinohara/",
+    "吉田町": "/katazuke-yoshida/",
+}
 
 # 本社の緯度経度（静岡県島田市金谷東2丁目3483-290）
 GEO_LAT = 34.8213
@@ -921,6 +935,52 @@ V3_CSS = V3_CSS + """
 """
 DESIGN_CSS = DESIGN_CSS + V3_CSS
 
+# ============================================================
+# V4 CSS（2026-10-12）目次・量のめやすツール・表のスマホ対応
+# ============================================================
+V4_CSS = """
+/* ---- ページ内目次（h2が多い長いページ） ---- */
+.amt-katazuke .k-toc{background:#fff;border:1px solid #eee;border-left:6px solid var(--primary);border-radius:10px;padding:18px 24px;margin:0 0 30px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.amt-katazuke .k-toc-h{font-weight:900;color:var(--dark);margin:0 0 10px;font-size:1.05rem;}
+.amt-katazuke .k-toc ol{margin:0 0 0 1.3em;padding:0;}
+.amt-katazuke .k-toc li{margin-bottom:7px;font-size:.95rem;}
+.amt-katazuke .k-toc a{color:var(--link);text-decoration:none;}
+.amt-katazuke .k-toc a:hover{text-decoration:underline;}
+.amt-katazuke .prose h2[id]{scroll-margin-top:96px;}
+/* ---- 表のスマホ対応（はみ出さずに横スクロール） ---- */
+.amt-katazuke .prose table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.amt-katazuke .prose table tbody,.amt-katazuke .prose table thead{display:table;width:100%;}
+@media(max-width:600px){
+  .amt-katazuke .prose table{font-size:.88rem;}
+  .amt-katazuke .prose table th,.amt-katazuke .prose table td{padding:10px 12px;}
+}
+/* ---- 量のめやすツール ---- */
+.amt-katazuke .kz-calc{background:#fff;border:1px solid #eee;border-top:6px solid var(--primary);border-radius:14px;padding:26px 28px 22px;box-shadow:0 8px 24px rgba(30,36,40,.08);margin:0 0 28px;}
+.amt-katazuke .kz-calc-h{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:900;color:var(--dark);margin:0 0 6px;}
+.amt-katazuke .kz-calc-h span{background:var(--primary);color:var(--ink);font-size:.7rem;padding:3px 10px;border-radius:999px;}
+.amt-katazuke .kz-calc-lead{font-size:.95rem;color:#5c5750;margin:0 0 18px;}
+.amt-katazuke .kz-calc-list{list-style:none;margin:0 0 18px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(282px,1fr));gap:10px;}
+.amt-katazuke .kz-calc-list li{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--gray);border-radius:8px;padding:10px 12px 10px 14px;}
+.amt-katazuke .kz-calc-list .kc-nm{font-size:.92rem;line-height:1.5;}
+.amt-katazuke .kz-calc-list .kc-nm i{display:block;font-style:normal;font-size:.76rem;color:#8a8278;}
+.amt-katazuke .kz-calc-ctl{display:flex;align-items:center;gap:8px;flex:0 0 auto;}
+.amt-katazuke .kz-calc-ctl button{width:32px;height:32px;border:0;border-radius:8px;background:var(--dark);color:#fff;font-size:1.1rem;font-weight:900;line-height:1;cursor:pointer;}
+.amt-katazuke .kz-calc-ctl button:hover{background:var(--dark-2);}
+.amt-katazuke .kz-calc-ctl output{min-width:1.6em;text-align:center;font-weight:900;font-size:1.02rem;color:var(--dark);}
+.amt-katazuke .kz-calc-out{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:baseline;background:var(--dark);color:#fff;border-radius:10px;padding:16px 22px;}
+.amt-katazuke .kz-calc-out p{margin:0;font-size:.95rem;color:#e9e4da;}
+.amt-katazuke .kz-calc-out b{font-size:1.9rem;font-weight:900;color:var(--primary-bright);margin:0 4px;letter-spacing:.01em;}
+.amt-katazuke .kz-calc-note{font-size:.82rem;color:#8a8278;line-height:1.8;margin:12px 0 0;}
+.amt-katazuke .kz-calc-reset{margin:12px 0 0;}
+.amt-katazuke .kz-calc-reset button{background:none;border:1px solid #ddd;border-radius:8px;padding:6px 14px;font-size:.84rem;color:#6d665e;cursor:pointer;}
+@media(max-width:600px){
+  .amt-katazuke .kz-calc{padding:20px 16px 16px;}
+  .amt-katazuke .kz-calc-out b{font-size:1.6rem;}
+}
+"""
+DESIGN_CSS = DESIGN_CSS + V4_CSS
+
+
 # ロゴマーク（片付け＝きれいに整った家＋きらめき）。文字は入れない。
 LOGO_SVG = (
     '<svg viewBox="0 0 48 48" width="46" height="46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
@@ -1005,7 +1065,9 @@ def footer():
     svc = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in FOOT_SERVICE)
     nouki = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in FOOT_NOUKI)
     gui = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in FOOT_GUIDE)
-    areas = "・".join(AREA_CITIES)
+    areas = "・".join(
+        ('<a href="%s">%s</a>' % (CITY_PAGE_BY_NAME[c], c)) if c in CITY_PAGE_BY_NAME else c
+        for c in AREA_CITIES)
     return (
         '<footer class="k-footer">'
         '<div class="foot-inner">'
@@ -1227,6 +1289,91 @@ def itemlist_jsonld(name, desc, url, items):
     }
 
 
+# 「量のめやすツール」で使う品目（㎥は本文の早見表と同じ考え方の目安）
+VOL_ITEMS = [
+    ("押入れの下段（1間ぶん）", "中身ひと段ぶんで約1㎥", 1.0),
+    ("段ボール（みかん箱サイズ）", "8箱で約1㎥", 0.125),
+    ("2ドア冷蔵庫", "1台で約0.4㎥（大型はもう少し大きめ）", 0.4),
+    ("洗濯機", "1台で約0.3㎥", 0.3),
+    ("3人掛けソファ", "1台で約1.2㎥（L字型はもっと大きめ）", 1.2),
+    ("シングルベッド", "フレーム＋マットレスで約1.2㎥", 1.2),
+    ("タンス・食器棚（大）", "幅90cm前後で約1㎥", 1.0),
+    ("布団　一組", "敷・掛のセットで約0.3㎥", 0.3),
+]
+
+
+def volume_calc():
+    """量のめやすツール（JSは同梱。正式な見積りではない旨を明示する）。"""
+    lis = []
+    for i, (nm, note, v) in enumerate(VOL_ITEMS):
+        lis.append(
+            '<li>'
+            f'<span class="kc-nm">{nm}<i>{note}</i></span>'
+            '<span class="kz-calc-ctl">'
+            f'<button type="button" aria-label="{nm}を1つ減らす" data-kc="-1" data-i="{i}">−</button>'
+            f'<output id="kc{i}" data-v="{v}">0</output>'
+            f'<button type="button" aria-label="{nm}を1つ増やす" data-kc="1" data-i="{i}">＋</button>'
+            '</span></li>')
+    items_js = ",".join(str(v) for _n, _d, v in VOL_ITEMS)
+    return (
+        '<div class="kz-calc" id="kzCalc">'
+        '<p class="kz-calc-h">量のめやすツール<span>目安</span></p>'
+        '<p class="kz-calc-lead">手放すものの数を入れると、おおよその体積（㎥）と費用の目安が出ます。'
+        '正式なお見積りは、現地確認のうえ無料でお出しします。</p>'
+        '<ul class="kz-calc-list">' + "".join(lis) + '</ul>'
+        '<div class="kz-calc-out">'
+        '<p>合計の体積　<b id="kcVol">0</b>㎥</p>'
+        '<p>費用の目安　<b id="kcYen">—</b></p>'
+        '</div>'
+        '<p class="kz-calc-reset"><button type="button" id="kcReset">入力をリセット</button></p>'
+        '<p class="kz-calc-note">※体積は一般的な目安で、品物の形状や積み方によって変わります。'
+        '費用の目安は' + PRICE_LABEL + 'で計算した概算で、'
+        '搬出経路・階数・買取できる品の有無によって変わります。'
+        '消費税の取り扱いを含む正確な金額は、現地確認のうえ無料でお見積りします。'
+        '家電リサイクル法の対象品の法定リサイクル料金は別途です。</p>'
+        '</div>'
+        '<script>(function(){'
+        'var V=[' + items_js + '],N=V.map(function(){return 0;}),'
+        'U=' + str(PRICE_PER_M3) + ';'
+        'var c=document.getElementById("kzCalc");if(!c)return;'
+        r'function f(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");}'
+        'function draw(){var t=0;for(var i=0;i<V.length;i++){t+=V[i]*N[i];'
+        'var o=document.getElementById("kc"+i);if(o)o.textContent=N[i];}'
+        't=Math.round(t*10)/10;'
+        'document.getElementById("kcVol").textContent=t;'
+        'var y=document.getElementById("kcYen");'
+        'if(t<=0){y.textContent="—";}else{'
+        'var yen=Math.ceil(t*U/1000)*1000;y.textContent=f(yen)+"円から";}}'
+        'c.addEventListener("click",function(e){'
+        'var b=e.target.closest("button[data-kc]");'
+        'if(b){var i=+b.dataset.i,d=+b.dataset.kc;'
+        'N[i]=Math.max(0,Math.min(99,N[i]+d));draw();return;}'
+        'if(e.target.id==="kcReset"){N=N.map(function(){return 0;});draw();}});'
+        'draw();})();</script>'
+    )
+
+
+def add_toc(body, min_h2=5, heading="このページの内容"):
+    """本文の <h2> に id を振り、最初の h2 の直前に目次を差し込む。
+       h2 が min_h2 本未満のページは何もしない（短いページに目次は不要）。"""
+    found = re.findall(r"<h2>(.*?)</h2>", body, re.S)
+    if len(found) < min_h2:
+        return body
+    items = []
+
+    def _sub(m):
+        i = len(items) + 1
+        label = re.sub(r"<[^>]+>", "", m.group(1)).strip()
+        items.append(("sec%d" % i, label))
+        return '<h2 id="sec%d">%s</h2>' % (i, m.group(1))
+
+    body = re.sub(r"<h2>(.*?)</h2>", _sub, body, flags=re.S)
+    lis = "".join('<li><a href="#%s">%s</a></li>' % (i, t) for i, t in items)
+    toc = ('<nav class="k-toc" aria-label="目次"><p class="k-toc-h">' + heading + '</p>'
+           '<ol>' + lis + '</ol></nav>')
+    return body.replace('<h2 id="sec1">', toc + '<h2 id="sec1">', 1)
+
+
 def assemble(slug, breadcrumb_label, hero_h1, hero_lead, body_html,
              faq_items, rel_cards, jsonlds, hero_img=None, hero_illust=None):
     """下層ページ本体を wp:html ブロックとして組み立てる。"""
@@ -1257,6 +1404,22 @@ def assemble(slug, breadcrumb_label, hero_h1, hero_lead, body_html,
             )
     return "\n\n".join([html_block] + scripts), url
 
+
+# 対応事例（/jirei/）の掲載データ。confirmed=true の事例だけを使う。
+#   ※/jirei/ ページ本体は後半で生成する。0件のときはページを作らないため、
+#     他ページから /jirei/ へリンクしないようここで先に読み込む（404リンク防止）。
+def _load_jirei():
+    path = os.path.join(HERE, "jirei-data.json")
+    try:
+        with io.open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (IOError, ValueError):
+        return []
+    return [it for it in data.get("items", [])
+            if it.get("confirmed") and it.get("title")]
+
+
+JIREI_ITEMS = _load_jirei()
 
 PAGES = []
 
@@ -1424,6 +1587,9 @@ add_service_page(
     '<p class="lead">解体やリフォームの前に必要な、建物内の残置物撤去に対応します。'
     '家財・設備・不用品をまとめて撤去し、次の工事へスムーズに進められるようにします。</p>'
     '<h2>残置物撤去とは</h2>'
+    '<p>なぜ解体の前に片付けが必要なのか、進め方と費用の考え方は'
+    '<a href="/zanchibutsu-kaitai/">残置物撤去とは？解体前に片付けが必要な理由（コラム）</a>'
+    'でくわしく解説しています。</p>'
     '<p>建物を解体する前には、室内に残った家具・家電・生活用品などの'
     '「残置物」を撤去しておく必要があります。'
     '残置物が多いと解体費用が上がることもあるため、事前の撤去が有効です。</p>'
@@ -1468,6 +1634,9 @@ add_service_page(
     '<li>店舗・事務所の移転・閉店にともなう片付け</li>'
     '<li>金属・機械が混ざった品物の整理</li></ul>'
     '<h2>金属・機械の買取もあわせて</h2>'
+    '<p>鉄と非鉄の見分け方や、金属として売るか中古機械として売るかの考え方は'
+    '<a href="/tetsukuzu-scrap/">倉庫・納屋の片付けで出る鉄くず・金属はどうなる？（コラム）</a>'
+    'にまとめました。</p>'
     '<p>株式会社AMTは金属スクラップの買取も本業としています。'
     '倉庫に眠る金属や機械類の中に買取できるものがあれば、'
     '<strong>片付け費用へ反映できる場合があります</strong>。'
@@ -1610,6 +1779,8 @@ add_service_page(
     'ぬかるんだ農地に置いたままの機械も、積み込みの方法からご相談ください。</p>'
 
     '<h2>買取のときに必要なもの</h2>'
+    '<p>本人確認やナンバーのある機械の届け出まで、手続きの流れは'
+    '<a href="/nouki-tetsuzuki/">農機具を売るときの手続き（コラム）</a>でご案内しています。</p>'
     '<ul>'
     '<li><strong>身分を確認できるもの</strong>（運転免許証など）'
     '※古物営業法により、買取のときに本人確認が必要です</li>'
@@ -1998,6 +2169,8 @@ c, _ = assemble(
     '</tbody></table>'
     '<p class="note">※上記は体積のイメージをつかんでいただくための一般的な目安で、'
     '品物の形状や積み方によって変わります。実際の㎥数は現地で確認して算出します。</p>'
+    '<h3>量のめやすを計算してみる</h3>'
+    + volume_calc() +
     '</div></section>'
 
     # ---- 料金に含まれるもの／別途になるもの ----
@@ -2051,6 +2224,7 @@ c, _ = assemble(
 
     # ---- 費用を抑えるコツ ----
     '<section class="k-section"><div class="prose">'
+    '<p>見積りに出てくる「㎥」の読み方は<a href="/fuyouhin-ryou-m3/">不用品の量「1㎥」はどれくらい？（コラム）</a>で、複数社を比べるときの見方は<a href="/gyousha-erabikata/">片付け業者の選び方（コラム）</a>で解説しています。</p>'
     '<h2>費用を抑える5つのコツ</h2>'
     '<ol>'
     '<li><strong>残すもの・処分するものを先に分けておく</strong>。仕分けの時間が減り、㎥数も正確に出せます。</li>'
@@ -2161,9 +2335,10 @@ c, _ = assemble(
     "お問い合わせ・現地確認・お見積り・作業・完了までの流れをご案内します。お見積り無料。",
     flow_body, FLOW_FAQ,
     [("/ryoukin/", "料金・費用について", PRICE_LABEL),
-     ("/faq/", "よくある質問", "対応品目・流れ"),
-     ("/jirei/", "対応事例", "実際の作業の例"),
-     ("/contact/", "お問い合わせ", "電話・メールで相談")],
+     ("/faq/", "よくある質問", "対応品目・流れ")]
+    + ([("/jirei/", "対応事例", "実際の作業の例")] if JIREI_ITEMS else
+       [("/gyousha-erabikata/", "片付け業者の選び方", "見積りで見るポイント")])
+    + [("/contact/", "お問い合わせ", "電話・メールで相談")],
     [howto_jsonld(
         "片付け・不用品回収のご依頼の流れ",
         "お問い合わせから現地確認・お見積り・作業・完了までの流れ。現地確認とお見積りは無料です。",
@@ -2213,10 +2388,19 @@ area_body = (
     '<p class="lead">静岡県内を中心に、片付け・不用品回収・残置物撤去・倉庫の片付け・'
     '農機具の買取りを承っています。下記エリアはもちろん、近隣地域もまずはご相談ください。</p>'
     f'<div class="area-map"><img src="{IMG["area_map"]}" alt="対応エリアマップ：静岡県島田市を中心に藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市など" width="1200" height="761" loading="lazy"></div>'
-    '<h2>主な対応エリア</h2>'
+    '<h2>市町別のご案内ページ</h2>'
+    '<p>市町によって、粗大ごみの出し方や施設への自己搬入のきまりは大きく違います。'
+    '「自分で出したほうが安いのか、まとめて頼んだほうが早いのか」を判断しやすいよう、'
+    '市町ごとにご案内ページを用意しました。お住まいの市町をご覧ください。</p>'
     '<ul>'
-    '<li>島田市（金谷を含む）</li><li>藤枝市</li><li>焼津市</li><li>静岡市</li>'
-    '<li>掛川市</li><li>菊川市</li><li>牧之原市</li><li>浜松市</li></ul>'
+    + "".join('<li><a href="%s">%s の片付け・不用品回収</a></li>' % (u, c)
+              for c, u in CITY_PAGE_BY_NAME.items())
+    + '</ul>'
+    '<p>市町ごとの違いと調べ方の手順は<a href="/shizuoka-sodaigomi/">静岡県中部の粗大ごみ・自己搬入は市町でこんなに違う（コラム）</a>でまとめて解説しています。</p>'
+    '<h2>そのほかの対応エリア</h2>'
+    '<p>ご案内ページのない市町も、下記のとおり対応しています。</p>'
+    '<ul><li>静岡市</li><li>浜松市</li><li>磐田市</li><li>袋井市</li>'
+    '<li>御前崎市</li><li>川根本町</li></ul>'
     '<p>上記以外の静岡県内の地域や、県外の物件についてもご相談を承ります。'
     '空き家や遠方の物件の片付けもお気軽にお問い合わせください。</p>'
     '<h2>現地確認でエリアの条件を確認します</h2>'
@@ -2229,11 +2413,24 @@ c, _ = assemble(
     "area", "対応エリア",
     "対応エリア｜静岡県内中心｜おうちのお片付け隊（株式会社AMT）",
     "島田市・藤枝市・焼津市・静岡市・掛川市・菊川市・牧之原市・浜松市ほか、静岡県内を中心に片付け・不用品回収に対応します。",
-    area_body, [],
+    area_body,
+    [("対応エリア以外でも相談できますか？",
+      "お気軽にご相談ください。静岡県内であればおおむね対応しています。県外の物件や遠方の空き家についても、物量と日程をお聞きしたうえで可否をお返事します。"),
+     ("出張費や現地確認の費用はかかりますか？",
+      "現地確認・お見積り・出張費はいただきません。お見積りをご覧になってからご判断いただけます。"),
+     ("市の粗大ごみに出すのと、どちらが安いですか？",
+      "大きなものが数点だけで、ご自身で分別・運搬できる場合は、市町の制度で出されたほうが安く済むことが多いです。量が多い・運び出せない・期日があるという場合は、まとめてお任せいただくほうが早く確実です。お見積りは無料ですので比べてお決めください。"),
+     ("遠方に住んでいて立ち会えません。",
+      "遠方のお客様のご依頼にも対応しています。現地確認のうえお見積りをお送りし、作業の前後は写真でご報告します。鍵のお預かり方法などもご相談ください。")],
     [("/katazuke/", "家のお片付け", "住まいの片付け"),
      ("/flow/", "ご利用の流れ", "お問い合わせから完了まで"),
      ("/contact/", "お問い合わせ", "電話・メールで相談")],
-    [breadcrumb_jsonld("対応エリア", "/area/")],
+    [breadcrumb_jsonld("対応エリア", "/area/"),
+     itemlist_jsonld("対応エリア（市町別のご案内ページ）",
+                     "おうちのお片付け隊（株式会社AMT）が市町別にご案内しているページの一覧。",
+                     "/area/",
+                     [(c + "の片付け・不用品回収", u,
+                       c + "の片付け・不用品回収・残置物撤去・農機具買取のご案内") for c, u in CITY_PAGE_BY_NAME.items()])],
 )
 PAGES.append(("area", "対応エリア｜静岡県内中心｜おうちのお片付け隊（株式会社AMT）", c))
 
@@ -2503,6 +2700,8 @@ add_service_page(
     'まだ使えるものは<strong>古物商許可（静岡県公安委員会）</strong>のもとで買取し、費用に反映できる場合があります。</p>'
     '<p>進め方のコツは<a href="/seizen-seiri/">生前整理の進め方（コラム）</a>で詳しく解説しています。</p>'
     '<h2>遺品整理のお手伝い</h2>'
+    '<p>相続した家の片付けを売却・解体まで見通して進める順番は'
+    '<a href="/souzoku-katazuke/">相続した家の片付け（コラム）</a>でご案内しています。</p>'
     '<p>遺品整理は、ご家族の気持ちに寄り添いながら進めます。通帳・印鑑などの貴重品や重要書類の捜索、'
     '形見分けの取り分け、ご希望に応じた供養のご相談にも配慮します。'
     '賃貸住宅で退去期限がある場合も、日程を含めてご相談ください。</p>'
@@ -2561,9 +2760,12 @@ add_service_page(
     '<strong>古物商許可（機械工具類・静岡県公安委員会）</strong>や非鉄金属・工業雑品スクラップの買取として、'
     '費用に反映できる場合があります。使わなくなった農機具は<a href="/nouki-kaitori/">農機具の買取り</a>もご覧ください。</p>'
     '<h2>取り扱いに注意が必要なもの</h2>'
+    '<p>仏壇・金庫・ピアノ・畳・タイヤなど、自治体の収集では扱えないことが多いものの手放し方は'
+    '<a href="/shobun-komaru-mono/">処分に困るものの手放し方（コラム）</a>で品目別に解説しています。</p>'
     '<p>テレビ・冷蔵庫・洗濯機・エアコンなどの<strong>家電リサイクル法</strong>対象品は、'
     '法令に沿った方法で手放す必要があります。詳しくは'
     '<a href="/kaden-shobun/">家電の正しい処分方法（コラム）</a>をご覧ください。'
+    'また、「無料回収」をうたう無許可の業者に渡すリスクと、任せてよい相手の見分け方は<a href="/mukyoka-kaishu-chui/">無料回収・無許可業者に注意（コラム）</a>にまとめています。'
     '危険物・液体・特殊なものなど、お預かりできないものもあります。判断に迷う場合は現地確認時にご案内します。</p>'
     '<h2>まずはご相談ください</h2>'
     '<p>「これは回収できる？」「買取できる？」だけでも大丈夫です。'
@@ -2604,6 +2806,10 @@ add_service_page(
     '<li>何を残すべきか分からない／貴重品や書類を確認したい</li>'
     '<li>売却・賃貸・解体の前に、まず片付けたい</li>'
     '</ul>'
+    '<p>親御さんと一緒に進めるときの話し方と順番は'
+    '<a href="/jikka-katazuke-oya/">実家の片付けを親と進めるコツ（コラム）</a>、'
+    '相続した家を売却・解体するまでの順番は'
+    '<a href="/souzoku-katazuke/">相続した家の片付け（コラム）</a>でまとめています。</p>'
     '<h2>遠方でも進められます</h2>'
     '<p>現地確認とお見積りをまとめて行い、通う回数を抑えます。'
     '残すもの・処分するものの方針を事前に共有しておけば、立ち会いが難しい場合の進め方もご相談いただけます。'
@@ -2776,19 +2982,6 @@ add_service_page(
 #   → 実在しない事例を「実績」として公開しないための仕組み。
 #   記入シート: docs/jirei-kinyu-sheet.md
 # ------------------------------------------------------------
-def _load_jirei():
-    path = os.path.join(HERE, "jirei-data.json")
-    try:
-        with io.open(path, encoding="utf-8") as f:
-            data = json.load(f)
-    except (IOError, ValueError):
-        return []
-    return [it for it in data.get("items", [])
-            if it.get("confirmed") and it.get("title")]
-
-
-JIREI_ITEMS = _load_jirei()
-
 if JIREI_ITEMS:
     def _jirei_card(it):
         rows = []
@@ -3109,12 +3302,14 @@ def build_index():
         '</div></section>'
     )
     col_links = [
-        ("不用品回収の費用はどう決まる？", "/fuyouhin-hiyou/"),
+        ("不用品の量「1㎥」はどれくらい？", "/fuyouhin-ryou-m3/"),
+        ("片付け業者の選び方 10のポイント", "/gyousha-erabikata/"),
+        ("無料回収・無許可業者に注意", "/mukyoka-kaishu-chui/"),
+        ("静岡県中部の粗大ごみは市町で違う", "/shizuoka-sodaigomi/"),
+        ("処分に困るものの手放し方", "/shobun-komaru-mono/"),
+        ("実家の片付けを親と進めるコツ", "/jikka-katazuke-oya/"),
+        ("相続した家の片付けの順番", "/souzoku-katazuke/"),
         ("使わない農機具を高く売るコツ", "/nouki-kaitori-kotsu/"),
-        ("生前整理は何から始める？", "/seizen-seiri/"),
-        ("空き家・実家の片付け5ステップ", "/akiya-katazuke/"),
-        ("冷蔵庫・洗濯機・テレビの処分方法", "/kaden-shobun/"),
-        ("不用品を賢く手放す方法", "/fuyouhin-tebanashi/"),
     ]
     col_html = "".join(f'<li><a href="{u}">{t}</a></li>' for t, u in col_links)
     column_sec = (
@@ -3245,6 +3440,461 @@ SEO_TITLE = {
 }
 
 
+# ------------------------------------------------------------
+# 10b. 市町別の地域ページ（2026-10-12 新設）
+#   /katazuke-shimada/ に続く第2弾。各市町の「ごみの出し方・自己搬入先」は
+#   必ず市町・施設の公式ページで確認した内容だけを書き、URLを併記する（推測で書かない）。
+#   確認日: 2026-10-12
+# ------------------------------------------------------------
+CITY_CHECK_DATE = "2026年10月12日"
+
+
+def _city_services(city):
+    return (
+        '<h2>' + city + 'でお手伝いしていること</h2>'
+        '<ul>'
+        '<li><a href="/katazuke/">家のお片付け</a>（引越し前後・模様替え・物置や納屋の整理）</li>'
+        '<li><a href="/akiya/">空き家・ご実家の片付け</a>（遠方にお住まいの方のご依頼も）</li>'
+        '<li><a href="/seiri/">生前整理・遺品整理</a></li>'
+        '<li><a href="/fuyouhin/">不用品の回収</a>（1点から家一軒分まで）</li>'
+        '<li><a href="/zanchibutsu/">解体前の残置物撤去</a>（当社の解体工事とあわせて）</li>'
+        '<li><a href="/souko/">倉庫・工場・店舗の片付け</a>（法人・事業者さま）</li>'
+        '<li><a href="/nouki-kaitori/">農機具の買取り</a>（トラクター・耕運機・田植機など）</li>'
+        '</ul>'
+    )
+
+
+def _city_compare(city, jibun_note):
+    return (
+        '<h2>' + city + 'で、自分で出す？業者に頼む？</h2>'
+        '<p>数点だけなら、' + city + 'の制度で自分で出すのがいちばん安く済みます。'
+        '一方で<strong>家一軒分・倉庫一棟分</strong>のように量が多いとき、運び出す人手や車がないとき、'
+        '期日が決まっているときは、まとめてお任せいただくほうが早く確実です。' + jibun_note + '</p>'
+        '<table><thead><tr><th>方法</th><th>向いているケース</th></tr></thead><tbody>'
+        '<tr><th>' + city + 'の制度で出す</th><td>大きなものが数点だけで、自分で運べるとき</td></tr>'
+        '<tr><th>施設へ自己搬入</th><td>車と人手があり、分別・荷下ろしを自分でできるとき</td></tr>'
+        '<tr><th>おうちのお片付け隊</th><td>量が多い・運び出せない・期日がある・買取できる品があるとき</td></tr>'
+        '</tbody></table>'
+        '<p>当社の費用は<strong>' + PRICE_LABEL + '</strong>です。'
+        '何にいくらかかるのかは<a href="/ryoukin/">料金・費用について</a>で公開しています。</p>'
+    )
+
+
+def _city_shikumi(city):
+    return (
+        '<h2>当社の回収のしくみ（許可について）</h2>'
+        '<p>当社は<strong>' + KOBUTSU_LABEL + '</strong>を受けています。'
+        'まだ使えるもの・価値のあるものは買取の対象とし、買取できたぶんはお見積りに反映します。'
+        '処分が必要なものは、<strong>提携する許可業者へ適正処理を委託</strong>します。'
+        '何を買取・回収できるかは<a href="/hinmoku/">回収・買取できるもの</a>をご覧ください。</p>'
+        '<p>' + city + 'のお客様も、個人・法人どちらでも承ります。'
+        '法人・事業者さまは請求書払いにも対応します。</p>'
+    )
+
+
+def _city_near(city, near):
+    lis = "".join('<li><a href="' + u + '">' + t + '</a></li>' for u, t in near)
+    return (
+        '<h2>近隣の市町</h2>'
+        '<p>' + city + 'の近隣も同じ体制で対応しています。</p>'
+        '<ul>' + lis + '</ul>'
+        '<p>そのほかの市町は<a href="/area/">対応エリア</a>をご覧ください。</p>'
+    )
+
+
+def add_city_page(slug, city, lead, seido_html, faq, near, seo_title, desc, answer,
+                  jibun_note="", nav_label=None):
+    """市町別の地域ページを1本追加する。"""
+    nav_label = nav_label or (city + "の片付け・不用品回収")
+    PAGE_DESC[slug] = desc
+    SEO_TITLE[slug] = seo_title
+    title = nav_label + "｜" + SITE_NAME + "（" + COMPANY_NAME + "）"
+    hero_h1 = city + "の片付け・不用品回収｜" + SITE_NAME + "（" + COMPANY_NAME + "）"
+    hero_lead = (city + "の家の片付け・不用品回収・解体前の残置物撤去・倉庫の片付け・"
+                 "農機具の買取りに対応します。拠点は静岡県島田市金谷。"
+                 "現地確認・お見積り・出張費は無料です。")
+    body = (
+        '<section class="k-section"><div class="prose">'
+        + '<p class="lead">' + lead + '</p>'
+        + add_toc(_city_services(city)
+        + _city_compare(city, jibun_note)
+        + seido_html
+        + _city_shikumi(city)
+        + _city_near(city, near), min_h2=4,
+                   heading=city + 'のご案内（このページの内容）')
+        + '<p class="note">※掲載している市町の制度・施設の案内は、' + CITY_CHECK_DATE
+        + 'に各公式サイトで確認した内容です。制度は変わることがあるため、'
+        'お出しになる前に必ず最新の公式案内でご確認ください。</p>'
+        '</div></section>'
+    )
+    jsonlds = [
+        {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "serviceType": "片付け・不用品回収",
+            "name": city + "の片付け・不用品回収",
+            "description": desc,
+            "areaServed": {"@type": "City", "name": city,
+                           "address": {"@type": "PostalAddress",
+                                       "addressRegion": "静岡県",
+                                       "addressLocality": city,
+                                       "addressCountry": "JP"}},
+            "provider": {"@type": PROVIDER_TYPE, "name": COMPANY_NAME,
+                         "url": DOMAIN + "/", "telephone": TEL_INTL},
+            "url": DOMAIN + "/" + slug + "/",
+            "offers": {"@type": "Offer", "priceCurrency": PRICE_CURRENCY,
+                       "priceSpecification": {
+                           "@type": "UnitPriceSpecification",
+                           "price": PRICE_PER_M3, "priceCurrency": PRICE_CURRENCY,
+                           "unitCode": "MTQ",
+                           "description": "片付け・不用品回収 " + PRICE_LABEL}},
+        },
+        breadcrumb_jsonld(nav_label, "/" + slug + "/"),
+        faq_jsonld(faq),
+    ]
+    ans_block = ('<section class="k-section" style="padding-bottom:0;">'
+                 '<div class="prose"><div class="answer"><span class="answer-h">要点</span>'
+                 '<p>' + answer + '</p></div></div></section>')
+    c, _ = assemble(slug, nav_label, hero_h1, hero_lead, ans_block + body, faq,
+                    [("/ryoukin/", "料金・費用について", PRICE_LABEL + "・内訳を公開"),
+                     ("/hinmoku/", "回収・買取できるもの", "対応品目の一覧"),
+                     ("/flow/", "ご利用の流れ", "お問い合わせから完了まで"),
+                     ("/contact/", "お問い合わせ", "ご相談・お見積りは無料")],
+                    jsonlds)
+    PAGES.append((slug, title, c))
+
+
+# --- 公式リンク（すべて2026-10-12にHTTP 200を確認） ----------
+CCS = {   # クリーンセンター志太（藤枝市・焼津市の共同処理施設）
+    "disposal": "https://cleancentershida.com/disposal/",
+    "reserve": "https://cleancentershida.com/reservation/",
+}
+GALLERY = {  # 環境資源ギャラリー（掛川市・菊川市衛生施設組合）
+    "index": "http://www.kankyoshigen-gallery.jp/reduce/index.html",
+    "price": "http://www.kankyoshigen-gallery.jp/reduce/price.html",
+    "carried": "http://www.kankyoshigen-gallery.jp/reduce/carried_in.html",
+    "howto": "http://www.kankyoshigen-gallery.jp/reduce/howto.html",
+}
+
+
+def _ccs_block(city):
+    """クリーンセンター志太（藤枝市・焼津市）への自己搬入の要点。"""
+    return (
+        '<h2>自己搬入先は「クリーンセンター志太」</h2>'
+        '<p>' + city + 'の家庭ごみを自分で持ち込む先は、藤枝市仮宿にある'
+        '<strong>クリーンセンター志太</strong>（藤枝市・焼津市の共同施設）です。'
+        '持ち込みを考えている方は、次の点にご注意ください。</p>'
+        '<ul class="checklist">'
+        '<li><strong>2026年（令和8年）9月1日から、ごみの持ち込みは事前予約制</strong>になりました</li>'
+        '<li>持ち込めるのは「<strong>藤枝市・焼津市内で出たごみを、出した本人が持ち込む場合</strong>」のみ</li>'
+        '<li>初めてのときは、排出元の住所が確認できるもの（免許証など）が必要</li>'
+        '<li>施設の中では解体できないため、木製家具などは<strong>事前に解体・分別</strong>して持ち込む</li>'
+        '<li>荷下ろしは搬入者自身が行うため、1人で下ろせないものは2人以上で行く</li>'
+        '<li>産業廃棄物（事業活動にともなって出た廃棄物）は持ち込めない</li>'
+        '<li>手数料は重量制（焼津市の公式案内では10kgあたり151円・税込）</li>'
+        '</ul>'
+        '<p>詳しくは施設公式の'
+        '<a href="' + CCS["disposal"] + '" target="_blank" rel="noopener">ごみを持ち込む方へ</a>と'
+        '<a href="' + CCS["reserve"] + '" target="_blank" rel="noopener">予約制について</a>を'
+        'ご確認ください。</p>'
+        '<div class="point"><b>ここが落とし穴</b>：この施設は<b>ごみを出したご本人が持ち込む</b>のが'
+        '原則のため、「知り合いに代わりに持っていってもらう」ことができません。'
+        '車や人手がない、予約の取れる日まで待てない、分別や解体まで手が回らない——'
+        'という場合は、まとめてご相談ください。当社が搬出し、'
+        '処分が必要なものは提携する許可業者へ適正処理を委託します。</div>'
+    )
+
+
+def _gallery_block(city):
+    """環境資源ギャラリー（掛川市・菊川市）への自己搬入の要点。"""
+    return (
+        '<h2>自己搬入先は「環境資源ギャラリー」</h2>'
+        '<p>' + city + 'のごみは、掛川市・菊川市衛生施設組合の'
+        '<strong>環境資源ギャラリー</strong>で処理されています。自分で持ち込むときは、'
+        '<a href="' + GALLERY["index"] + '" target="_blank" rel="noopener">ごみの持ち込みについて</a>／'
+        '<a href="' + GALLERY["price"] + '" target="_blank" rel="noopener">搬入料金</a>／'
+        '<a href="' + GALLERY["carried"] + '" target="_blank" rel="noopener">搬入できるもの・搬入できないもの</a>／'
+        '<a href="' + GALLERY["howto"] + '" target="_blank" rel="noopener">搬入方法・注意事項</a>'
+        'を事前に確認してください。</p>'
+        '<p>施設の案内では、<strong>休日や繁忙期・年末年始の搬入は予約が必要</strong>とされています。'
+        '混み合う時期は希望の日に持ち込めないこともあるため、'
+        '期日が決まっている片付けは早めに段取りを決めておくと安心です。</p>'
+    )
+
+
+# === 藤枝市 ===================================================
+add_city_page(
+    "katazuke-fujieda", "藤枝市",
+    '藤枝駅周辺のマンション・住宅地から、瀬戸谷・朝比奈の山あいのお宅まで。'
+    '藤枝市は拠点のある島田市のすぐ隣で、金谷から国道1号で30分ほどです。'
+    '現地確認・お見積りにもすぐうかがえます。自分で出せるもの、施設に持ち込めるもの、'
+    '業者に頼んだほうが早いもの。藤枝市の実情をふまえて、いちばん負担の少ない方法をご提案します。',
+    '<h2>藤枝市のごみの出し方を調べる</h2>'
+    '<p>藤枝市は、品目を入力して出し方を調べられる'
+    '<a href="https://www.city.fujieda.shizuoka.jp/benri/gomi/index.html" target="_blank" rel="noopener">'
+    'ごみの出し方・分け方検索ナビ</a>を公開しています。'
+    '分別の全体像は'
+    '<a href="https://www.city.fujieda.shizuoka.jp/material/files/group/81/R6guidebook.pdf" target="_blank" rel="noopener">'
+    'ごみ分別ガイドブック（PDF）</a>にまとまっています。'
+    'まず「それは何ごみか」を調べてから、量と運べるかどうかで方法を決めるのが確実です。</p>'
+    + _ccs_block("藤枝市"),
+    [("藤枝市内は出張費がかかりますか？",
+      "いいえ。現地確認・お見積り・出張費はいただきません。藤枝市は拠点の島田市金谷から30分ほどですので、お気軽にお申し付けください。"),
+     ("クリーンセンター志太へ、代わりに持ち込んでもらえますか？",
+      "施設はごみを出したご本人による搬入が原則のため、持ち込みの代行はできません。当社の場合は、当社が搬出を行い、処分が必要なものは提携する許可業者へ適正処理を委託する形になります。"),
+     ("家具の解体もしてもらえますか？",
+      "はい。搬出のために必要な解体は作業に含めて行います。タンス・食器棚・ベッドなど、そのままでは運び出せないものもご相談ください。"),
+     ("エレベーターのない集合住宅でも頼めますか？",
+      "対応します。階数と物量に合わせて人員を調整し、養生のうえ搬出します。現地確認のときに搬出経路を確認させてください。")],
+    [("/katazuke-shimada/", "島田市の片付け・不用品回収"),
+     ("/katazuke-yaizu/", "焼津市の片付け・不用品回収"),
+     ("/katazuke-yoshida/", "吉田町の片付け・不用品回収")],
+    "藤枝市の片付け・不用品回収｜1㎥20,000円から｜AMT",
+    "藤枝市の片付け・不用品回収は島田市金谷の株式会社AMTへ。クリーンセンター志太の予約制・本人搬入のきまりも解説。使える品は古物商許可で買取、処分は提携の許可業者へ委託。1㎥20,000円から・見積り無料。",
+    "藤枝市の片付け・不用品回収は、隣の<strong>島田市金谷に拠点</strong>を置くおうちのお片付け隊（株式会社AMT）へ。"
+    "自己搬入先のクリーンセンター志太は<strong>予約制・本人搬入が原則</strong>のため、量が多いときはまとめてお任せいただくほうが早いです。"
+    "まだ使えるものは<strong>古物商許可のもとで買取</strong>し、処分品は提携する許可業者へ適正処理を委託します。",
+    "藤枝市の場合、自己搬入先のクリーンセンター志太が予約制になったぶん、思い立ってすぐ運ぶということができなくなりました。",
+)
+
+
+# === 焼津市 ===================================================
+add_city_page(
+    "katazuke-yaizu", "焼津市",
+    '焼津港の周りの市街地から、大井川地区の住宅や倉庫まで。'
+    '焼津市は島田市金谷の拠点から40分ほどで、片付け・不用品回収・残置物撤去に対応しています。'
+    '「まず売れるものは売る、処分が必要なものだけ手放す」という進め方は、'
+    '焼津市がリユースを呼びかけている方向と同じです。',
+    '<h2>焼津市のごみの出し方を調べる</h2>'
+    '<p>焼津市の分別とルールは'
+    '<a href="https://www.city.yaizu.lg.jp/life/gomi/dashikata/dashikata-wakekata.html" target="_blank" rel="noopener">'
+    '家庭ごみ、資源物の分け方・出し方</a>に、'
+    '持ち込みの案内は'
+    '<a href="https://www.city.yaizu.lg.jp/life/gomi/dashikata/jiko-hannyu.html" target="_blank" rel="noopener">'
+    'ごみの自己搬入</a>にまとまっています。'
+    '入口は<a href="https://www.city.yaizu.lg.jp/life/gomi/index.html" target="_blank" rel="noopener">'
+    'ごみ・リサイクル</a>です。</p>'
+    '<p>焼津市の公式案内では、<strong>ごみ袋に入らない大きな燃やすごみ（長さ1m・直径30cm以上）</strong>や、'
+    '収集かごに入らない大きな資源物は、クリーンセンター志太へ持ち込むよう案内されています。'
+    'また多量の木くず・木材は、藤枝市内の民間工場へ直接持ち込む案内が出ています。</p>'
+    '<h2>焼津市は「捨てる前に売る」を呼びかけています</h2>'
+    '<p>焼津市はリユースのプラットフォームを運営する企業と連携協定を結び、'
+    '<strong>処分費用を払って捨てる前に、売ってリユースにつなげられないか検討してほしい</strong>と'
+    '呼びかけています（市の自己搬入ページに記載）。</p>'
+    '<p>当社の考え方も同じです。片付けでお預かりした品のうち、まだ使えるもの・価値のあるものは'
+    + KOBUTSU_LABEL + 'のもとで買取し、そのぶんをお見積りに反映します。'
+    '「売れるものがあるのか分からない」という段階でも、現地確認のときに仕分けながらご説明します。</p>'
+    + _ccs_block("焼津市"),
+    [("焼津市内の水産加工や事業所の片付けもお願いできますか？",
+      "はい、法人・事業者さまのご依頼に対応しています。請求書払いも可能です。事業活動にともなって出た廃棄物は産業廃棄物にあたるため、提携する許可業者へ適正処理を委託する形で進めます。"),
+     ("売れるものがあるか、見てもらうだけでもいいですか？",
+      "もちろんです。現地確認のうえ、買取の対象になりそうなものとそうでないものをご説明します。見積り・ご相談は無料です。"),
+     ("大井川地区でも来てもらえますか？",
+      "焼津市内は全域が対応エリアです。場所と物量をお知らせいただければ、現地確認の日程をご相談します。"),
+     ("冷蔵庫や洗濯機も引き取ってもらえますか？",
+      "家電リサイクル法の対象品（テレビ・エアコン・冷蔵庫・冷凍庫・洗濯機・衣類乾燥機）は、法令に沿った方法で取り扱います。状態によっては買取の対象になることもあります。")],
+    [("/katazuke-fujieda/", "藤枝市の片付け・不用品回収"),
+     ("/katazuke-shimada/", "島田市の片付け・不用品回収"),
+     ("/katazuke-yoshida/", "吉田町の片付け・不用品回収")],
+    "焼津市の片付け・不用品回収｜1㎥20,000円から｜AMT",
+    "焼津市の片付け・不用品回収は島田市金谷の株式会社AMTへ。市の分別・自己搬入の案内とクリーンセンター志太の予約制も解説。使える品は買取、処分は提携の許可業者へ委託。1㎥20,000円から・見積り無料。",
+    "焼津市の片付け・不用品回収は、<strong>島田市金谷に拠点</strong>を置くおうちのお片付け隊（株式会社AMT）へ。"
+    "焼津市は「捨てる前に売る」ことを呼びかけており、当社も<strong>古物商許可のもとで買取</strong>してお見積りに反映します。"
+    "自己搬入先のクリーンセンター志太は<strong>予約制・本人搬入が原則</strong>です。処分品は提携する許可業者へ適正処理を委託します。",
+    "焼津市では、袋に入らない大きさのものは施設への持ち込みが基本になります。",
+)
+
+
+# === 掛川市 ===================================================
+add_city_page(
+    "katazuke-kakegawa", "掛川市",
+    '掛川市は、掛川城の周りの市街地と、広い茶園・農地が隣り合う市です。'
+    '島田市金谷の拠点から国道1号で30分ほど。'
+    'お住まいの片付けだけでなく、<strong>使わなくなった農機具の買取</strong>と'
+    '納屋・倉庫の片付けを同時にというご相談が多い地域です。',
+    '<h2>掛川市のごみの出し方を調べる</h2>'
+    '<p>掛川市の分別とルールは'
+    '<a href="https://www.city.kakegawa.shizuoka.jp/gyosei/docs/930877.html" target="_blank" rel="noopener">'
+    '掛川市 ごみの出し方の基本ルール</a>に、'
+    'ごみ全般の入口は'
+    '<a href="https://www.city.kakegawa.shizuoka.jp/gyosei/kurashi/gomi/" target="_blank" rel="noopener">'
+    'ごみ・リサイクル</a>にまとまっています。</p>'
+    + _gallery_block("掛川市")
+    + '<h2>掛川市では農機具の買取と片付けを同時に</h2>'
+    '<p>茶園や田畑をやめる・規模を縮める際に、トラクターや管理機、'
+    '茶工場の機械、倉庫の資材がまとめて残ることがあります。'
+    '当社は' + KOBUTSU_LABEL + '（取扱品目：' + KOBUTSU_CATEGORY + '）を受けており、'
+    '<strong>機械の買取と、残りの片付け・搬出を同じ日にまとめて</strong>進められます。</p>'
+    '<ul>'
+    '<li><a href="/nouki-kaitori/">農機具の買取り</a>（メーカー不問・出張査定無料）</li>'
+    '<li><a href="/nouki-tractor/">トラクター</a>／<a href="/nouki-kouunki/">耕運機・管理機</a>／'
+    '<a href="/nouki-kusakari/">草刈機・運搬車</a></li>'
+    '<li><a href="/souko/">倉庫・工場の片付け</a>（法人・事業者さま）</li>'
+    '</ul>'
+    '<p>動かない機械・自走できない機械も、まずはご相談ください。</p>',
+    [("掛川市内の農機具も出張で査定してもらえますか？",
+      "はい。掛川市は出張査定の対応エリアです。倉庫や農地に置いたままの状態でも査定にうかがいます。出張査定の費用はいただきません。"),
+     ("片付けと農機具の買取は、同じ日にお願いできますか？",
+      "できます。買取できた分はお見積りに反映しますので、片付けの費用を抑えられる場合があります。現地確認のときにまとめてご相談ください。"),
+     ("環境資源ギャラリーへ持ち込むのと、どちらが安いですか？",
+      "大きなものが数点だけで、ご自身で分別・運搬できるなら持ち込みのほうが安く済むことが多いです。量が多い・運び出せない・期日があるという場合は、まとめてお任せいただくほうが早く確実です。お見積りは無料ですので、比べてからお決めいただけます。"),
+     ("茶工場の機械や事業所のものも対応できますか？",
+      "法人・事業者さまのご依頼に対応しています。請求書払いも可能です。事業活動にともなって出た廃棄物は、提携する許可業者へ適正処理を委託します。")],
+    [("/katazuke-kikugawa/", "菊川市の片付け・不用品回収"),
+     ("/katazuke-makinohara/", "牧之原市の片付け・不用品回収"),
+     ("/katazuke-shimada/", "島田市の片付け・不用品回収")],
+    "掛川市の片付け・不用品回収｜農機具買取も｜株式会社AMT",
+    "掛川市の片付け・不用品回収・農機具買取は島田市金谷の株式会社AMTへ。市の分別ルールと環境資源ギャラリーへの持ち込みも解説。使える機械は古物商許可で買取。1㎥20,000円から・出張査定無料。",
+    "掛川市の片付け・不用品回収は、<strong>島田市金谷に拠点</strong>を置くおうちのお片付け隊（株式会社AMT）へ。"
+    "茶園・農地の多い掛川市では、<strong>農機具の買取と納屋・倉庫の片付けを同じ日にまとめて</strong>のご相談が多くいただけます。"
+    "使えるものは古物商許可のもとで買取し、処分品は提携する許可業者へ適正処理を委託します。出張査定・お見積りは無料です。",
+    "掛川市は茶園・農地が広く、納屋や倉庫に機械や資材がまとまって残っていることが多い地域です。",
+)
+
+
+# === 菊川市 ===================================================
+add_city_page(
+    "katazuke-kikugawa", "菊川市",
+    '深蒸し茶の産地として知られる菊川市。茶園と住宅が隣り合い、'
+    '納屋や倉庫に農機具・資材が残っているお宅が多い地域です。'
+    '島田市金谷の拠点から25分ほど。'
+    '菊川市は<strong>粗大ごみの扱いが近隣の市と違う</strong>ため、'
+    '出し方を整理しておきます。',
+    '<h2>菊川市の粗大ごみは「自分で搬入」が基本です</h2>'
+    '<p>菊川市の公式案内では、粗大ごみについて'
+    '<strong>環境資源ギャラリーへ個人で搬入する</strong>ことが基本とされており、'
+    '個人で搬入できない場合は<strong>市が案内している収集業者に依頼する</strong>流れになっています。'
+    '依頼した場合の料金は品物によって異なるため、業者に確認する必要があります。</p>'
+    '<p>詳しくは'
+    '<a href="https://www.city.kikugawa.shizuoka.jp/kankyousuishin/sodai-gomi.html" target="_blank" rel="noopener">'
+    '菊川市公式サイト：粗大ごみの戸別収集について</a>でご確認ください。'
+    '分別全般は'
+    '<a href="https://www.city.kikugawa.shizuoka.jp/kankyousuishin/gominodashikata.html" target="_blank" rel="noopener">'
+    'ごみの出し方</a>、入口は'
+    '<a href="https://www.city.kikugawa.shizuoka.jp/kurashi/gomi_recycle/index.html" target="_blank" rel="noopener">'
+    'ごみ・リサイクル</a>です。</p>'
+    '<div class="point"><b>つまり</b>：菊川市では「大きな家具を1〜2点だけ、無料で玄関先から持っていってもらう」'
+    'という選択肢はありません。<b>自分で運ぶか、費用をかけて頼むか</b>のどちらかになります。'
+    'それなら、残りの片付けもまとめて<b>' + PRICE_LABEL + '</b>で見積りを取り、'
+    '買取できる品の査定額を差し引いたうえで比べるのが分かりやすい方法です。</div>'
+    + _gallery_block("菊川市")
+    + '<h2>菊川市では農機具・茶関連の機械の買取も</h2>'
+    '<p>茶園の規模を縮める、やめるというタイミングで、'
+    'トラクター・管理機・乗用草刈機・運搬車などがまとめて残ることがあります。'
+    '当社は' + KOBUTSU_LABEL + '（取扱品目：' + KOBUTSU_CATEGORY + '）を受けており、'
+    '機械の買取と片付けを同じ日に進められます。'
+    '詳しくは<a href="/nouki-kaitori/">農機具の買取り</a>をご覧ください。</p>',
+    [("菊川市は市の粗大ごみ収集がないと聞きましたが本当ですか？",
+      "菊川市の公式案内では、粗大ごみは環境資源ギャラリーへご自身で搬入し、搬入できない場合は市が案内している収集業者へ依頼する流れとされています。最新の内容は菊川市の公式ページでご確認ください。"),
+     ("数点だけでも頼めますか？",
+      "はい、1点からご相談いただけます。ただし数点だけならご自身で搬入されたほうが安く済む場合もありますので、無料のお見積りで比べてからお決めください。"),
+     ("茶園をやめるので、機械と倉庫をまとめて片付けたいのですが。",
+      "まとめて承ります。トラクター・管理機・運搬車などは古物商許可（機械工具類）のもとで買取査定し、残りの資材や不用品の搬出・適正処理の手配まで一度に進められます。"),
+     ("菊川市内は出張費がかかりますか？",
+      "いいえ。現地確認・お見積り・出張費はいただきません。菊川市は拠点の島田市金谷から25分ほどです。")],
+    [("/katazuke-kakegawa/", "掛川市の片付け・不用品回収"),
+     ("/katazuke-makinohara/", "牧之原市の片付け・不用品回収"),
+     ("/katazuke-shimada/", "島田市の片付け・不用品回収")],
+    "菊川市の片付け・不用品回収｜粗大ごみの出し方も解説",
+    "菊川市の片付け・不用品回収は島田市金谷の株式会社AMTへ。市の粗大ごみは自己搬入が基本という扱いもあわせて解説。使える品は古物商許可で買取、処分は提携の許可業者へ委託。1㎥20,000円から・見積り無料。",
+    "菊川市の片付け・不用品回収は、<strong>島田市金谷に拠点</strong>を置くおうちのお片付け隊（株式会社AMT）へ。"
+    "菊川市の粗大ごみは<strong>環境資源ギャラリーへの自己搬入が基本</strong>で、搬入できない場合は市が案内する収集業者へ依頼する流れです。"
+    "量が多いときは、買取の査定額を差し引ける当社の" + PRICE_LABEL + "と比べてお決めください。",
+    "菊川市は粗大ごみを市が無料で戸別収集するしくみがないため、量が増えるほどまとめて頼む意味が大きくなります。",
+)
+
+
+# === 牧之原市 =================================================
+add_city_page(
+    "katazuke-makinohara", "牧之原市",
+    '牧之原台地に広がる茶園と、相良・榛原の住宅地。'
+    '牧之原市は島田市金谷の拠点から20〜30分ほどで、'
+    '空き家の片付けや、使わなくなった農機具の買取のご相談が多い地域です。'
+    'お住まいからお茶の倉庫まで、量の多少を問わずご相談ください。',
+    '<h2>牧之原市のごみの出し方を調べる</h2>'
+    '<p>牧之原市のごみ・リサイクルの案内は'
+    '<a href="https://www.city.makinohara.shizuoka.jp/life/1/3/" target="_blank" rel="noopener">'
+    '牧之原市公式サイト：ごみ・リサイクル・環境</a>にまとまっています。'
+    '収集日は'
+    '<a href="https://www.city.makinohara.shizuoka.jp/soshiki/12/575.html" target="_blank" rel="noopener">'
+    'ごみカレンダー</a>でご確認ください。</p>'
+    '<p>粗大ごみの出し方や施設への持ち込みの条件は市町ごとに違い、'
+    '予約が必要な場合や、持ち込める人・ものが限られる場合があります。'
+    '出す前に必ず市の公式案内でご確認ください。'
+    '「調べるのが大変」「結局どれがいちばん楽なのか分からない」という段階でも、'
+    'お電話でご相談いただければ一緒に整理します。</p>'
+    '<h2>牧之原市で多いご相談</h2>'
+    '<ul>'
+    '<li><strong>空き家・ご実家の片付け</strong>：遠方にお住まいでも、現地確認から写真でのご報告まで対応します（<a href="/akiya/">空き家・実家の片付け</a>）</li>'
+    '<li><strong>農機具の買取</strong>：茶園・田畑の機械をメーカー不問で査定します（<a href="/nouki-kaitori/">農機具の買取り</a>）</li>'
+    '<li><strong>解体前の残置物撤去</strong>：解体工事も自社で行うため、撤去から解体まで一貫でご相談いただけます（<a href="/zanchibutsu/">解体前の残置物撤去</a>）</li>'
+    '<li><strong>倉庫・納屋の片付け</strong>：資材・機械・不用品の仕分けから搬出まで（<a href="/souko/">倉庫・工場の片付け</a>）</li>'
+    '</ul>',
+    [("牧之原市の空き家を片付けたいのですが、遠方に住んでいます。",
+      "遠方からのご依頼にも対応しています。現地確認のうえお見積りをお送りし、作業の前後は写真でご報告します。鍵のお預かり方法などもご相談ください。"),
+     ("茶園をやめるので農機具と倉庫をまとめてお願いできますか？",
+      "まとめて承ります。機械は古物商許可（機械工具類）のもとで買取査定し、買取できた分はお見積りに反映します。残りの資材・不用品の搬出も同時に進められます。"),
+     ("片付けのあと、建物の解体も頼めますか？",
+      "解体工事も当社で行っています。残置物の撤去から解体までまとめてご相談いただけます。解体については解体工事サイトでも詳しくご案内しています。"),
+     ("牧之原市内は出張費がかかりますか？",
+      "いいえ。現地確認・お見積り・出張費はいただきません。牧之原市は拠点の島田市金谷から20〜30分ほどです。")],
+    [("/katazuke-kikugawa/", "菊川市の片付け・不用品回収"),
+     ("/katazuke-yoshida/", "吉田町の片付け・不用品回収"),
+     ("/katazuke-shimada/", "島田市の片付け・不用品回収")],
+    "牧之原市の片付け・不用品回収｜空き家・農機具もAMT",
+    "牧之原市の片付け・不用品回収・空き家の片付けは島田市金谷の株式会社AMTへ。市のごみ案内のリンクつき。農機具は古物商許可で買取、処分は提携の許可業者へ委託。解体まで一貫。1㎥20,000円から・見積り無料。",
+    "牧之原市の片付け・不用品回収は、<strong>島田市金谷に拠点</strong>を置くおうちのお片付け隊（株式会社AMT）へ。"
+    "空き家・ご実家の片付けは<strong>遠方にお住まいでも対応</strong>し、茶園・田畑の農機具は古物商許可のもとで買取します。"
+    "解体工事も自社で行うため、<strong>残置物撤去から解体まで一貫</strong>してご相談いただけます。お見積り無料。",
+    "牧之原市は台地に茶園が広がり、納屋や倉庫に機械や資材が残ったままというお宅が少なくありません。",
+)
+
+
+# === 吉田町 ===================================================
+add_city_page(
+    "katazuke-yoshida", "吉田町",
+    '吉田町は島田市のすぐ南、金谷の拠点から20分ほどの町です。'
+    '住宅地と工業団地が近く、お住まいの片付けから事業所の片付けまでご相談をいただきます。'
+    '近いぶん、現地確認もお見積りも早くお届けできます。',
+    '<h2>吉田町のごみの出し方を調べる</h2>'
+    '<p>吉田町のごみの案内は'
+    '<a href="https://www.town.yoshida.shizuoka.jp/1023.htm" target="_blank" rel="noopener">'
+    '吉田町公式サイト：ごみ・環境保全</a>に、'
+    '収集日は'
+    '<a href="https://www.town.yoshida.shizuoka.jp/6938.htm" target="_blank" rel="noopener">'
+    'ごみ分別収集カレンダー</a>にまとまっています。</p>'
+    '<p>粗大ごみの出し方や施設への持ち込みの条件は市町ごとに違います。'
+    '予約が必要な場合や、持ち込める人・ものが限られる場合がありますので、'
+    '出す前に町の公式案内でご確認ください。</p>'
+    '<h2>吉田町で多いご相談</h2>'
+    '<ul>'
+    '<li><strong>引っ越し前後の不用品</strong>：期日までにまとめて搬出します（<a href="/hikkoshi/">引っ越しの片付け</a>）</li>'
+    '<li><strong>ご実家・空き家の片付け</strong>（<a href="/akiya/">空き家・実家の片付け</a>）</li>'
+    '<li><strong>事業所・工場・倉庫の片付け</strong>：請求書払い可（<a href="/souko/">倉庫・工場の片付け</a>）</li>'
+    '<li><strong>生前整理・遺品整理</strong>（<a href="/seiri/">生前整理・遺品整理</a>）</li>'
+    '</ul>'
+    '<p>拠点から近いため、「急ぎで見てほしい」というご相談にもできるだけ早くうかがいます。'
+    'まずはお電話か<a href="/contact/">お問い合わせフォーム</a>から、場所と物量をお知らせください。</p>',
+    [("吉田町は近いので、すぐ来てもらえますか？",
+      "吉田町は拠点の島田市金谷から20分ほどです。日程が許すかぎり早めに現地確認にうかがいます。お急ぎの場合はお電話でご相談ください。"),
+     ("工業団地の事業所の片付けもお願いできますか？",
+      "法人・事業者さまのご依頼に対応しています。請求書払いも可能です。事業活動にともなって出た廃棄物は産業廃棄物にあたるため、提携する許可業者へ適正処理を委託します。"),
+     ("少量でも来てもらえますか？",
+      "1点からご相談いただけます。ただし少量の場合は町の制度で出されたほうが安く済むこともありますので、無料のお見積りで比べてお決めください。"),
+     ("吉田町内は出張費がかかりますか？",
+      "いいえ。現地確認・お見積り・出張費はいただきません。")],
+    [("/katazuke-shimada/", "島田市の片付け・不用品回収"),
+     ("/katazuke-makinohara/", "牧之原市の片付け・不用品回収"),
+     ("/katazuke-yaizu/", "焼津市の片付け・不用品回収")],
+    "吉田町の片付け・不用品回収｜島田市から20分のAMT",
+    "吉田町の片付け・不用品回収は、車で20分の島田市金谷にある株式会社AMTへ。町のごみ案内のリンクつき。使える品は古物商許可で買取、処分は提携の許可業者へ委託。個人法人対応・1㎥20,000円から・見積り無料。",
+    "吉田町の片付け・不用品回収は、<strong>車で20分の島田市金谷</strong>に拠点を置くおうちのお片付け隊（株式会社AMT）へ。"
+    "近いぶん、現地確認もお見積りも早くお届けできます。まだ使えるものは<strong>古物商許可のもとで買取</strong>し、"
+    "処分品は提携する許可業者へ適正処理を委託します。個人・法人どちらも対応、お見積り無料です。",
+    "吉田町は拠点から近いため、現地確認の日程を取りやすいのが強みです。",
+)
+
+
 # ============================================================
 # llms.txt（AI検索・LLM向けのサイト要約。ドキュメントルートに置く）
 #   出力先: リポジトリ直下の llms.txt
@@ -3259,7 +3909,8 @@ def build_llms_txt():
                  "akiya", "gomiyashiki-katazuke", "hikkoshi", "tenpo", "hinmoku"]
     nouki_order = ["nouki-kaitori", "nouki-tractor", "nouki-combine", "nouki-taue",
                    "nouki-kouunki", "nouki-kusakari", "nouki-kaitori-shizuoka"]
-    guide_order = ["ryoukin", "flow", "area", "katazuke-shimada", "faq", "company", "contact"]
+    guide_order = ["ryoukin", "flow", "area", "faq", "company", "contact"]
+    city_order = [u.strip("/") for u in CITY_PAGE_BY_NAME.values()]
     titles = {slug: title for slug, title, _c in PAGES}
 
     def sec(heading, slugs):
@@ -3296,10 +3947,14 @@ def build_llms_txt():
              "動かない機械・自走できない機械も相談可。出張査定無料。")
     L.append("- 関連事業: 解体工事（" + SAME_AS[1] + "）、金属スクラップ買取、通販・卸売。"
              "コーポレートサイトは " + SAME_AS[0])
+    L.append("- 市町別の案内ページ: " + "・".join(CITY_PAGE_BY_NAME.keys())
+             + " について、その市町のごみの出し方・自己搬入のきまり（公式サイトの確認内容）と"
+               "当社の対応をまとめたページがある。")
     L.append("- 掲載していないもの: 施工実績の件数、お客様の声の創作、"
              "具体的な一律料金表（㎥単価以外）、代表者名")
     L += sec("主なサービス", svc_order)
     L += sec("農機具の買取り", nouki_order)
+    L += sec("市町別のご案内（地域ページ）", city_order)
     L += sec("料金・ご利用案内", guide_order)
     if "jirei" in titles:
         L += sec("対応事例", ["jirei"])
