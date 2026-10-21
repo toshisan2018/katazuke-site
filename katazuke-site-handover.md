@@ -528,3 +528,118 @@ bundle.json（2.9MB）はブラウザに渡しづらいので、**GitHub raw か
 ### 20-4. 公開
 - コミット `70235cb`。**54件すべて再公開成功**（新規作成なし＝全slug既存）。
 - `py -3 assets/audit_live.py` → **全54ページ・問題0**。
+
+---
+
+## 21. 2026-10-21 AIO/GEO 本格強化（@graph統合・アンサーカプセル100%・公的出典）
+
+生成AI検索（Google AI Overviews / AIモード、ChatGPT Search、Perplexity、Gemini など）に
+引用されるための構造改善。解体サイトで 2026-10-12 に実施した枠組み
+（`kaitai-site/AIO-GEO-対応記録-20261012.md`）を、片付けサイトの全54ページに展開した。
+
+### 21-1. 実施前 → 実施後（`py -3 assets/audit_aio.py` で実測）
+
+| 項目 | 実施前 | 実施後 |
+|---|---|---|
+| アンサーカプセル（本文H2直後の結論段落） | 188/261 本（72%） | **261/261 本（100%）** |
+| JSON-LD の @graph 化 | 0/54 ページ | **54/54 ページ** |
+| 公的機関の出典リンク | 19本 / 7ページ | **65本 / 28ページ** |
+| 可視の更新日表示 | 11/54 | **54/54** |
+| schema の dateModified | 0/54 | **54/54** |
+
+### 21-2. 構造化データの @graph 統合
+
+従来は BreadcrumbList / FAQPage / Service などを別々の `<script>` で2〜3本出していた。
+これを **単一の @graph** にまとめ、`@id` で相互参照させた。
+
+```
+LocalBusiness+Organization  @id .../#organization   ← 全ページ共通の正本
+WebSite                     @id .../#website        publisher → #organization
+WebPage (+FAQPage)          @id <url>#webpage       isPartOf → #website / about → #organization
+ImageObject                 @id <url>#primaryimage
+BreadcrumbList              @id <url>#breadcrumb
+BlogPosting                 @id <url>#article       author・publisher → #organization（コラム）
+Service / HowTo / ItemList  ページ固有。provider を #organization に寄せた
+```
+
+- FAQ は独立した FAQPage をやめ、`@type:["WebPage","FAQPage"]` + `mainEntity` に統合
+  （ページ実体がふたつあるように見えるのを避けるため）。
+- 著者は **Organization（株式会社AMT）**。代表者名を出さない方針のため Person ノードは作らない。
+- 旧 `#localbusiness` は **`#organization` に改名**（解体サイトと同じ @id 体系）。
+- Organization を強化：**法人番号 9080401012652**（identifier）、**古物商許可**（hasCredential）、
+  営業時間、sameAs に **法人番号公表サイト**と **Googleビジネスプロフィール** を追加。
+- 実装は `build_pages.page_graph()` の1か所。`assemble()` が全下層ページで呼ぶ。
+  コラムは `build_articles.article_graph()`、コラム一覧は `build_column_page()` 内。
+
+### 21-3. アンサーカプセル
+
+本文H2の直後に、その見出しの問いへ直接答える段落を置く。
+実測すると 261本中 188本は既に結論ファーストだったため、
+**見出し直後が表・リスト・h3 で始まっていた73本**に要約文を追加した。
+
+- 文面は **`assets/capsules.json`**（slug → 見出し → 文）。
+  `build_pages.insert_capsules()` が見出し直後に `<p class="k-capsule">` として差し込む。
+- **文面はページに既に書かれている事実だけ**で構成。新しい数値・実績は足していない。
+- 見出しが見つからないと標準エラーに `capsule 未挿入:` を出す。見出しを変えたらJSON側も直すこと。
+- リンクグリッド（「近隣の市町」「投稿をさらに読み込む」、コラム一覧のカテゴリ見出し）は
+  要約文を置く意味がないため対象外。`audit_aio.py` の `NAV_H2` / `NAV_SLUGS` で除外している。
+
+### 21-4. 公的機関の出典
+
+法令・制度を主題にしている **21ページ**の本文末尾に「出典・参考（公的機関）」ブロックを追加（48リンク）。
+定義は **`assets/sources.json`**（slug → [[表示名, URL], ...]）。**URLは全件 200 を確認済み**。
+
+| 出典 | URL |
+|---|---|
+| 環境省「廃棄物の処理及び清掃に関する法律（廃棄物処理法）」 | https://www.env.go.jp/recycle/waste/laws.html |
+| 環境省「廃棄物等の処理」 | https://www.env.go.jp/recycle/waste/index.html |
+| 環境省「家電リサイクル関連」 | https://www.env.go.jp/recycle/kaden/ |
+| 国土交通省「空家等対策の推進に関する特別措置法関連情報」 | https://www.mlit.go.jp/jutakukentiku/house/jutakukentiku_house_tk3_000035.html |
+| 警察庁「古物営業・質屋営業について」 | https://www.npa.go.jp/bureau/safetylife/kobutsu/index.html |
+| 裁判所「相続の放棄の申述」「相続の限定承認の申述」 | https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html ほか |
+| 家電リサイクル券センター（RKC） | https://www.rkc.aeha.or.jp/ |
+| e-Gov法令検索 | 廃棄物処理法 345AC0000000137 ／ 家電リサイクル法 410AC0000000097 ／ 古物営業法 324AC0000000108 ／ 空家法 426AC1000000127 |
+| 県内7市町のごみページ | 島田・藤枝・焼津・掛川・菊川・牧之原・吉田（`/shizuoka-sodaigomi/` に一覧） |
+
+**出典を足すときは必ず実在を確認し、公式ページだけを載せること**（まとめサイトは不可）。
+法令は e-Gov の法令APIで法令名まで照合した。
+
+### 21-5. 更新日
+
+- `build_pages.SITE_UPDATED` / `SITE_UPDATED_JP`（固定ページ）と
+  `build_articles.UPDATED_ISO` / `UPDATED_JP`（コラム）を **2026-10-21** に。
+- 全ページのフッター手前に `<p class="k-updated">最終更新：…</p>` を出す（`updated_line()`）。
+- コラム10本の**公開日は 2026-10-12 に固定**した（以前は `UPDATED_ISO` を参照していたため、
+  最終更新日を進めると公開日まで動いてしまっていた）。
+
+### 21-6. AIクローラーのアクセス確認
+
+robots.txt は WordPress の既定（`Disallow: /wp-admin/` のみ）で、AIクローラーを拒否していない。
+実際に各ボットの User-Agent でアクセスして全て **200 / 184KB 全文取得**を確認した。
+
+GPTBot ／ OAI-SearchBot ／ PerplexityBot ／ ClaudeBot ／ Google-Extended ／ bingbot
+
+### 21-7. 点検
+
+- **`assets/audit_aio.py`** を新設。`py -3 assets/audit_aio.py --refresh` で公開ページを
+  `snapshot-live/` に取り込み、カプセル率・@graph・出典・更新日を実測する（`--detail` で内訳）。
+  自治体は `lg.jp` 以外に `city.*.<県>.jp` / `town.*.jp` も多いので、公的リンクの判定に含めている。
+- `py -3 assets/audit_live.py` → **全54ページ・問題0**。
+
+### 21-8. 公開（2026-10-21）
+
+コミット `7fb6879`。§18-8 の手順どおり GitHub raw をコミットSHA指定で fetch して
+bundle を再構成し、**54件すべて成功**（固定ページ33・投稿21）。新規作成なし（全件upsert）。
+
+### 21-9. 残作業
+
+1. **`llms.txt` は AIOSEO 生成版が配信されている**（9.8KB）。リポジトリ直下の手書き版
+   （`llms.txt`・23KB・確定事実を詳しく書いたもの）のほうが AI検索には有利なので、
+   Xserverのファイルマネージャーで `katazuke.amt-eco.com` 直下に実ファイルを置くと
+   そちらが優先される（解体サイトは 2026-10-12 にこの方法で差し替え済み）。
+2. **GA4 の「AI検索」カスタムチャネルグループ**が片付けサイトのプロパティには未設定。
+   解体サイトと同じ設定（AIO-GEO-対応記録-20261012.md の「GA4」節）を入れると、
+   ChatGPT・Perplexity などからの流入が Referral に埋もれず見えるようになる。**要アカウント操作**。
+3. **自社独自の一次情報**（施工件数・事例）— GEOでいちばん効くが創作禁止のため社長の実数待ち。
+   `/jirei/` の公開（`docs/jirei-kinyu-sheet.md`）がそのまま効く。
+4. 比較表は22ページ。法令・制度の対比がある数ページは `<table>` に起こす余地がある。
