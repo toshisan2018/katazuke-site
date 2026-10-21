@@ -29,8 +29,8 @@ TODAY_ISO = "2026-09-27"
 TODAY_JP = "2026年9月27日"
 
 # 最終更新日（全記事の dateModified と記事上部の表示に使う）
-UPDATED_ISO = "2026-10-12"
-UPDATED_JP = "2026年10月12日"
+UPDATED_ISO = "2026-10-21"
+UPDATED_JP = "2026年10月21日"
 
 # 記事ごとの公開日（未登録は TODAY_ISO）
 PUB_DATE = {}
@@ -198,6 +198,64 @@ def article_jsonld(slug, title, desc):
     }
 
 
+def article_graph(slug, title, desc, faq, illust=None):
+    """コラム1本ぶんの JSON-LD（@graph 1本）。固定ページと同じ @id 体系でつなぐ。"""
+    url = bp.DOMAIN + "/" + slug + "/"
+    img = bp.IMG.get(illust) if illust else None
+    img = img or bp.IMG["ogp_v2"]
+    nodes = [bp._strip_ctx(bp.local_business_jsonld()), bp.website_node()]
+
+    webpage = {
+        "@type": ["WebPage", "FAQPage"] if faq else "WebPage",
+        "@id": url + "#webpage",
+        "url": url,
+        "name": title,
+        "description": desc,
+        "isPartOf": {"@id": bp.SITE_ID},
+        "about": {"@id": bp.ORG_ID},
+        "publisher": {"@id": bp.ORG_ID},
+        "primaryImageOfPage": {"@id": url + "#primaryimage"},
+        "breadcrumb": {"@id": url + "#breadcrumb"},
+        "inLanguage": "ja",
+        "datePublished": PUB_DATE.get(slug, TODAY_ISO),
+        "dateModified": UPDATED_ISO,
+    }
+    if faq:
+        webpage["mainEntity"] = [
+            {"@type": "Question", "name": q,
+             "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]
+    nodes.append(webpage)
+
+    nodes.append({"@type": "ImageObject", "@id": url + "#primaryimage",
+                  "url": img, "contentUrl": img, "inLanguage": "ja"})
+    nodes.append({
+        "@type": "BlogPosting",
+        "@id": url + "#article",
+        "headline": title,
+        "description": desc,
+        "inLanguage": "ja",
+        "datePublished": PUB_DATE.get(slug, TODAY_ISO),
+        "dateModified": UPDATED_ISO,
+        "articleSection": ART_CAT.get(slug, "コラム"),
+        "isAccessibleForFree": True,
+        "isPartOf": {"@id": url + "#webpage"},
+        "mainEntityOfPage": {"@id": url + "#webpage"},
+        "image": {"@id": url + "#primaryimage"},
+        "author": {"@id": bp.ORG_ID},
+        "publisher": {"@id": bp.ORG_ID},
+    })
+    nodes.append({
+        "@type": "BreadcrumbList",
+        "@id": url + "#breadcrumb",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "ホーム", "item": bp.DOMAIN + "/"},
+            {"@type": "ListItem", "position": 2, "name": "コラム", "item": bp.DOMAIN + "/column/"},
+            {"@type": "ListItem", "position": 3, "name": title, "item": url},
+        ],
+    })
+    return {"@context": "https://schema.org", "@graph": nodes}
+
+
 def article_breadcrumb_jsonld(slug, title):
     return {
         "@context": "https://schema.org",
@@ -269,6 +327,7 @@ def add_article(slug, title, desc, lead, sections, faq, rel, answer=None):
     parts.append('<section class="k-section">' + art + '</section>')
     if slug in ("akiya-katazuke", "tenpo-heiten"):
         parts.append(bp.kaitai_banner())   # 解体サイトへの相互リンクバナー
+    parts.append(bp.sources_for(slug))
     parts.append(bp.faq_block(faq))
     parts.append(author_box())
     parts.append('<!--RELCOL-->')
@@ -276,15 +335,13 @@ def add_article(slug, title, desc, lead, sections, faq, rel, answer=None):
     parts.append(bp.cta())
     parts.append(bp.footer())
     parts.append('</div>')
-    inner = "".join(parts)
+    inner = bp.insert_capsules(slug, "".join(parts))
     content = ('<!-- wp:html -->\n<style id="amt-katazuke-css">' + CSS + '</style>\n'
                + inner + '\n<!-- /wp:html -->')
-    for j in [article_jsonld(slug, title, desc),
-              article_breadcrumb_jsonld(slug, title),
-              bp.faq_jsonld(faq)]:
-        if j:
-            content += ('\n\n<!-- wp:html -->\n<script type="application/ld+json">'
-                        + json.dumps(j, ensure_ascii=False) + '</script>\n<!-- /wp:html -->')
+    content += ('\n\n<!-- wp:html -->\n<script type="application/ld+json">'
+                + json.dumps(article_graph(slug, title, desc, faq, ik),
+                             ensure_ascii=False)
+                + '</script>\n<!-- /wp:html -->')
     ARTICLES.append({"slug": slug, "title": title, "desc": desc, "content": content, "illust": ik})
 
 
@@ -941,7 +998,7 @@ for _s in ("fuyouhin-ryou-m3", "mukyoka-kaishu-chui", "gyousha-erabikata",
            "zanchibutsu-kaitai", "jikka-katazuke-oya", "souzoku-katazuke",
            "shobun-komaru-mono", "tetsukuzu-scrap", "nouki-tetsuzuki",
            "shizuoka-sodaigomi"):
-    PUB_DATE[_s] = UPDATED_ISO
+    PUB_DATE[_s] = "2026-10-12"
 
 _PL = bp.PRICE_LABEL          # 1㎥あたり20,000円から
 _KB = bp.KOBUTSU_LABEL        # 古物商許可（静岡県公安委員会）第…号
@@ -1942,30 +1999,49 @@ def build_column_page():
         parts.append(f'<section class="k-section" id="cat{i+1}" style="padding-top:0;">'
                      f'<div class="inner"><h2 class="sec-title">{c}</h2>'
                      f'<div class="card-grid card-grid--c">{cards}</div></div></section>')
+    parts.append(bp.updated_line(UPDATED_JP, UPDATED_ISO))
     parts.append(bp.cta())
     parts.append(bp.footer())
     parts.append('</div>')
     inner = "".join(parts)
     content = ('<!-- wp:html -->\n<style id="amt-katazuke-css">' + CSS + '</style>\n'
                + inner + '\n<!-- /wp:html -->')
-    bc = {"@context": "https://schema.org", "@type": "BreadcrumbList",
-          "itemListElement": [
-              {"@type": "ListItem", "position": 1, "name": "ホーム", "item": bp.DOMAIN + "/"},
-              {"@type": "ListItem", "position": 2, "name": "コラム", "item": bp.DOMAIN + "/column/"}]}
+    hub_url = bp.DOMAIN + "/column/"
+    hub_desc = "片付け・不用品回収・生前整理・空き家・農機具買取の解説記事の一覧。"
+    graph = {"@context": "https://schema.org", "@graph": [
+        bp._strip_ctx(bp.local_business_jsonld()),
+        bp.website_node(),
+        {"@type": ["WebPage", "CollectionPage"],
+         "@id": hub_url + "#webpage",
+         "url": hub_url,
+         "name": "片付けのお役立ちコラム",
+         "description": hub_desc,
+         "isPartOf": {"@id": bp.SITE_ID},
+         "about": {"@id": bp.ORG_ID},
+         "publisher": {"@id": bp.ORG_ID},
+         "breadcrumb": {"@id": hub_url + "#breadcrumb"},
+         "mainEntity": {"@id": hub_url + "#itemlist"},
+         "inLanguage": "ja",
+         "dateModified": UPDATED_ISO},
+        {"@type": "BreadcrumbList",
+         "@id": hub_url + "#breadcrumb",
+         "itemListElement": [
+             {"@type": "ListItem", "position": 1, "name": "ホーム", "item": bp.DOMAIN + "/"},
+             {"@type": "ListItem", "position": 2, "name": "コラム", "item": hub_url}]},
+        {"@type": "ItemList",
+         "@id": hub_url + "#itemlist",
+         "name": "おうちのお片付け隊のコラム一覧",
+         "description": hub_desc,
+         "url": hub_url,
+         "numberOfItems": len(ARTICLES),
+         "itemListElement": [
+             {"@type": "ListItem", "position": i + 1, "name": a["title"],
+              "url": bp.DOMAIN + "/" + a["slug"] + "/",
+              "description": a["desc"]}
+             for i, a in enumerate(ARTICLES)]},
+    ]}
     content += ('\n\n<!-- wp:html -->\n<script type="application/ld+json">'
-                + json.dumps(bc, ensure_ascii=False) + '</script>\n<!-- /wp:html -->')
-    il = {"@context": "https://schema.org", "@type": "ItemList",
-          "name": "おうちのお片付け隊のコラム一覧",
-          "description": "片付け・不用品回収・生前整理・空き家・農機具買取の解説記事の一覧。",
-          "url": bp.DOMAIN + "/column/",
-          "numberOfItems": len(ARTICLES),
-          "itemListElement": [
-              {"@type": "ListItem", "position": i + 1, "name": a["title"],
-               "url": bp.DOMAIN + "/" + a["slug"] + "/",
-               "description": a["desc"]}
-              for i, a in enumerate(ARTICLES)]}
-    content += ('\n\n<!-- wp:html -->\n<script type="application/ld+json">'
-                + json.dumps(il, ensure_ascii=False) + '</script>\n<!-- /wp:html -->')
+                + json.dumps(graph, ensure_ascii=False) + '</script>\n<!-- /wp:html -->')
     return {"slug": "column", "title": "コラム｜おうちのお片付け隊",
             "desc": "片付け・不用品回収・生前整理・遺品整理・空き家・農機具買取に役立つ解説記事をまとめています。費用の考え方や自治体制度との使い分けも。静岡県島田市の株式会社AMT おうちのお片付け隊。",
             "content": content}

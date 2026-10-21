@@ -82,7 +82,20 @@ GEO_LAT = 34.8213
 GEO_LNG = 138.1312
 
 # 関連サイト（JSON-LD sameAs）
-SAME_AS = ["https://amt-eco.com/", "https://kaitai.amt-eco.com/"]
+HOUJIN_BANGOU = "9080401012652"        # 国税庁 法人番号
+GBP_CID = "599748240231332014"         # Googleビジネスプロフィール
+SAME_AS = [
+    "https://amt-eco.com/",
+    "https://kaitai.amt-eco.com/",
+    "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=" + HOUJIN_BANGOU,
+    "https://maps.google.com/?cid=" + GBP_CID,
+]
+
+# 構造化データ（@graph）の共通 @id と、サイト全体の最終更新日
+ORG_ID = DOMAIN + "/#organization"
+SITE_ID = DOMAIN + "/#website"
+SITE_UPDATED = "2026-10-21"
+SITE_UPDATED_JP = "2026年10月21日"
 
 # サイト画像（WordPressメディアにアップ済みのURL）
 UPLOADS = "https://katazuke.amt-eco.com/wp-content/uploads/2026/09/"
@@ -981,6 +994,25 @@ V4_CSS = """
 """
 DESIGN_CSS = DESIGN_CSS + V4_CSS
 
+# ---- V5（2026-10-21 AIO/GEO）：最終更新の表示と公的出典ブロック ----
+V5_CSS = """
+.amt-katazuke .k-capsule{font-size:1.0rem;line-height:1.9;margin:0 0 16px;padding:14px 18px;
+  background:#f3f8f6;border-left:4px solid var(--primary,#2f7d62);border-radius:0 8px 8px 0;font-weight:500;}
+.amt-katazuke .sec-title + .k-capsule,.amt-katazuke .k-capsule{max-width:100%;}
+.amt-katazuke .inner > .k-capsule{max-width:860px;margin-left:auto;margin-right:auto;}
+.amt-katazuke .k-updated{max-width:860px;margin:28px auto 0;padding:0 20px;
+  font-size:.86rem;color:var(--muted,#6b7280);text-align:right;}
+.amt-katazuke .k-sources{max-width:860px;margin:26px auto 0;padding:18px 22px;
+  background:#f6f7f9;border:1px solid #e3e6ea;border-radius:12px;}
+.amt-katazuke .k-sources h3{font-size:.95rem;margin:0 0 10px;font-weight:800;}
+.amt-katazuke .k-sources ul{margin:0;padding-left:1.2em;}
+.amt-katazuke .k-sources li{font-size:.88rem;line-height:1.9;}
+.amt-katazuke .k-sources .k-src-note{margin:10px 0 0;font-size:.8rem;color:var(--muted,#6b7280);}
+@media(max-width:600px){.amt-katazuke .k-updated{text-align:left;}}
+"""
+DESIGN_CSS = DESIGN_CSS + V5_CSS
+
+
 
 # ロゴマーク（片付け＝きれいに整った家＋きらめき）。文字は入れない。
 LOGO_SVG = (
@@ -1171,8 +1203,10 @@ def local_business_jsonld():
     """サイト共通の LocalBusiness（トップ・料金・農機具ハブで使う完全版）。"""
     return {
         "@context": "https://schema.org",
-        "@type": PROVIDER_TYPE,
-        "@id": DOMAIN + "/#localbusiness",
+        "@type": [PROVIDER_TYPE, "Organization"],
+        "@id": ORG_ID,
+        "identifier": {"@type": "PropertyValue", "propertyID": "法人番号",
+                       "value": HOUJIN_BANGOU},
         "name": COMPANY_NAME + "（" + SITE_NAME + "）",
         "alternateName": SITE_NAME,
         "url": DOMAIN + "/",
@@ -1193,6 +1227,18 @@ def local_business_jsonld():
             "addressCountry": "JP",
         },
         "geo": {"@type": "GeoCoordinates", "latitude": GEO_LAT, "longitude": GEO_LNG},
+        "openingHoursSpecification": [{
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday",
+                          "Friday", "Saturday"],
+            "opens": "08:00", "closes": "17:00",
+        }],
+        "hasCredential": [{
+            "@type": "EducationalOccupationalCredential",
+            "credentialCategory": "古物商許可（" + KOBUTSU_CATEGORY + "）",
+            "recognizedBy": {"@type": "GovernmentOrganization", "name": KOBUTSU_AUTH},
+            "identifier": KOBUTSU_NO,
+        }],
         "areaServed": [{"@type": "City", "name": c} for c in AREA_CITIES],
         "knowsAbout": ["家の片付け", "不用品回収", "残置物撤去", "倉庫・工場の片付け",
                        "農機具買取", "生前整理", "遺品整理", "空き家の片付け"],
@@ -1226,7 +1272,7 @@ def price_offer_jsonld(url, name, desc):
         "description": desc,
         "serviceType": "不用品回収・片付け",
         "url": DOMAIN + url,
-        "provider": {"@id": DOMAIN + "/#localbusiness"},
+        "provider": {"@id": ORG_ID},
         "areaServed": [{"@type": "City", "name": c} for c in AREA_CITIES],
         "offers": {
             "@type": "Offer",
@@ -1289,6 +1335,107 @@ def itemlist_jsonld(name, desc, url, items):
         "numberOfItems": len(items),
         "itemListElement": el,
     }
+
+
+# ------------------------------------------------------------
+# JSON-LD を単一の @graph にまとめる（AIO/GEO：2026-10-21）
+#   Organization(#organization) ← WebSite(#website) ← WebPage(#webpage)
+#   BreadcrumbList(#breadcrumb) / ImageObject(#primaryimage) を @id で連結し、
+#   FAQ は独立した FAQPage ではなく WebPage の mainEntity に統合する
+#   （ページ実体がふたつあるように見えるのを避けるため）。
+# ------------------------------------------------------------
+def website_node():
+    return {
+        "@type": "WebSite",
+        "@id": SITE_ID,
+        "name": SITE_NAME + "（" + COMPANY_NAME + "）",
+        "alternateName": COMPANY_NAME,
+        "url": DOMAIN + "/",
+        "inLanguage": "ja",
+        "publisher": {"@id": ORG_ID},
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {"@type": "EntryPoint",
+                       "urlTemplate": DOMAIN + "/?s={search_term_string}"},
+            "query-input": "required name=search_term_string",
+        },
+    }
+
+
+def _strip_ctx(node):
+    n = dict(node)
+    n.pop("@context", None)
+    return n
+
+
+def _types_of(node):
+    t = node.get("@type")
+    return set(t) if isinstance(t, list) else ({t} if t else set())
+
+
+def page_graph(url, label, name, description, faq_items=None,
+               extra=None, image=None, date_modified=None, is_home=False):
+    """1ページ分の JSON-LD（@graph 1本）を返す。url は "/slug/" 形式。"""
+    page_url = DOMAIN + url
+    wp_id = page_url + "#webpage"
+
+    nodes = [_strip_ctx(local_business_jsonld()), website_node()]
+
+    webpage = {
+        "@type": ["WebPage", "FAQPage"] if faq_items else "WebPage",
+        "@id": wp_id,
+        "url": page_url,
+        "name": name,
+        "description": description,
+        "isPartOf": {"@id": SITE_ID},
+        "about": {"@id": ORG_ID},
+        "publisher": {"@id": ORG_ID},
+        "inLanguage": "ja",
+        "dateModified": date_modified or SITE_UPDATED,
+    }
+    if image:
+        webpage["primaryImageOfPage"] = {"@id": page_url + "#primaryimage"}
+    if not is_home:
+        webpage["breadcrumb"] = {"@id": page_url + "#breadcrumb"}
+    if faq_items:
+        webpage["mainEntity"] = [
+            {"@type": "Question", "name": q,
+             "acceptedAnswer": {"@type": "Answer", "text": a}}
+            for q, a in faq_items
+        ]
+    nodes.append(webpage)
+
+    if image:
+        nodes.append({"@type": "ImageObject", "@id": page_url + "#primaryimage",
+                      "url": image, "contentUrl": image, "inLanguage": "ja"})
+    if not is_home:
+        nodes.append({
+            "@type": "BreadcrumbList",
+            "@id": page_url + "#breadcrumb",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "ホーム",
+                 "item": DOMAIN + "/"},
+                {"@type": "ListItem", "position": 2, "name": label,
+                 "item": page_url},
+            ],
+        })
+
+    # 個別ページ固有のノード（Service / HowTo / ItemList ほか）を取り込む。
+    # FAQPage・BreadcrumbList・組織ノードは上で作り直しているので捨てる。
+    for j in (extra or []):
+        if not j:
+            continue
+        t = _types_of(j)
+        if t & {"FAQPage", "BreadcrumbList", PROVIDER_TYPE, "Organization"}:
+            continue
+        n = _strip_ctx(j)
+        n.setdefault("@id", page_url + "#" + "-".join(sorted(t)).lower())
+        if "provider" in n:
+            n["provider"] = {"@id": ORG_ID}
+        n["isPartOf"] = {"@id": wp_id}
+        nodes.append(n)
+
+    return {"@context": "https://schema.org", "@graph": nodes}
 
 
 # 「量のめやすツール」で使う品目（㎥は本文の早見表と同じ考え方の目安）
@@ -1377,6 +1524,80 @@ def add_toc(body, min_h2=5, heading="このページの内容"):
     return body.replace('<h2 id="sec1">', toc + '<h2 id="sec1">', 1)
 
 
+# ------------------------------------------------------------
+# アンサーカプセル（AIO/GEO：2026-10-21）
+#   本文H2の直後が表・リスト・h3 で始まっているセクションに、
+#   その見出しの問いへ直接答える段落を差し込む。
+#   文面は assets/capsules.json（ページに既にある事実だけで構成）。
+# ------------------------------------------------------------
+def _load_capsules():
+    try:
+        with io.open(os.path.join(HERE, "capsules.json"), encoding="utf-8") as f:
+            data = json.load(f)
+    except (IOError, ValueError):
+        return {}
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+
+CAPSULES = _load_capsules()
+
+
+def insert_capsules(slug, html):
+    """slug のページHTMLに、見出し直後の結論段落を差し込む。"""
+    d = CAPSULES.get(slug)
+    if not d:
+        return html
+    for title, text in d.items():
+        pat = re.compile(
+            r"(<h2(?:(?!</h2>)[\s\S])*?" + re.escape(title)
+            + r"(?:(?!</h2>)[\s\S])*?</h2>)")
+        html, n = pat.subn(
+            lambda m: m.group(1) + '<p class="k-capsule">' + text + "</p>",
+            html, count=1)
+        if not n:
+            sys.stderr.write("capsule 未挿入: %s / %s\n" % (slug, title))
+    return html
+
+
+def updated_line(date_jp=None, date_iso=None):
+    """ページ下部に出す「最終更新」行。AI検索・読者ともに鮮度の判断材料になる。"""
+    return ('<p class="k-updated">最終更新：<time datetime="%s">%s</time></p>'
+            % (date_iso or SITE_UPDATED, date_jp or SITE_UPDATED_JP))
+
+
+def sources_block(items, note=None):
+    """公的機関の出典ブロック。items = [(表示名, URL), ...]"""
+    if not items:
+        return ""
+    lis = "".join(
+        '<li><a href="%s" target="_blank" rel="noopener">%s</a></li>' % (u, t)
+        for t, u in items)
+    n = ('<p class="k-src-note">%s</p>' % note) if note else ""
+    return ('<section class="k-section" style="padding-top:0;">'
+            '<div class="k-sources"><h3>出典・参考（公的機関）</h3>'
+            '<ul>' + lis + '</ul>' + n + '</div></section>')
+
+
+def _load_sources():
+    try:
+        with io.open(os.path.join(HERE, "sources.json"), encoding="utf-8") as f:
+            return json.load(f)
+    except (IOError, ValueError):
+        return {}
+
+
+SOURCES = _load_sources()
+SOURCES_NOTE = SOURCES.get("_note", "")
+
+
+def sources_for(slug):
+    """slug に出典が登録されていれば、出典ブロックのHTMLを返す。"""
+    items = SOURCES.get(slug)
+    if not items or slug.startswith("_"):
+        return ""
+    return sources_block([(t, u) for t, u in items], SOURCES_NOTE)
+
+
 def assemble(slug, breadcrumb_label, hero_h1, hero_lead, body_html,
              faq_items, rel_cards, jsonlds, hero_img=None, hero_illust=None):
     """下層ページ本体を wp:html ブロックとして組み立てる。"""
@@ -1391,21 +1612,24 @@ def assemble(slug, breadcrumb_label, hero_h1, hero_lead, body_html,
     elif hero_img:
         parts.append(f'<div class="svc-hero"><img src="{hero_img}" alt="{breadcrumb_label}" width="1200" height="800" loading="lazy"></div>')
     parts.append(body_html)
+    parts.append(sources_for(slug))
     parts.append(faq_block(faq_items))
     parts.append(rel_block(rel_cards))
+    parts.append(updated_line())
     parts.append(cta())
     parts.append(footer())
     parts.append('</div>')
-    html_block = "<!-- wp:html -->\n" + "".join(parts) + "\n<!-- /wp:html -->"
-    scripts = []
-    for j in jsonlds:
-        if j:
-            scripts.append(
-                '<!-- wp:html -->\n<script type="application/ld+json">'
-                + json.dumps(j, ensure_ascii=False)
-                + "</script>\n<!-- /wp:html -->"
-            )
-    return "\n\n".join([html_block] + scripts), url
+    inner = insert_capsules(slug, "".join(parts))
+    html_block = "<!-- wp:html -->" + chr(10) + inner + chr(10) + "<!-- /wp:html -->"
+    graph = page_graph(
+        url, breadcrumb_label, hero_h1, hero_lead,
+        faq_items=faq_items, extra=jsonlds,
+        image=(hero_img or hero_illust or IMG["ogp_v2"]),
+    )
+    script = ('<!-- wp:html -->\n<script type="application/ld+json">'
+              + json.dumps(graph, ensure_ascii=False)
+              + "</script>\n<!-- /wp:html -->")
+    return "\n\n".join([html_block, script]), url
 
 
 # 対応事例（/jirei/）の掲載データ。confirmed=true の事例だけを使う。
@@ -2614,10 +2838,14 @@ _c_b1 = ('<!-- wp:html -->\n<div class="amt-katazuke">'
          + page_hero(contact_h1, contact_lead) + contact_intro + contact_form_open
          + '\n<!-- /wp:html -->')
 _c_b2 = '<!-- wp:shortcode -->' + CF7_SHORTCODE + '<!-- /wp:shortcode -->'
-_c_b3 = ('<!-- wp:html -->\n' + contact_form_close + contact_rel + cta() + footer()
+_c_b3 = ('<!-- wp:html -->\n' + contact_form_close + contact_rel + updated_line() + cta() + footer()
          + '</div>\n<!-- /wp:html -->')
 _c_ld = ('<!-- wp:html -->\n<script type="application/ld+json">'
-         + json.dumps(breadcrumb_jsonld("お問い合わせ", "/contact/"), ensure_ascii=False)
+         + json.dumps(page_graph(
+             "/contact/", "お問い合わせ", "お問い合わせ｜おうちのお片付け隊",
+             "片付け・不用品回収・農機具買取のご相談・お見積りのお問い合わせ先。"
+             "電話またはフォームから。現地確認・お見積りは無料です。",
+             image=IMG["ogp_v2"]), ensure_ascii=False)
          + '</script>\n<!-- /wp:html -->')
 # WebMCP（Declarative API）：CF7のformをAIエージェント用ツールとして宣言（2026-10-05）。
 # CF7はformに任意属性を付けられないため、フォームの後ろでスクリプトが属性を付与する。
@@ -3333,25 +3561,17 @@ def build_index():
     body = ('<div class="amt-katazuke">'
             + header("/") + hero + passion + works + price_sec + scenes_sec
             + nouki_sec + reasons_sec + license_sec + flow_sec + area_sec
-            + column_sec + company_sec + cta() + footer() + '</div>')
+            + column_sec + company_sec + updated_line() + cta() + footer() + '</div>')
+    body = insert_capsules("home", body)
 
-    jsonld = local_business_jsonld()
-    jsonld_site = {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "@id": DOMAIN + "/#website",
-        "name": SITE_NAME + "（" + COMPANY_NAME + "）",
-        "alternateName": COMPANY_NAME,
-        "url": DOMAIN + "/",
-        "inLanguage": "ja",
-        "publisher": {"@id": DOMAIN + "/#localbusiness"},
-        "about": {"@id": DOMAIN + "/#localbusiness"},
-    }
     jsonld_price = price_offer_jsonld(
         "/ryoukin/", "片付け・不用品回収（静岡県島田市）",
         "荷物の体積（㎥）を基準にお見積り。" + PRICE_LABEL
         + "。搬出・運搬・適正処理の委託費用を含む。出張費・見積り無料。")
-    jsonld_all = [jsonld, jsonld_site, jsonld_price]
+    jsonld_all = [page_graph(
+        "/", "ホーム", SITE_NAME + "｜" + COMPANY_NAME + "（静岡県島田市）",
+        PAGE_DESC["home"], extra=[jsonld_price],
+        image=IMG["ogp_v2"], is_home=True)]
 
     doc = (
         '<!DOCTYPE html>\n<html lang="ja">\n<head>\n'

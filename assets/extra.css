@@ -766,3 +766,17 @@ body,.wp-site-blocks{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu
   .amt-katazuke .kz-calc{padding:20px 16px 16px;}
   .amt-katazuke .kz-calc-out b{font-size:1.6rem;}
 }
+
+.amt-katazuke .k-capsule{font-size:1.0rem;line-height:1.9;margin:0 0 16px;padding:14px 18px;
+  background:#f3f8f6;border-left:4px solid var(--primary,#2f7d62);border-radius:0 8px 8px 0;font-weight:500;}
+.amt-katazuke .sec-title + .k-capsule,.amt-katazuke .k-capsule{max-width:100%;}
+.amt-katazuke .inner > .k-capsule{max-width:860px;margin-left:auto;margin-right:auto;}
+.amt-katazuke .k-updated{max-width:860px;margin:28px auto 0;padding:0 20px;
+  font-size:.86rem;color:var(--muted,#6b7280);text-align:right;}
+.amt-katazuke .k-sources{max-width:860px;margin:26px auto 0;padding:18px 22px;
+  background:#f6f7f9;border:1px solid #e3e6ea;border-radius:12px;}
+.amt-katazuke .k-sources h3{font-size:.95rem;margin:0 0 10px;font-weight:800;}
+.amt-katazuke .k-sources ul{margin:0;padding-left:1.2em;}
+.amt-katazuke .k-sources li{font-size:.88rem;line-height:1.9;}
+.amt-katazuke .k-sources .k-src-note{margin:10px 0 0;font-size:.8rem;color:var(--muted,#6b7280);}
+@media(max-width:600px){.amt-katazuke .k-updated{text-align:left;}}

@@ -1,0 +1,96 @@
+{
+ "_readme": "法令・制度を扱うページの末尾に出す「出典・参考（公的機関）」ブロック。slug → [[表示名, URL], ...]。URLは2026-10-21にすべて200を確認済み。追加するときは必ず実在を確認し、公式ページだけを載せること（まとめサイトは不可）。",
+ "_note": "※リンク先は各機関・自治体の公式ページです。制度・料金・手数料は変わることがあるため、最新の情報は各ページでご確認ください（2026年10月21日時点で確認）。",
+
+ "fuyouhin": [
+  ["環境省「廃棄物の処理及び清掃に関する法律（廃棄物処理法）」", "https://www.env.go.jp/recycle/waste/laws.html"],
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"],
+  ["e-Gov法令検索「廃棄物の処理及び清掃に関する法律」", "https://laws.e-gov.go.jp/law/345AC0000000137"]
+ ],
+ "hinmoku": [
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"],
+  ["e-Gov法令検索「特定家庭用機器再商品化法（家電リサイクル法）」", "https://laws.e-gov.go.jp/law/410AC0000000097"]
+ ],
+ "ryoukin": [
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"],
+  ["家電リサイクル券センター（RKC）", "https://www.rkc.aeha.or.jp/"]
+ ],
+ "hikkoshi": [
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"],
+  ["e-Gov法令検索「特定家庭用機器再商品化法（家電リサイクル法）」", "https://laws.e-gov.go.jp/law/410AC0000000097"]
+ ],
+ "zanchibutsu": [
+  ["環境省「廃棄物等の処理」", "https://www.env.go.jp/recycle/waste/index.html"],
+  ["e-Gov法令検索「廃棄物の処理及び清掃に関する法律」", "https://laws.e-gov.go.jp/law/345AC0000000137"]
+ ],
+ "tenpo": [
+  ["環境省「廃棄物等の処理」", "https://www.env.go.jp/recycle/waste/index.html"],
+  ["e-Gov法令検索「廃棄物の処理及び清掃に関する法律」", "https://laws.e-gov.go.jp/law/345AC0000000137"]
+ ],
+ "akiya": [
+  ["国土交通省「空家等対策の推進に関する特別措置法関連情報」", "https://www.mlit.go.jp/jutakukentiku/house/jutakukentiku_house_tk3_000035.html"],
+  ["e-Gov法令検索「空家等対策の推進に関する特別措置法」", "https://laws.e-gov.go.jp/law/426AC1000000127"]
+ ],
+ "nouki-kaitori": [
+  ["警察庁「古物営業・質屋営業について」", "https://www.npa.go.jp/bureau/safetylife/kobutsu/index.html"],
+  ["e-Gov法令検索「古物営業法」", "https://laws.e-gov.go.jp/law/324AC0000000108"]
+ ],
+
+ "kaden-shobun": [
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"],
+  ["e-Gov法令検索「特定家庭用機器再商品化法（家電リサイクル法）」", "https://laws.e-gov.go.jp/law/410AC0000000097"],
+  ["家電リサイクル券センター（RKC）", "https://www.rkc.aeha.or.jp/"]
+ ],
+ "mukyoka-kaishu-chui": [
+  ["環境省「廃棄物の処理及び清掃に関する法律（廃棄物処理法）」", "https://www.env.go.jp/recycle/waste/laws.html"],
+  ["e-Gov法令検索「廃棄物の処理及び清掃に関する法律」", "https://laws.e-gov.go.jp/law/345AC0000000137"],
+  ["警察庁「古物営業・質屋営業について」", "https://www.npa.go.jp/bureau/safetylife/kobutsu/index.html"],
+  ["e-Gov法令検索「古物営業法」", "https://laws.e-gov.go.jp/law/324AC0000000108"]
+ ],
+ "gyousha-erabikata": [
+  ["環境省「廃棄物の処理及び清掃に関する法律（廃棄物処理法）」", "https://www.env.go.jp/recycle/waste/laws.html"],
+  ["警察庁「古物営業・質屋営業について」", "https://www.npa.go.jp/bureau/safetylife/kobutsu/index.html"]
+ ],
+ "nouki-tetsuzuki": [
+  ["警察庁「古物営業・質屋営業について」", "https://www.npa.go.jp/bureau/safetylife/kobutsu/index.html"],
+  ["e-Gov法令検索「古物営業法」", "https://laws.e-gov.go.jp/law/324AC0000000108"]
+ ],
+ "tetsukuzu-scrap": [
+  ["警察庁「古物営業・質屋営業について」", "https://www.npa.go.jp/bureau/safetylife/kobutsu/index.html"],
+  ["環境省「廃棄物等の処理」", "https://www.env.go.jp/recycle/waste/index.html"]
+ ],
+ "souzoku-katazuke": [
+  ["裁判所「相続の放棄の申述」", "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_13/index.html"],
+  ["裁判所「相続の限定承認の申述」", "https://www.courts.go.jp/saiban/syurui/syurui_kazi/kazi_06_14/index.html"]
+ ],
+ "akiya-katazuke": [
+  ["国土交通省「空家等対策の推進に関する特別措置法関連情報」", "https://www.mlit.go.jp/jutakukentiku/house/jutakukentiku_house_tk3_000035.html"],
+  ["e-Gov法令検索「空家等対策の推進に関する特別措置法」", "https://laws.e-gov.go.jp/law/426AC1000000127"]
+ ],
+ "gomiyashiki": [
+  ["環境省「廃棄物の処理及び清掃に関する法律（廃棄物処理法）」", "https://www.env.go.jp/recycle/waste/laws.html"]
+ ],
+ "fuyouhin-tebanashi": [
+  ["環境省「廃棄物等の処理」", "https://www.env.go.jp/recycle/waste/index.html"],
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"]
+ ],
+ "hikkoshi-fuyouhin": [
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"]
+ ],
+ "shobun-komaru-mono": [
+  ["環境省「廃棄物等の処理」", "https://www.env.go.jp/recycle/waste/index.html"],
+  ["環境省「家電リサイクル関連」", "https://www.env.go.jp/recycle/kaden/"]
+ ],
+ "shizuoka-sodaigomi": [
+  ["島田市「ごみ収集・分け方・出し方」", "https://www.city.shimada.shizuoka.jp/kurashi/life-event/scene09/01/"],
+  ["藤枝市「ごみの出し方・分け方検索ナビ」", "https://www.city.fujieda.shizuoka.jp/benri/gomi/index.html"],
+  ["焼津市「ごみ・リサイクル」", "https://www.city.yaizu.lg.jp/life/gomi/index.html"],
+  ["掛川市「ごみ・リサイクル」", "https://www.city.kakegawa.shizuoka.jp/gyosei/kurashi/gomi/"],
+  ["菊川市「ごみ・リサイクル」", "https://www.city.kikugawa.shizuoka.jp/kurashi/gomi_recycle/index.html"],
+  ["牧之原市「ごみ・リサイクル・環境」", "https://www.city.makinohara.shizuoka.jp/life/1/3/"],
+  ["吉田町「ごみ・環境保全」", "https://www.town.yoshida.shizuoka.jp/1023.htm"]
+ ],
+ "fuyouhin-ryou-m3": [
+  ["環境省「廃棄物等の処理」", "https://www.env.go.jp/recycle/waste/index.html"]
+ ]
+}
